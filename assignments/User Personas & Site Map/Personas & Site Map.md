@@ -3,7 +3,7 @@
 | Ana Marić *(Turist koji želi unikatna iskustva)* | Marko Ramljak *(Turist koji traži specifične teme)* | Ivan Kristić *(Lokalac koji želi zaraditi)* |
 |--------------------------------------------------|--------------------------------------------------|------------------------------------------------|
 | ![Ana Marić](1.png)                       | ![Marko Radić](3.png)                     | ![Ivan Kristić](2.png)               |
-| **Dob:** 25                                      | **Dob:** 41                                     | **Dob:** 42                                    |
+| **Dob:** 25                                      | **Dob:** 40                                     | **Dob:** 42                                    |
 | **Zanimanje:** Studentica arhitekture               | **Zanimanje:** IT stručnjak                      | **Zanimanje:** Magistar povijesti, nema posla, vozi taxi          |
 | **Mjesto:** Zagreb, Hrvatska                     | **Mjesto:** Mostar, Bosna i Hercegovina                     | **Mjesto:**   Split, Hrvatska       |
 | **Opis:** Ana voli putovati s prijateljima i otkrivati autentična mjesta – lokalne kafiće, kvartove i skrivene priče koje ne pišu u vodičima. Ne zanima ju masovni turizam, već doživljaj kulture “iznutra”. | **Opis:** Marko često putuje sa suprugom i djecom, ali na dužim putovanjima se voli odvojiti i istražiti ono što ga zanima, kao film i sport. Putovanja mu služe kao prilika da poveže svoje interese s novim destinacijama. | **Opis:** Ivan voli svoj grad i uživa dijeliti lokalne priče. Želi iskoristiti svoje znanje, ljubav prema sportu i slobodno vrijeme za dodatnu zaradu kroz vođenje tura i iskustava. |
@@ -14,5 +14,7 @@
 | **Budžet:** Srednji - spremna platiti više za autentičnost | **Budžet:** Srednji do viši – ulaže u ono što ga zanima | **Budžet:** Traži dodatnu zaradu - važna fleksibilnost |
 
 
+
 ## Site Map
 ![Diagram](DIAGRAM.png)     
+
