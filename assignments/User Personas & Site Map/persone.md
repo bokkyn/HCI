@@ -2,7 +2,7 @@
 
 | Ana Marić *(Turist koji želi unikatna iskustva)* | Marko Ramljak *(Turist koji traži specifične teme)* | Ivan Kristić *(Lokalac koji želi zaraditi)* |
 |--------------------------------------------------|--------------------------------------------------|------------------------------------------------|
-| ![Ana Marić](1.png)                       | ![Marko Radić](2.png)                     | ![Ivan Kristić](3.png)               |
+| ![Ana Marić](1.png)                       | ![Marko Radić](3.png)                     | ![Ivan Kristić](2.png)               |
 | **Dob:** 25                                      | **Dob:** 41                                     | **Dob:** 42                                    |
 | **Zanimanje:** Studentica arhitekture               | **Zanimanje:** IT stručnjak                      | **Zanimanje:** Magistar povijesti, nema posla, vozi taxi          |
 | **Mjesto:** Zagreb, Hrvatska                     | **Mjesto:** Mostar, Bosna i Hercegovina                     | **Mjesto:**   Split, Hrvatska       |
@@ -12,4 +12,5 @@
 | **Ciljevi:** Lako pronaći originalne, lokalne ture | **Ciljevi:** Pronaći tematske ture i lokalne stručnjake | **Ciljevi:** Dosegnuti turiste i promovirati svoje unikatne ture bez puno truda |
 | **Frustracije:** Dosadne agencijske ture, skriveni troškovi | **Frustracije:** Premalo specijaliziranih ponuda, sve je previše općenito | **Frustracije:** Težak pronalazak klijenata |
 | **Budžet:** Srednji - spremna platiti više za autentičnost | **Budžet:** Srednji do viši – ulaže u ono što ga zanima | **Budžet:** Traži dodatnu zaradu - važna fleksibilnost |
+
 
