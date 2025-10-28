@@ -14,3 +14,5 @@
 | **Budžet:** Srednji - spremna platiti više za autentičnost | **Budžet:** Srednji do viši – ulaže u ono što ga zanima | **Budžet:** Traži dodatnu zaradu - važna fleksibilnost |
 
 
+## Site Map
+![Diagram](DIAGRAM.png)     
