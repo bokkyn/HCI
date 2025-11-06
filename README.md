@@ -33,7 +33,7 @@
 
 ### Web Application Requirements
 
-- [ ] The application will be used from a web browser
+- [ ] The application will be used from a web browser.
 - [ ] It will be accessible on devices of different sizes
 - [ ] Users can search/filter products or services
 - [ ] The application will support user login for showing private content
