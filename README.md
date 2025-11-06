@@ -18,7 +18,7 @@
 
 ### Semester Project
 
-- Link to your production version: [**Production Version**](URL_TO_PRODUCTION_VERSION) <!-- Replace with actual URL -->
+- Link to your production version: [**Production Version**](https://coverdis-hci.vercel.app/) <!-- Replace with actual URL -->
 - Link to your final report: [**Final Report**](URL_TO_FINAL_REPORT) <!-- Replace with actual URL -->
 <!-- Add more as necessary -->
 
@@ -26,7 +26,9 @@
 
 - Link to Assignment 1: [**Pitch video & Project summary**](https://github.com/bokkyn/HCI/tree/main/assignments/Pitch%20video%20and%20project%20summary) <!-- Replace with actual URL -->
 - Link to Assignment 2: [**Personas & Site Map**](https://github.com/bokkyn/HCI/tree/main/assignments/User%20Personas%20%26%20Site%20Map) <!-- Replace with actual URL -->
-- Link to Assignment 3: [**Assignment 3**](URL_TO_ASSIGNMENT_3) <!-- Replace with actual URL -->
+- Link to Assignment 3: [**App Link**](https://coverdis-hci.vercel.app/) <!-- Replace with actual URL -->
+- Link to Assignment 4: [**Assignment 4**](URL) <!-- Replace with actual URL -->
+- Link to Assignment 5: [**Assignment 5**](URL) <!-- Replace with actual URL -->
 <!-- Add more assignments as necessary -->
 
 ## Project Requirements
