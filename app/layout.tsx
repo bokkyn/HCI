@@ -2,8 +2,8 @@ import { Navigation } from "./_components/navigation";
 import "./globals.css";
 
 export const metadata = {
-  title: "Moja Aplikacija",
-  description: "Opis aplikacije",
+  title: "CoverDis",
+  description: "",
 };
 
 export default function RootLayout({
