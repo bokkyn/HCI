@@ -25,7 +25,7 @@ const pages: Page[] = [
   },
   {
     title: "Istraži Ture",
-    path: "/istraži_ture",
+    path: "/istrazi_ture",
   },
   {
     title: "Blog",
