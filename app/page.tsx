@@ -3,12 +3,7 @@ type Page = {
   path: `/${string}`;
 };
 
-/**
- * pages is an array of objects representing the pages in the web app.
- * Each object contains a title and a path. This array is used to generate the navigation menu.
- *
- * We hardcode pages here, but in real app you want to store and read this information from some external source (e.g. CMS, DB, config file, etc).
- */
+
 const pages: Page[] = [
   { title: "Home", path: "/" },
   {
@@ -37,12 +32,7 @@ const pages: Page[] = [
   },
 ];
 
-/**
- * Render a page list item.
- * @param page - { title, path } for the page
- * @param index - array index used for key
- * @returns JSX element for a list item
- */
+
 function processPage(page: Page, index: number) {
   return (
     <li key={index}>
