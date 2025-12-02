@@ -27,7 +27,7 @@
 - Link to Assignment 1: [**Pitch video & Project summary**](https://github.com/bokkyn/HCI/tree/main/assignments/Pitch%20video%20and%20project%20summary) <!-- Replace with actual URL -->
 - Link to Assignment 2: [**Personas & Site Map**](https://github.com/bokkyn/HCI/tree/main/assignments/User%20Personas%20%26%20Site%20Map) <!-- Replace with actual URL -->
 - Link to Assignment 3: [**App Link**](https://coverdis-hci.vercel.app/) <!-- Replace with actual URL -->
-- Link to Assignment 4: [**Low & High FIdelity Prototype**](https://github.com/bokkyn/HCI/tree/main/assignments/Low%20and%20High%20Fidelity%20prototype) <!-- Replace with actual URL -->
+- Link to Assignment 4: [**Low & High FIdelity Prototype**](https://github.com/bokkyn/HCI/tree/main/assignments/Low%20and%20High%20Fidelity%20prototype/Prototype.md) <!-- Replace with actual URL -->
 - Link to Assignment 5: [**Assignment 5**](URL) <!-- Replace with actual URL -->
 <!-- Add more assignments as necessary -->
 
