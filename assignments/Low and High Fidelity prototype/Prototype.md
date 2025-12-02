@@ -12,7 +12,7 @@ U ovom zadatku koristili smo prijašnje zadatke kao referencu, uz male promjene 
 
 ### Link na High fidelity prototype
 
-https://www.figma.com/make/BJv8MbXfTfc7SkZAe4ys58/Landing-Page-for-CoverDis?t=g7tHdKlBNxnQvAgg-0
+(https://www.figma.com/proto/V3irlLnzWyNrwLSnxiz3OT/Untitled?node-id=1-2&p=f&t=QkWwuZ4ngYrk3Q5A-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
 
 
 
@@ -22,6 +22,7 @@ https://www.figma.com/make/BJv8MbXfTfc7SkZAe4ys58/Landing-Page-for-CoverDis?t=g7
 
 ### Low-fidelity prototip
 ![Low prototype](./low.jpg)
+
 
 
 
