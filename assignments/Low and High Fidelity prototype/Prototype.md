@@ -21,7 +21,8 @@ https://www.figma.com/make/BJv8MbXfTfc7SkZAe4ys58/Landing-Page-for-CoverDis?t=g7
 ![High prototype](./high.png)
 
 ### Low-fidelity prototip
-![Low prototype](./low.png)
+![Low prototype](./low.jpg)
+
 
 
 
