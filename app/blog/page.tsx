@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { Button } from "../_components/ui/button"
 import { BlogPageSkeleton } from "../_components/blog-skeleton"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { unstable_noStore as noStore } from 'next/cache'
 
 interface Post {
   userId: number
@@ -20,9 +21,11 @@ interface PageProps {
 const POSTS_PER_PAGE = 9
 
 async function getPosts(): Promise<Post[]> {
+  noStore() 
   try {
     const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
-      next: { revalidate: 3600 }, // Revalidate every hour
+      //next: { revalidate: 3600 }, // Revalidate every hour
+      cache: 'no-store'
     })
     if (!res.ok) throw new Error("Failed to fetch posts")
     return res.json()
