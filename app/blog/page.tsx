@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, User, Clock, ArrowRight, Search, X } from "lucide-react";
-import {Footer} from "@/components/Footer";
 
 const blogPosts = [
   {
@@ -233,7 +232,7 @@ const blogPosts = [
           </div>
         </div>
       </div>
-      <Footer />
+      
     </>
   );
 }
