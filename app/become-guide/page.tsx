@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { Check, Users, DollarSign, Calendar, Star } from "lucide-react";
 import Link from "next/link";
 
- function Page() {
+function Page() {
   const benefits = [
     "Fleksibilno radno vrijeme - vi određujete svoj raspored",
     "Zarađujte radeći ono što volite",
