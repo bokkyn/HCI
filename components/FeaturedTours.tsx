@@ -114,18 +114,7 @@ export default function FeaturedTours() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Orange abstract line decoration */}
-        <div className="mb-12">
-          <svg className="w-32 h-2" viewBox="0 0 128 8">
-            <path
-              d="M0 4 Q32 0, 64 4 T128 4"
-              stroke="#ff6309"
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+        
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

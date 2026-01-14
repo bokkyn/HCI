@@ -52,37 +52,7 @@ export function HowItWorksPath() {
 
         {/* Path visualization */}
         <div className="relative">
-          {/* Curved path line for desktop */}
-          <div className="hidden md:block absolute top-24 left-0 right-0 h-1">
-            <svg
-              className="w-full h-32"
-              viewBox="0 0 1200 128"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M 0 64 Q 300 0, 600 64 T 1200 64"
-                stroke="url(#pathGradient)"
-                strokeWidth="4"
-                fill="none"
-                strokeDasharray="8,8"
-                strokeLinecap="round"
-              />
-              <defs>
-                <linearGradient
-                  id="pathGradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="0%"
-                >
-                  <stop offset="0%" stopColor="#2b946f" />
-                  <stop offset="50%" stopColor="#0f6659" />
-                  <stop offset="100%" stopColor="#ff6309" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-
+          
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 relative z-10">
             {steps.map((step, index) => (
               <motion.div
@@ -142,18 +112,7 @@ export function HowItWorksPath() {
           </div>
         </div>
 
-        {/* Bottom decorative path */}
-        <div className="mt-16 flex justify-center">
-          <svg className="w-64 h-2" viewBox="0 0 256 8">
-            <path
-              d="M0 4 Q64 0, 128 4 T256 4"
-              stroke="#ff6309"
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+        
       </div>
     </section>
   );
