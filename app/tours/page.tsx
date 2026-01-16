@@ -14,7 +14,7 @@ import {
   ChevronDown,
   X,
 } from "lucide-react";
-import { Footer } from "@/components/Footer";
+
 
 interface Tour {
   id: number;
@@ -309,7 +309,6 @@ export default function ToursPage() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }

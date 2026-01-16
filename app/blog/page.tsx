@@ -180,7 +180,7 @@ const blogPosts = [
                   whileHover={{ y: -8 }}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
                 >
-                  {/* Image */}
+                  {/* Image */} 
                   <div className="relative h-56 overflow-hidden">
                     <Image
                       src={post.image}

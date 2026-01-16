@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Send, HelpCircle } from "lucide-react";
-import { Footer } from "@/components/Footer";
+
 
 export default function ContactPage() {
   return (
@@ -173,7 +173,6 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }
