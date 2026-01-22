@@ -1,350 +1,420 @@
+// app/components/Navbar.tsx
+// @ts-nocheck
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
-import { useUser } from "@/app/lib/auth/get-user";
-import LoginPage from "@/app/login/page";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  User,
+  LogOut,
+  Home,
+  Map,
+  Book,
+  Mail,
+  HelpCircle,
+  Info,
+  Settings,
+  Award,
+  PlusCircle,
+} from "lucide-react";
+import { useAuth } from "./AuthProvider";
+import LoginModal from "./LoginModal";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-
-  // Koristi hook za korisnika
-  const { user, loading, logout } = useUser();
+  const { user, loading, logout } = useAuth();
 
   const navLinks = [
-    { name: "Ture", href: "/tours" },
-    { name: "Blog", href: "/blog" },
-    { name: "Profil", href: "/profile" },
-    { name: "Kontakt", href: "/contact" },
-    { name: "FAQ", href: "/faq" },
-    { name: "O nama", href: "/about" },
+    { name: "Početna", href: "/", icon: <Home size={18} /> },
+    { name: "Ture", href: "/tours", icon: <Map size={18} /> },
+    { name: "Blog", href: "/blog", icon: <Book size={18} /> },
+    { name: "Kontakt", href: "/contact", icon: <Mail size={18} /> },
+    { name: "FAQ", href: "/faq", icon: <HelpCircle size={18} /> },
+    { name: "O nama", href: "/about", icon: <Info size={18} /> },
   ];
 
   const handleLogout = async () => {
     await logout();
     setUserDropdownOpen(false);
-    router.refresh();
+    router.push("/");
   };
 
-  // Ako je login otvoren, prikaži login komponentu
-  if (showLogin) {
-    return <LoginPage />;
-  }
+  // Zatvori dropdown kada klikneš izvan
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".user-dropdown")) {
+        setUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  // Izračunaj level na temelju XP-a
+  const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#104d2f]/95 backdrop-blur-md shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center"
-          >
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#104d2f]/95 backdrop-blur-md shadow-lg border-b border-[#2b946f]/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 text-white text-2xl tracking-tight hover:text-[#ff6309] transition-colors duration-200 p-2 rounded-lg hover:bg-white/5"
-              aria-label="Početna stranica"
+              className="flex items-center gap-2 text-white text-2xl font-bold tracking-tight hover:text-[#ff6309] transition-colors duration-200 p-2 rounded-lg hover:bg-white/5"
             >
-              Cover<span className="text-[#ff6309]">Dis</span>
+              <span className="bg-[#ff6309] text-white px-2 py-1 rounded-lg">
+                Cover
+              </span>
+              <span className="text-white">Dis</span>
             </Link>
-          </motion.div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link, index) => (
-              <motion.div
-                key={link.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="relative"
-                onMouseEnter={() => setHoveredLink(link.name)}
-                onMouseLeave={() => setHoveredLink(null)}
-              >
-                <Link
-                  href={link.href}
-                  className={`
-                    flex items-center gap-1 px-4 py-2 rounded-lg transition-all duration-200
-                    ${
-                      pathname === link.href
-                        ? "text-[#ff6309] bg-white/10"
-                        : "text-white hover:text-[#ff6309] hover:bg-white/5"
-                    }
-                    active:scale-95 active:bg-white/15
-                  `}
-                  aria-current={pathname === link.href ? "page" : undefined}
-                >
-                  {link.name}
-                  {pathname === link.href && (
-                    <motion.div
-                      layoutId="navbar-indicator"
-                      className="absolute inset-0 rounded-lg border border-[#ff6309]/30 pointer-events-none"
-                    />
-                  )}
-                </Link>
-
-                {/* Hover Effect */}
-                {hoveredLink === link.name && pathname !== link.href && (
-                  <motion.div
-                    layoutId="hover-effect"
-                    className="absolute inset-0 rounded-lg bg-white/5 pointer-events-none"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </motion.div>
-            ))}
-
-            {/* User/Login Button */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: navLinks.length * 0.1 }}
-              className="ml-2 relative"
-            >
-              {loading ? (
-                <div className="w-10 h-10 rounded-full bg-white/10 animate-pulse" />
-              ) : user ? (
-                // Korisnik je logiran - prikaži user dropdown
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="
-                      flex items-center gap-2 px-4 py-2.5 rounded-lg
-                      bg-white/10 text-white
-                      hover:bg-white/15 hover:shadow-lg
-                      active:scale-95 active:shadow-md
-                      transition-all duration-200
-                      font-medium
-                      focus:outline-none focus:ring-2 focus:ring-[#ff6309] focus:ring-offset-2 focus:ring-offset-[#104d2f]
-                    "
-                    aria-label="Korisnički meni"
-                    aria-expanded={userDropdownOpen}
-                  >
-                    <User size={18} />
-                    <span className="max-w-[120px] truncate">
-                      {user.full_name || user.email.split("@")[0]}
-                    </span>
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform duration-200 ${
-                        userDropdownOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {/* User Dropdown */}
-                  <AnimatePresence>
-                    {userDropdownOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                        className="
-                          absolute right-0 mt-2 w-48
-                          bg-[#104d2f] border border-[#2b946f]
-                          rounded-lg shadow-xl overflow-hidden
-                          z-50
-                        "
-                      >
-                        <div className="p-2">
-                          {/* User info */}
-                          <div className="px-3 py-2 border-b border-[#2b946f]/50">
-                            <p className="font-medium text-white truncate">
-                              {user.full_name || "Korisnik"}
-                            </p>
-                            <p className="text-sm text-white/70 truncate">
-                              {user.email}
-                            </p>
-                          </div>
-
-                          {/* Dropdown links */}
-                          <Link
-                            href="/profile"
-                            onClick={() => setUserDropdownOpen(false)}
-                            className="
-                              flex items-center gap-2 w-full px-3 py-2.5 rounded
-                              text-white hover:bg-white/10
-                              transition-colors duration-200
-                            "
-                          >
-                            <User size={16} />
-                            Moj profil
-                          </Link>
-
-                          <button
-                            onClick={handleLogout}
-                            className="
-                              flex items-center gap-2 w-full px-3 py-2.5 rounded
-                              text-red-300 hover:bg-red-500/20 hover:text-red-200
-                              transition-colors duration-200
-                              mt-1
-                            "
-                          >
-                            <LogOut size={16} />
-                            Odjavi se
-                          </button>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                // Korisnik nije logiran - prikaži login button
-                <button
-                  onClick={() => setShowLogin(true)}
-                  className="
-                    bg-[#ff6309] text-white px-6 py-2.5 rounded-lg
-                    hover:bg-[#e55808] hover:shadow-lg
-                    active:scale-95 active:shadow-md
-                    transition-all duration-200
-                    font-medium
-                    focus:outline-none focus:ring-2 focus:ring-[#ff6309] focus:ring-offset-2 focus:ring-offset-[#104d2f]
-                  "
-                  aria-label="Prijavi se"
-                >
-                  Login
-                </button>
-              )}
-            </motion.div>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="
-              md:hidden text-white p-2 rounded-lg
-              hover:bg-white/5 active:bg-white/10
-              transition-colors duration-200
-              focus:outline-none focus:ring-2 focus:ring-[#ff6309]
-            "
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Zatvori meni" : "Otvori meni"}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#104d2f] border-t border-[#2b946f]"
-          >
-            <div className="px-4 py-2 space-y-1">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   className={`
-                    flex items-center justify-between px-4 py-3 rounded-lg
-                    transition-all duration-200
+                    flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200
                     ${
                       pathname === link.href
                         ? "text-[#ff6309] bg-white/10"
                         : "text-white hover:text-[#ff6309] hover:bg-white/5"
                     }
-                    active:scale-[0.98] active:bg-white/15
                   `}
-                  onClick={() => setMobileMenuOpen(false)}
-                  aria-current={pathname === link.href ? "page" : undefined}
                 >
+                  {link.icon}
                   <span>{link.name}</span>
-                  {pathname === link.href && (
-                    <div className="w-2 h-2 rounded-full bg-[#ff6309]" />
-                  )}
                 </Link>
               ))}
 
-              {/* Mobile Login/User */}
-              {loading ? (
-                <div className="px-4 py-3">
-                  <div className="h-10 rounded-lg bg-white/10 animate-pulse" />
-                </div>
-              ) : user ? (
-                <>
-                  <div className="px-4 py-3 border-t border-[#2b946f]/50 mt-2 pt-4">
-                    <div className="mb-2">
-                      <p className="font-medium text-white">
-                        {user.full_name || "Korisnik"}
-                      </p>
-                      <p className="text-sm text-white/70">{user.email}</p>
-                    </div>
-                    <Link
-                      href="/profile"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="
-                        flex items-center gap-2 w-full px-3 py-2.5 rounded-lg
-                        text-white bg-white/10
-                        hover:bg-white/15
-                        transition-colors duration-200
-                        mb-1
-                      "
+              {/* User/Login Section */}
+              <div className="ml-4 relative user-dropdown">
+                {loading ? (
+                  <div className="w-10 h-10 rounded-full bg-white/10 animate-pulse" />
+                ) : user ? (
+                  // LOGIRAN KORISNIK - DROPDOWN
+                  <div className="relative">
+                    <button
+                      onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                      className="group flex items-center gap-3 px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/15 transition-all duration-200"
                     >
-                      <User size={16} />
-                      Moj profil
-                    </Link>
+                      <div className="flex items-center gap-2">
+                        {user.avatar ? (
+                          <img
+                            src={user.avatar}
+                            alt={user.ime}
+                            className="w-8 h-8 rounded-full object-cover border-2 border-white/30"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] flex items-center justify-center border-2 border-white/30">
+                            <span className="text-white font-bold text-sm">
+                              {user.ime?.[0] || "U"}
+                              {user.prezime?.[0] || "S"}
+                            </span>
+                          </div>
+                        )}
+                        <div className="text-left">
+                          <div className="font-medium text-sm">
+                            {user.ime} {user.prezime?.[0]}.
+                          </div>
+                          <div className="text-xs text-white/70 flex items-center gap-1">
+                            <Award size={10} />
+                            Lvl {calculateLevel(user.xp_total || 0)}
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform duration-200 ${
+                          userDropdownOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    <AnimatePresence>
+                      {userDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                          className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50"
+                        >
+                          {/* User info header */}
+                          <div className="px-4 py-4 bg-gradient-to-r from-[#104d2f] to-[#0f6659] text-white">
+                            <div className="flex items-center gap-3 mb-2">
+                              {user.avatar ? (
+                                <img
+                                  src={user.avatar}
+                                  alt={user.ime}
+                                  className="w-12 h-12 rounded-full object-cover border-2 border-white/30"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] flex items-center justify-center border-2 border-white/30">
+                                  <span className="text-white font-bold text-lg">
+                                    {user.ime?.[0] || "U"}
+                                    {user.prezime?.[0] || "S"}
+                                  </span>
+                                </div>
+                              )}
+                              <div>
+                                <p className="font-bold">
+                                  {user.ime} {user.prezime}
+                                </p>
+                                <p className="text-sm text-white/80 truncate max-w-[180px]">
+                                  {user.email}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between mt-3">
+                              <div className="text-center">
+                                <div className="text-xl font-bold">
+                                  {user.xp_total || 0}
+                                </div>
+                                <div className="text-xs opacity-80">XP</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-xl font-bold">
+                                  Lvl {calculateLevel(user.xp_total || 0)}
+                                </div>
+                                <div className="text-xs opacity-80">Level</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-xl font-bold">
+                                  {user.ukupno_tura || 0}
+                                </div>
+                                <div className="text-xs opacity-80">Ture</div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Menu items */}
+                          <div className="py-2">
+                            <Link
+                              href="/profile"
+                              onClick={() => setUserDropdownOpen(false)}
+                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              <User size={18} />
+                              <div>
+                                <div className="font-medium">Moj profil</div>
+                                <div className="text-xs text-gray-500">
+                                  Pregledaj i uredi svoj profil
+                                </div>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/tours/create"
+                              onClick={() => setUserDropdownOpen(false)}
+                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              <PlusCircle size={18} />
+                              <div>
+                                <div className="font-medium">Kreiraj turu</div>
+                                <div className="text-xs text-gray-500">
+                                  Podijeli svoje putovanje
+                                </div>
+                              </div>
+                            </Link>
+
+                            <Link
+                              href="/profile/settings"
+                              onClick={() => setUserDropdownOpen(false)}
+                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              <Settings size={18} />
+                              <div>
+                                <div className="font-medium">Postavke</div>
+                                <div className="text-xs text-gray-500">
+                                  Prilagodi svoj račun
+                                </div>
+                              </div>
+                            </Link>
+
+                            <div className="border-t border-gray-100 mx-4 my-2" />
+
+                            <button
+                              onClick={handleLogout}
+                              className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
+                            >
+                              <LogOut size={18} />
+                              <div>
+                                <div className="font-medium">Odjavi se</div>
+                                <div className="text-xs text-red-500">
+                                  Završi trenutnu sesiju
+                                </div>
+                              </div>
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  // NIJE LOGIRAN - LOGIN BUTTON
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white px-6 py-2.5 rounded-lg hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all font-medium shadow-md"
+                  >
+                    Prijavi se
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-white p-2 rounded-lg hover:bg-white/5 transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-[#104d2f] border-t border-[#2b946f]"
+            >
+              <div className="px-4 py-3 space-y-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.icon}
+                    <span>{link.name}</span>
+                  </Link>
+                ))}
+
+                {/* Mobile Auth */}
+                <div className="pt-4 border-t border-[#2b946f]/50">
+                  {user ? (
+                    <>
+                      <div className="px-4 py-3 mb-3 bg-white/5 rounded-lg">
+                        <div className="flex items-center gap-3 mb-2">
+                          {user.avatar ? (
+                            <img
+                              src={user.avatar}
+                              alt={user.ime}
+                              className="w-10 h-10 rounded-full object-cover border-2 border-white/30"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] flex items-center justify-center border-2 border-white/30">
+                              <span className="text-white font-bold">
+                                {user.ime?.[0] || "U"}
+                                {user.prezime?.[0] || "S"}
+                              </span>
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-bold text-white">
+                              {user.ime} {user.prezime}
+                            </p>
+                            <p className="text-sm text-white/70 truncate">
+                              {user.email}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between mt-2">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-white">
+                              {user.xp_total || 0}
+                            </div>
+                            <div className="text-xs text-white/70">XP</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-white">
+                              Lvl {calculateLevel(user.xp_total || 0)}
+                            </div>
+                            <div className="text-xs text-white/70">Level</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-white">
+                              {user.ukupno_tura || 0}
+                            </div>
+                            <div className="text-xs text-white/70">Ture</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Link
+                        href="/profile"
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <User size={18} />
+                        Moj profil
+                      </Link>
+
+                      <Link
+                        href="/tours/create"
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <PlusCircle size={18} />
+                        Kreiraj turu
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-300 hover:bg-red-500/20 transition-colors mt-1"
+                      >
+                        <LogOut size={18} />
+                        Odjavi se
+                      </button>
+                    </>
+                  ) : (
                     <button
                       onClick={() => {
-                        handleLogout();
+                        setShowLoginModal(true);
                         setMobileMenuOpen(false);
                       }}
-                      className="
-                        flex items-center gap-2 w-full px-3 py-2.5 rounded-lg
-                        text-red-300 bg-red-500/10
-                        hover:bg-red-500/20 hover:text-red-200
-                        transition-colors duration-200
-                      "
+                      className="w-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white px-6 py-3.5 rounded-lg font-medium shadow-md"
                     >
-                      <LogOut size={16} />
-                      Odjavi se
+                      Prijavi se
                     </button>
-                  </div>
-                </>
-              ) : (
-                <button
-                  onClick={() => {
-                    setShowLogin(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="
-                    w-full flex items-center justify-center
-                    bg-[#ff6309] text-white px-6 py-3.5 rounded-lg
-                    hover:bg-[#e55808] active:scale-[0.98]
-                    transition-all duration-200
-                    font-medium
-                    mt-2
-                    focus:outline-none focus:ring-2 focus:ring-[#ff6309] focus:ring-offset-2 focus:ring-offset-[#104d2f]
-                  "
-                  aria-label="Prijavi se"
-                >
-                  Login
-                </button>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
 
-      {/* Backdrop za dropdown (zatvara dropdown kada se klikne izvan) */}
+      {/* Login Modal */}
+      {showLoginModal && (
+        <LoginModal onClose={() => setShowLoginModal(false)} />
+      )}
+
+      {/* Backdrop for dropdown */}
       {userDropdownOpen && (
         <div
           className="fixed inset-0 z-40"
           onClick={() => setUserDropdownOpen(false)}
         />
       )}
-    </nav>
+    </>
   );
 }

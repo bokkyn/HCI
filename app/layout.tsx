@@ -1,8 +1,10 @@
+// app/layout.tsx
 "use client";
 import "@/styles/globals.css";
 import "@/styles/index.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { AuthProvider } from "@/components/AuthProvider";
 
 export default function RootLayout({
   children,
@@ -11,10 +13,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="hr">
-      <body>
-        <Navbar />
-        {children}
-        <Footer />
+      <body className="min-h-screen flex flex-col">
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-grow pt-16">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
