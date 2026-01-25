@@ -16,7 +16,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col">
         <AuthProvider>
           <Navbar />
-          <main className="flex-grow pt-16">{children}</main>
+          <main className="flex-grow pt-0">{children}</main>
           <Footer />
         </AuthProvider>
       </body>

@@ -268,7 +268,7 @@ export function Navbar() {
                   // NIJE LOGIRAN - LOGIN BUTTON
                   <button
                     onClick={() => setShowLoginModal(true)}
-                    className="bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white px-6 py-2.5 rounded-lg hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all font-medium shadow-md"
+                    className="bg-[#ff6309] text-white px-6 py-2.5 rounded-lg hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all font-medium shadow-md"
                   >
                     Prijavi se
                   </button>
@@ -391,7 +391,7 @@ export function Navbar() {
                         setShowLoginModal(true);
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white px-6 py-3.5 rounded-lg font-medium shadow-md"
+                      className="w-full bg-[#ff6309] text-white px-6 py-3.5 rounded-lg font-medium shadow-md"
                     >
                       Prijavi se
                     </button>
