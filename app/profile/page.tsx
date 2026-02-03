@@ -4,6 +4,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import EditProfileModal from "@/components/EditProfileModal";
+import CreateTourModal from "@/components/CreateTourModal"; // DODAJ
+import MyToursSection from "@/components/MyToursSection"; // DODAJ
 import {
   MapPin,
   Calendar,
@@ -18,6 +20,7 @@ import {
   Globe,
   Cake,
   Sparkles,
+  Plus, // DODAJ
 } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 
@@ -26,6 +29,7 @@ export default function ProfilePage() {
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showCreateTourModal, setShowCreateTourModal] = useState(false); // DODAJ
   const [saving, setSaving] = useState(false);
   const [editForm, setEditForm] = useState({
     ime: "",
@@ -57,21 +61,18 @@ export default function ProfilePage() {
     }
   }, [currentUser, authLoading]);
 
-  // U Profile page.tsx - popravi handleSaveProfile funkciju:
   const handleSaveProfile = async () => {
     if (!userData) return;
 
     setSaving(true);
     try {
-      // NE treba Authorization header - cookie se šalje automatski
       const response = await fetch("/api/profile/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          // NE DODAJEMO Authorization header!
         },
         body: JSON.stringify(editForm),
-        credentials: "include", // Ovo je bitno za cookie
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -80,11 +81,8 @@ export default function ProfilePage() {
         throw new Error(data.error || "Došlo je do greške");
       }
 
-      // Update local state
       setUserData(data.user);
       setShowEditModal(false);
-
-      // Osvježi podatke
       window.location.reload();
     } catch (error: any) {
       alert(error.message || "Došlo je do greške pri spremanju");
@@ -244,13 +242,22 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => setShowEditModal(true)}
-                    className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all font-medium"
-                  >
-                    <Edit size={18} />
-                    Uredi profil
-                  </button>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setShowCreateTourModal(true)}
+                      className="flex items-center gap-2 bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium"
+                    >
+                      <Plus size={18} />
+                      Dodaj turu
+                    </button>
+                    <button
+                      onClick={() => setShowEditModal(true)}
+                      className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all font-medium"
+                    >
+                      <Edit size={18} />
+                      Uredi profil
+                    </button>
+                  </div>
                 </div>
 
                 {/* Stats */}
@@ -321,37 +328,11 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* XP Categories */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    XP po kategorijama
-                  </h2>
-                  <Award className="text-[#2b946f]" size={20} />
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {userData.xp_kategorije &&
-                    Object.entries(userData.xp_kategorije).map(
-                      ([category, xp]: [string, any]) => (
-                        <div
-                          key={category}
-                          className={`p-4 rounded-xl text-center ${
-                            xp > 0
-                              ? "bg-gradient-to-br from-[#2b946f]/10 to-[#0f6659]/10"
-                              : "bg-gray-50"
-                          }`}
-                        >
-                          <div className="text-2xl font-bold text-[#104d2f] mb-1">
-                            {xp}
-                          </div>
-                          <div className="text-sm font-medium text-gray-700 capitalize">
-                            {category}
-                          </div>
-                        </div>
-                      ),
-                    )}
-                </div>
-              </div>
+              {/* Moje ture Section - ZAMIJENJENO UMJESTO XP Categories */}
+              <MyToursSection
+                userId={userData.id}
+                onAddTourClick={() => setShowCreateTourModal(true)}
+              />
             </div>
 
             {/* Right Column - Info & Stats */}
@@ -461,6 +442,18 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* Create Tour Modal */}
+      {showCreateTourModal && (
+        <CreateTourModal
+          isOpen={showCreateTourModal}
+          onClose={() => setShowCreateTourModal(false)}
+          onSuccess={() => {
+            // Osvježi stranicu da se vide nove ture
+            window.location.reload();
+          }}
+        />
+      )}
+
       {/* Edit Profile Modal */}
       <AnimatePresence>
         {showEditModal && (
@@ -470,7 +463,6 @@ export default function ProfilePage() {
             user={userData}
             onUpdate={(updatedUser) => {
               setUserData(updatedUser);
-              // Osvježi podatke
               window.location.reload();
             }}
           />
