@@ -49,6 +49,56 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Opis je obavezan" }, { status: 400 });
     }
 
+    // Validacija kategorija
+    if (
+      !body.categories ||
+      !Array.isArray(body.categories) ||
+      body.categories.length === 0
+    ) {
+      return NextResponse.json(
+        { error: "Barem jedna kategorija je obavezna" },
+        { status: 400 },
+      );
+    }
+
+    // Provjeri broj kategorija
+    if (body.categories.length > 3) {
+      return NextResponse.json(
+        { error: "Maksimalno 3 kategorije su dozvoljene" },
+        { status: 400 },
+      );
+    }
+
+    // Provjeri duplikate kategorija
+    const uniqueCategories = [...new Set(body.categories)];
+    if (uniqueCategories.length !== body.categories.length) {
+      return NextResponse.json(
+        { error: "Kategorije ne smiju biti duplicirane" },
+        { status: 400 },
+      );
+    }
+
+    // Validacija da su sve kategorije u dozvoljenom skupu
+    const allowedCategories = [
+      "Hrana",
+      "Kultura",
+      "Priroda",
+      "Urbano",
+      "Sport",
+      "Misterija",
+      "Povijest",
+      "Zabava",
+    ];
+    const invalidCategories = body.categories.filter(
+      (cat: string) => !allowedCategories.includes(cat),
+    );
+    if (invalidCategories.length > 0) {
+      return NextResponse.json(
+        { error: `Nedozvoljene kategorije: ${invalidCategories.join(", ")}` },
+        { status: 400 },
+      );
+    }
+
     await connectDB();
 
     // Provjeri da li korisnik postoji
@@ -65,21 +115,27 @@ export async function POST(req: Request) {
       guide_id: userId,
       title: body.title.trim(),
       description: body.description.trim(),
-      highlights: Array.isArray(body.highlights) ? body.highlights : [],
+      highlights: Array.isArray(body.highlights)
+        ? body.highlights.filter((h: string) => h.trim())
+        : [],
       meeting_point: body.meeting_point || "",
       price_per_group: body.price_per_group || 0,
       max_people: body.max_people || 1,
       duration: body.duration || "",
       location: body.location || "",
-      image_urls: Array.isArray(body.image_urls) ? body.image_urls : [],
-      tags: Array.isArray(body.tags) ? body.tags : [],
+      image_urls: Array.isArray(body.image_urls)
+        ? body.image_urls.filter((img: string) => img.trim())
+        : [],
+      categories: body.categories, // Dodane kategorije
       language_offered: Array.isArray(body.language_offered)
         ? body.language_offered.length > 0
           ? body.language_offered
           : ["Hrvatski"]
         : ["Hrvatski"],
       is_featured: body.is_featured || false,
-      benefits: Array.isArray(body.benefits) ? body.benefits : [],
+      benefits: Array.isArray(body.benefits)
+        ? body.benefits.filter((b: string) => b.trim())
+        : [],
       rating: 0,
       reviews_count: 0,
       status: "active",
@@ -87,11 +143,21 @@ export async function POST(req: Request) {
 
     await newTour.save();
 
-    // Ažuriraj korisnikov broj tura
+    // Ažuriraj korisnikov broj tura i dodaj XP
     user.ukupno_tura = (user.ukupno_tura || 0) + 1;
+    user.xp_total = (user.xp_total || 0) + 10; // Dodaj 10 XP za kreiranje ture
+
+    // Ažuriraj XP po kategorijama
+    body.categories.forEach((category: string) => {
+      const categoryKey = category.toLowerCase();
+      const currentXP = user.xp_kategorije.get(categoryKey) || 0;
+      user.xp_kategorije.set(categoryKey, currentXP + 10);
+    });
+
     await user.save();
 
     console.log("Tour created successfully:", newTour._id);
+    console.log("User XP updated:", user.xp_total);
 
     // Kreiraj response sa detaljima ture
     const tourResponse = {
@@ -106,7 +172,7 @@ export async function POST(req: Request) {
       duration: newTour.duration,
       location: newTour.location,
       image_urls: newTour.image_urls,
-      tags: newTour.tags,
+      categories: newTour.categories, // Dodano
       language_offered: newTour.language_offered,
       is_featured: newTour.is_featured,
       benefits: newTour.benefits,
@@ -116,7 +182,7 @@ export async function POST(req: Request) {
       guide: {
         name: `${user.ime} ${user.prezime}`,
         avatar: user.avatar || "",
-        rating: 0, // Možeš dodati rating za vodiča kasnije
+        rating: 0,
         tours_led: user.ukupno_tura || 0,
       },
       createdAt: newTour.createdAt,

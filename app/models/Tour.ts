@@ -1,4 +1,3 @@
-// app/models/Tour.ts
 import mongoose from "mongoose";
 
 const TourSchema = new mongoose.Schema(
@@ -52,9 +51,31 @@ const TourSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    tags: {
+    // DODANO: Kategorije umjesto tags
+    categories: {
       type: [String],
-      default: [],
+      required: true,
+      validate: {
+        validator: function (categories: string[]) {
+          // Validacija: minimalno 1, maksimalno 3 kategorije
+          return categories.length >= 1 && categories.length <= 3;
+        },
+        message: "Tura mora imati 1-3 kategorije",
+      },
+      enum: {
+        values: [
+          "Hrana",
+          "Kultura",
+          "Priroda",
+          "Urbano",
+          "Sport",
+          "Misterija",
+          "Povijest",
+          "Zabava",
+        ],
+        message:
+          "Kategorija mora biti jedna od: Hrana, Kultura, Priroda, Urbano, Sport, Misterija, Povijest, Zabava",
+      },
     },
     language_offered: {
       type: [String],
@@ -92,6 +113,6 @@ const TourSchema = new mongoose.Schema(
 // Index za brže pretraživanje
 TourSchema.index({ guide_id: 1, createdAt: -1 });
 TourSchema.index({ is_featured: 1, rating: -1 });
-TourSchema.index({ tags: 1 });
+TourSchema.index({ categories: 1 });
 
 export const Tour = mongoose.models.Tour || mongoose.model("Tour", TourSchema);

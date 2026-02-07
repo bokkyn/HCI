@@ -64,9 +64,10 @@ const UserSchema = new Schema(
           ["sport", 0],
           ["urbano", 0],
           ["priroda", 0],
-          ["art", 0],
+          ["povijest", 0],
+          ["kultura", 0],
           ["misterija", 0],
-          ["ostalo", 0],
+          ["zabava", 0],
         ]),
     },
 
