@@ -181,7 +181,6 @@ export default function ProfilePage() {
           {/* Cover Image */}
           <div className="h-48 md:h-64 bg-gradient-to-r from-[#104d2f] to-[#0f6659] relative">
             <div className="absolute inset-0 bg-black/20" />
-            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50 to-transparent" />
           </div>
 
           {/* Profile Info */}
