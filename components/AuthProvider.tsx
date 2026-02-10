@@ -1,5 +1,4 @@
 
-// app/components/AuthProvider.tsx - dopuni user objekat
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";

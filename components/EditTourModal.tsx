@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   Loader2,
-  Tag,
   MapPin,
   Clock,
   Users,
@@ -16,6 +15,8 @@ import {
   Globe,
   DollarSign,
   AlertCircle,
+  ChevronDown,
+  Tag,
   Edit,
 } from "lucide-react";
 
@@ -31,6 +32,7 @@ interface Tour {
   location: string;
   image_urls: string[];
   tags: string[];
+  categories: string[];
   language_offered: string[];
   is_featured: boolean;
   benefits: string[];
@@ -43,6 +45,17 @@ interface EditTourModalProps {
   onSuccess: () => void;
 }
 
+const ALLOWED_CATEGORIES = [
+  "Hrana",
+  "Kultura",
+  "Priroda",
+  "Urbano",
+  "Sport",
+  "Misterija",
+  "Povijest",
+  "Zabava",
+];
+
 export default function EditTourModal({
   isOpen,
   onClose,
@@ -52,6 +65,10 @@ export default function EditTourModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [availableCategories, setAvailableCategories] =
+    useState<string[]>(ALLOWED_CATEGORIES);
 
   const [formData, setFormData] = useState<Tour>({
     id: "",
@@ -65,15 +82,24 @@ export default function EditTourModal({
     location: "",
     image_urls: [],
     tags: [],
+    categories: [],
     language_offered: ["Hrvatski"],
     is_featured: false,
     benefits: [],
   });
 
-  const [tagInput, setTagInput] = useState("");
   const [highlightInput, setHighlightInput] = useState("");
   const [benefitInput, setBenefitInput] = useState("");
   const [imageUrlInput, setImageUrlInput] = useState("");
+
+  // Ažuriraj dostupne kategorije kada se promijene odabrane kategorije
+  useEffect(() => {
+    const selected = formData.categories;
+    const filtered = ALLOWED_CATEGORIES.filter(
+      (cat) => !selected.includes(cat),
+    );
+    setAvailableCategories(filtered);
+  }, [formData.categories]);
 
   useEffect(() => {
     if (tour && isOpen) {
@@ -89,12 +115,15 @@ export default function EditTourModal({
         location: tour.location || "",
         image_urls: tour.image_urls || [],
         tags: tour.tags || [],
+        categories: tour.categories || [],
         language_offered: tour.language_offered || ["Hrvatski"],
         is_featured: tour.is_featured || false,
         benefits: tour.benefits || [],
       });
       setError("");
       setSuccess("");
+      setFieldErrors({});
+      setCategoryDropdownOpen(false);
     }
   }, [tour, isOpen]);
 
@@ -113,22 +142,40 @@ export default function EditTourModal({
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
-  };
 
-  const addTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData((prev) => ({
-        ...prev,
-        tags: [...prev.tags, tagInput.trim()],
-      }));
-      setTagInput("");
+    // Očisti grešku za polje kada se počne unositi
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
   };
 
-  const removeTag = (index: number) => {
+  const addCategory = (category: string) => {
+    if (formData.categories.length >= 3) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        categories: "Maksimalno 3 kategorije su dozvoljene",
+      }));
+      return;
+    }
+
+    if (!formData.categories.includes(category)) {
+      setFormData((prev) => ({
+        ...prev,
+        categories: [...prev.categories, category],
+      }));
+    }
+
+    setCategoryDropdownOpen(false);
+  };
+
+  const removeCategory = (categoryToRemove: string) => {
     setFormData((prev) => ({
       ...prev,
-      tags: prev.tags.filter((_, i) => i !== index),
+      categories: prev.categories.filter((cat) => cat !== categoryToRemove),
     }));
   };
 
@@ -136,7 +183,10 @@ export default function EditTourModal({
     if (highlightInput.trim()) {
       setFormData((prev) => ({
         ...prev,
-        highlights: [...prev.highlights, highlightInput.trim()],
+        highlights: [
+          ...prev.highlights.filter((h) => h),
+          highlightInput.trim(),
+        ],
       }));
       setHighlightInput("");
     }
@@ -153,7 +203,7 @@ export default function EditTourModal({
     if (benefitInput.trim()) {
       setFormData((prev) => ({
         ...prev,
-        benefits: [...prev.benefits, benefitInput.trim()],
+        benefits: [...prev.benefits.filter((b) => b), benefitInput.trim()],
       }));
       setBenefitInput("");
     }
@@ -170,7 +220,10 @@ export default function EditTourModal({
     if (imageUrlInput.trim()) {
       setFormData((prev) => ({
         ...prev,
-        image_urls: [...prev.image_urls, imageUrlInput.trim()],
+        image_urls: [
+          ...prev.image_urls.filter((img) => img),
+          imageUrlInput.trim(),
+        ],
       }));
       setImageUrlInput("");
     }
@@ -188,20 +241,38 @@ export default function EditTourModal({
     setLoading(true);
     setError("");
     setSuccess("");
+    setFieldErrors({});
 
     try {
       // Validacija
+      const errors: Record<string, string> = {};
+
       if (!formData.title.trim()) {
-        throw new Error("Naslov je obavezan");
+        errors.title = "Naslov je obavezan";
+      } else if (formData.title.trim().length < 5) {
+        errors.title = "Naslov mora imati barem 5 znakova";
       }
+
       if (!formData.description.trim()) {
-        throw new Error("Opis je obavezan");
+        errors.description = "Opis je obavezan";
+      } else if (formData.description.trim().length < 20) {
+        errors.description = "Opis mora imati barem 20 znakova";
+      }
+
+      if (formData.categories.length === 0) {
+        errors.categories = "Barem jedna kategorija je obavezna";
+      }
+
+      if (Object.keys(errors).length > 0) {
+        setFieldErrors(errors);
+        throw new Error("Ispravite greške u obrascu");
       }
 
       // Pripremi podatke za update
       const updateData = {
         title: formData.title,
         description: formData.description,
+        categories: formData.categories,
         highlights: formData.highlights.filter((h) => h.trim()),
         meeting_point: formData.meeting_point,
         price_per_group: formData.price_per_group,
@@ -225,7 +296,10 @@ export default function EditTourModal({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Došlo je do greške pri ažuriranju ture");
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        throw new Error("Došlo je do greške pri ažuriranju ture");
       }
 
       // Uspješno ažuriranje
@@ -265,7 +339,11 @@ export default function EditTourModal({
               <Edit className="h-6 w-6 text-[#2b946f]" />
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">Uredi turu</h2>
-                <p className="text-gray-600 mt-1">Ažurirajte podatke o turi</p>
+                <p className="text-gray-600 mt-1">
+                  Ažurirajte podatke o turi{" "}
+                  <span className="text-red-500 font-medium">*</span> označava
+                  obavezna polja
+                </p>
               </div>
             </div>
             <button
@@ -297,37 +375,165 @@ export default function EditTourModal({
               {/* Title & Description */}
               <div className="space-y-6">
                 <h3 className="text-lg font-bold text-gray-900 border-b pb-2">
-                  Osnovne informacije
+                  Osnovne informacije <span className="text-red-500">*</span>
                 </h3>
 
+                {/* Title */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <FileText size={16} />
-                    Naslov ture *
+                    Naslov ture <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all ${
+                      fieldErrors.title ? "border-red-500" : "border-gray-300"
+                    }`}
                     required
                   />
+                  {fieldErrors.title && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {fieldErrors.title}
+                    </p>
+                  )}
                 </div>
 
+                {/* Description */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <FileText size={16} />
-                    Opis ture *
+                    Opis ture <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all resize-none"
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all resize-none ${
+                      fieldErrors.description
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    }`}
                     required
                   />
+                  {fieldErrors.description ? (
+                    <p className="mt-1 text-sm text-red-600">
+                      {fieldErrors.description}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Minimum 20 znakova, maksimum 2000 znakova
+                    </p>
+                  )}
+                </div>
+
+                {/* Categories */}
+                <div className="space-y-4">
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <Tag size={16} />
+                    Kategorije <span className="text-red-500">*</span>
+                    <span className="text-xs text-gray-500 ml-2">
+                      (Odaberite 1-3 kategorije)
+                    </span>
+                  </label>
+
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setCategoryDropdownOpen(!categoryDropdownOpen)
+                      }
+                      disabled={
+                        availableCategories.length === 0 ||
+                        formData.categories.length >= 3
+                      }
+                      className={`w-full px-4 py-3 border rounded-lg text-left flex items-center justify-between transition-all ${
+                        fieldErrors.categories
+                          ? "border-red-500"
+                          : "border-gray-300 hover:border-gray-400"
+                      } ${
+                        availableCategories.length === 0 ||
+                        formData.categories.length >= 3
+                          ? "opacity-50 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                    >
+                      <span className="text-gray-500">
+                        {formData.categories.length === 0
+                          ? "Odaberite kategoriju..."
+                          : `Odabrano: ${formData.categories.length} kategorija(e)`}
+                      </span>
+                      <ChevronDown
+                        size={20}
+                        className={`transition-transform ${categoryDropdownOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {fieldErrors.categories && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {fieldErrors.categories}
+                      </p>
+                    )}
+
+                    {/* Dropdown menu */}
+                    <AnimatePresence>
+                      {categoryDropdownOpen &&
+                        availableCategories.length > 0 &&
+                        formData.categories.length < 3 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                          >
+                            {availableCategories.map((category) => (
+                              <button
+                                key={category}
+                                type="button"
+                                onClick={() => addCategory(category)}
+                                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                              >
+                                <span>{category}</span>
+                                {formData.categories.includes(category) && (
+                                  <Check size={16} className="text-[#2b946f]" />
+                                )}
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Prikaz odabranih kategorija */}
+                  {formData.categories.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {formData.categories.map((category) => (
+                        <span
+                          key={category}
+                          className="inline-flex items-center gap-1 px-3 py-1 bg-[#2b946f]/10 text-[#2b946f] rounded-full text-sm font-medium"
+                        >
+                          {category}
+                          <button
+                            type="button"
+                            onClick={() => removeCategory(category)}
+                            className="text-[#2b946f]/70 hover:text-[#2b946f]"
+                          >
+                            <X size={14} />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Info o maksimalnom broju kategorija */}
+                  {formData.categories.length >= 3 && (
+                    <p className="text-sm text-amber-600 mt-1">
+                      Dostigli ste maksimalan broj kategorija (3)
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -338,6 +544,7 @@ export default function EditTourModal({
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Location */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                       <MapPin size={16} />
@@ -349,9 +556,11 @@ export default function EditTourModal({
                       value={formData.location}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
+                      placeholder="npr. Zagreb, Hrvatska"
                     />
                   </div>
 
+                  {/* Duration */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                       <Clock size={16} />
@@ -363,9 +572,11 @@ export default function EditTourModal({
                       value={formData.duration}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
+                      placeholder="npr. 3 sata, 1 dan, 2h 30min"
                     />
                   </div>
 
+                  {/* Price */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                       <DollarSign size={16} />
@@ -382,6 +593,7 @@ export default function EditTourModal({
                     />
                   </div>
 
+                  {/* Max People */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                       <Users size={16} />
@@ -398,6 +610,7 @@ export default function EditTourModal({
                   </div>
                 </div>
 
+                {/* Meeting Point */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <MapPin size={16} />
@@ -409,98 +622,8 @@ export default function EditTourModal({
                     value={formData.meeting_point}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
+                    placeholder="npr. Trg bana Jelačića, ispod konja"
                   />
-                </div>
-              </div>
-
-              {/* Arrays - Tags, Highlights, Benefits, Images */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Tags */}
-                <div className="space-y-4">
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                    <Tag size={16} />
-                    Tagovi
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={tagInput}
-                      onChange={(e) => setTagInput(e.target.value)}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" && (e.preventDefault(), addTag())
-                      }
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm"
-                      placeholder="Dodaj tag..."
-                    />
-                    <button
-                      type="button"
-                      onClick={addTag}
-                      className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {formData.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                      >
-                        {tag}
-                        <button
-                          type="button"
-                          onClick={() => removeTag(index)}
-                          className="text-gray-400 hover:text-gray-700"
-                        >
-                          <X size={12} />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Languages & Featured */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <Globe size={16} />
-                      Jezik
-                    </label>
-                    <select
-                      name="language_offered"
-                      value={formData.language_offered[0]}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          language_offered: [e.target.value],
-                        }))
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm"
-                    >
-                      <option value="Hrvatski">Hrvatski</option>
-                      <option value="Engleski">Engleski</option>
-                      <option value="Njemački">Njemački</option>
-                      <option value="Talijanski">Talijanski</option>
-                      <option value="Španjolski">Španjolski</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      id="is_featured"
-                      name="is_featured"
-                      checked={formData.is_featured}
-                      onChange={handleChange}
-                      className="w-4 h-4 text-[#2b946f] rounded focus:ring-[#2b946f]"
-                    />
-                    <label
-                      htmlFor="is_featured"
-                      className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer"
-                    >
-                      <Award size={14} className="text-[#ff6309]" />
-                      Istaknuta tura
-                    </label>
-                  </div>
                 </div>
               </div>
 
@@ -508,7 +631,7 @@ export default function EditTourModal({
               <div className="space-y-4">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Award size={16} />
-                  Značajke
+                  Značajke (highlights)
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -518,41 +641,45 @@ export default function EditTourModal({
                     onKeyDown={(e) =>
                       e.key === "Enter" && (e.preventDefault(), addHighlight())
                     }
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm"
-                    placeholder="Dodaj značajku..."
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent"
+                    placeholder="npr. Panoramski pogled na more, Degustacija lokalnih specijaliteta..."
                   />
                   <button
                     type="button"
                     onClick={addHighlight}
-                    className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    +
+                    Dodaj
                   </button>
                 </div>
-                <ul className="space-y-2">
-                  {formData.highlights.map((highlight, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 text-[#2b946f] mt-1 flex-shrink-0" />
-                      <span className="flex-1 text-gray-700 text-sm">
-                        {highlight}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => removeHighlight(index)}
-                        className="text-gray-400 hover:text-gray-700"
-                      >
-                        <X size={12} />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                {formData.highlights.filter((h) => h).length > 0 && (
+                  <ul className="space-y-2">
+                    {formData.highlights
+                      .filter((h) => h)
+                      .map((highlight, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-[#2b946f] mt-1 flex-shrink-0" />
+                          <span className="flex-1 text-gray-700">
+                            {highlight}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeHighlight(index)}
+                            className="text-gray-400 hover:text-gray-700"
+                          >
+                            <X size={14} />
+                          </button>
+                        </li>
+                      ))}
+                  </ul>
+                )}
               </div>
 
               {/* Benefits */}
               <div className="space-y-4">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Check size={16} />
-                  Uključeno
+                  Što je uključeno
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -562,41 +689,45 @@ export default function EditTourModal({
                     onKeyDown={(e) =>
                       e.key === "Enter" && (e.preventDefault(), addBenefit())
                     }
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm"
-                    placeholder="Dodaj benefite..."
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent"
+                    placeholder="npr. Vodič s licencom, Osiguranje, Snack i voda..."
                   />
                   <button
                     type="button"
                     onClick={addBenefit}
-                    className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    +
+                    Dodaj
                   </button>
                 </div>
-                <ul className="space-y-2">
-                  {formData.benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 text-[#2b946f] mt-1 flex-shrink-0" />
-                      <span className="flex-1 text-gray-700 text-sm">
-                        {benefit}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => removeBenefit(index)}
-                        className="text-gray-400 hover:text-gray-700"
-                      >
-                        <X size={12} />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                {formData.benefits.filter((b) => b).length > 0 && (
+                  <ul className="space-y-2">
+                    {formData.benefits
+                      .filter((b) => b)
+                      .map((benefit, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <Check className="h-4 w-4 text-[#2b946f] mt-1 flex-shrink-0" />
+                          <span className="flex-1 text-gray-700">
+                            {benefit}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeBenefit(index)}
+                            className="text-gray-400 hover:text-gray-700"
+                          >
+                            <X size={14} />
+                          </button>
+                        </li>
+                      ))}
+                  </ul>
+                )}
               </div>
 
-              {/* Images */}
+              {/* Image URLs */}
               <div className="space-y-4">
                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <ImageIcon size={16} />
-                  Slike
+                  URL-ovi slika
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -606,38 +737,117 @@ export default function EditTourModal({
                     onKeyDown={(e) =>
                       e.key === "Enter" && (e.preventDefault(), addImageUrl())
                     }
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm"
-                    placeholder="URL slike..."
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent"
+                    placeholder="https://images.unsplash.com/photo-..."
                   />
                   <button
                     type="button"
                     onClick={addImageUrl}
-                    className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    +
+                    Dodaj
                   </button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {formData.image_urls.map((url, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={url}
-                        alt={`Preview ${index + 1}`}
-                        className="w-full h-20 object-cover rounded-lg"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='8' fill='%239ca3af'%3ENevažeći URL%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
+                {formData.image_urls.filter((img) => img).length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {formData.image_urls
+                      .filter((img) => img)
+                      .map((url, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={url}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-24 object-cover rounded-lg"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='10' fill='%239ca3af'%3ENevažeći URL%3C/text%3E%3C/svg%3E";
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImageUrl(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Tags (zaostalo polje za kompatibilnost) */}
+              <div className="space-y-4">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <Tag size={16} />
+                  Tagovi (dodatne oznake)
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {formData.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                    >
+                      {tag}
                       <button
                         type="button"
-                        onClick={() => removeImageUrl(index)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            tags: prev.tags.filter((_, i) => i !== index),
+                          }))
+                        }
+                        className="text-gray-400 hover:text-gray-700"
                       >
-                        <X size={10} />
+                        <X size={12} />
                       </button>
-                    </div>
+                    </span>
                   ))}
+                </div>
+              </div>
+
+              {/* Languages & Featured */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                    <Globe size={16} />
+                    Dostupni jezici
+                  </label>
+                  <select
+                    name="language_offered"
+                    value={formData.language_offered[0]}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        language_offered: [e.target.value],
+                      }))
+                    }
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all bg-white"
+                  >
+                    <option value="Hrvatski">Hrvatski</option>
+                    <option value="Engleski">Engleski</option>
+                    <option value="Njemački">Njemački</option>
+                    <option value="Talijanski">Talijanski</option>
+                    <option value="Španjolski">Španjolski</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="is_featured"
+                    name="is_featured"
+                    checked={formData.is_featured}
+                    onChange={handleChange}
+                    className="w-4 h-4 text-[#2b946f] rounded focus:ring-[#2b946f]"
+                  />
+                  <label
+                    htmlFor="is_featured"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer"
+                  >
+                    <Award size={16} className="text-[#ff6309]" />
+                    Istaknuta tura
+                  </label>
                 </div>
               </div>
 

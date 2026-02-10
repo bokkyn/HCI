@@ -60,14 +60,14 @@ const UserSchema = new Schema(
       of: Number,
       default: () =>
         new Map([
-          ["hrana", 0],
-          ["sport", 0],
-          ["urbano", 0],
-          ["priroda", 0],
-          ["povijest", 0],
-          ["kultura", 0],
-          ["misterija", 0],
-          ["zabava", 0],
+          ["Hrana", 0],
+          ["Sport", 0],
+          ["Urbano", 0],
+          ["Priroda", 0],
+          ["Povijest", 0],
+          ["Kultura", 0],
+          ["Misterija", 0],
+          ["Zabava", 0],
         ]),
     },
 

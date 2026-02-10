@@ -42,11 +42,24 @@ interface Tour {
   description: string;
   meeting_point: string;
   benefits: string[];
+  categories: string[];
 }
 
 export default function ToursPage() {
+  const [sortOption, setSortOption] = useState<string>("");
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
-  const [selectedCategory, setSelectedCategory] = useState("Sve");
+  // Kategorije - definiraj ručno ili iz tura
+  const CATEGORY_LIST = [
+    "Hrana",
+    "Kultura",
+    "Priroda",
+    "Urbano",
+    "Sport",
+    "Misterija",
+    "Povijest",
+    "Zabava",
+  ];
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [hoveredTour, setHoveredTour] = useState<string | null>(null);
@@ -54,7 +67,7 @@ export default function ToursPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [price, setPrice] = useState(200);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedDuration, setSelectedDuration] = useState("");
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
@@ -88,19 +101,8 @@ export default function ToursPage() {
     fetchTours();
   }, []);
 
-  // Ekstrakt kategorije iz tagova
-  const allCategories = useMemo(() => {
-    const categories = new Set<string>(["Sve"]);
-    tours.forEach((tour) => {
-      if (tour.tags && tour.tags.length > 0) {
-        tour.tags.forEach((tag) => {
-          const mainTag = tag.split(" ")[0]; // Uzmi prvu riječ kao kategoriju
-          categories.add(mainTag);
-        });
-      }
-    });
-    return Array.from(categories);
-  }, [tours]);
+  // Kategorije za prikaz
+  const allCategories = useMemo(() => ["Sve", ...CATEGORY_LIST], []);
 
   // Ekstrakt sve jezike
   const allLanguages = useMemo(() => {
@@ -114,14 +116,12 @@ export default function ToursPage() {
   }, [tours]);
 
   const filteredTours = useMemo(() => {
-    return tours.filter((tour) => {
-      // Filter po kategoriji
-      if (selectedCategory !== "Sve") {
+    let filtered = tours.filter((tour) => {
+      // Filter po kategorijama
+      if (selectedCategories.length > 0) {
         if (
-          !tour.tags ||
-          !tour.tags.some((tag) =>
-            tag.toLowerCase().includes(selectedCategory.toLowerCase()),
-          )
+          !tour.categories ||
+          !tour.categories.some((cat) => selectedCategories.includes(cat))
         ) {
           return false;
         }
@@ -140,10 +140,7 @@ export default function ToursPage() {
       }
 
       // Filter po cijeni
-      if (
-        tour.price_per_group < priceRange[0] ||
-        tour.price_per_group > priceRange[1]
-      ) {
+      if (tour.price_per_group > price) {
         return false;
       }
 
@@ -177,14 +174,40 @@ export default function ToursPage() {
 
       return true;
     });
+
+    // Sortiranje
+    if (sortOption === "price-asc") {
+      filtered = filtered.sort((a, b) => a.price_per_group - b.price_per_group);
+    } else if (sortOption === "price-desc") {
+      filtered = filtered.sort((a, b) => b.price_per_group - a.price_per_group);
+    } else if (sortOption === "duration-asc") {
+      filtered = filtered.sort((a, b) => {
+        const getHours = (d: string) => {
+          const m = d.match(/(\d+)/);
+          return m ? parseInt(m[1]) : 0;
+        };
+        return getHours(a.duration) - getHours(b.duration);
+      });
+    } else if (sortOption === "duration-desc") {
+      filtered = filtered.sort((a, b) => {
+        const getHours = (d: string) => {
+          const m = d.match(/(\d+)/);
+          return m ? parseInt(m[1]) : 0;
+        };
+        return getHours(b.duration) - getHours(a.duration);
+      });
+    }
+    return filtered;
   }, [
     tours,
-    selectedCategory,
+    allCategories,
+    selectedCategories,
     searchQuery,
-    priceRange,
+    price,
     selectedLanguages,
     selectedDuration,
     showFeaturedOnly,
+    sortOption,
   ]);
 
   const toggleLanguage = (lang: string) => {
@@ -195,11 +218,18 @@ export default function ToursPage() {
 
   const clearFilters = () => {
     setSearchQuery("");
-    setSelectedCategory("Sve");
-    setPriceRange([0, 200]);
+    setSelectedCategories([]);
+    setPrice(200);
     setSelectedLanguages([]);
     setSelectedDuration("");
     setShowFeaturedOnly(false);
+  };
+
+  // Višestruki odabir kategorija
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
+    );
   };
 
   // Formatiraj trajanje
@@ -284,12 +314,22 @@ export default function ToursPage() {
 
           {/* CATEGORIES */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {allCategories.map((category) => (
+            <button
+              onClick={() => setSelectedCategories([])}
+              className={`px-3 py-1.5 rounded-full text-xs transition-all font-medium ${
+                selectedCategories.length === 0
+                  ? "bg-[#2b946f] text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              }`}
+            >
+              Sve
+            </button>
+            {CATEGORY_LIST.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full transition-all ${
-                  selectedCategory === category
+                onClick={() => toggleCategory(category)}
+                className={`px-3 py-1.5 rounded-full text-xs transition-all font-medium ${
+                  selectedCategories.includes(category)
                     ? "bg-[#2b946f] text-white"
                     : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
                 }`}
@@ -326,32 +366,19 @@ export default function ToursPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Price Range */}
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">
-                    Cijena (€{priceRange[0]} - €{priceRange[1]})
+                  <h3 className="font-medium text-gray-900 mb-3 text-xs">
+                    Cijena (do €{price})
                   </h3>
                   <input
                     type="range"
                     min="0"
                     max="500"
                     step="10"
-                    value={priceRange[0]}
-                    onChange={(e) =>
-                      setPriceRange([parseInt(e.target.value), priceRange[1]])
-                    }
+                    value={price}
+                    onChange={(e) => setPrice(parseInt(e.target.value))}
                     className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2b946f]"
                   />
-                  <input
-                    type="range"
-                    min="0"
-                    max="500"
-                    step="10"
-                    value={priceRange[1]}
-                    onChange={(e) =>
-                      setPriceRange([priceRange[0], parseInt(e.target.value)])
-                    }
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2b946f] mt-2"
-                  />
-                  <div className="flex justify-between text-sm text-gray-600 mt-2">
+                  <div className="flex justify-between text-xs text-gray-600 mt-2">
                     <span>€0</span>
                     <span>€500</span>
                   </div>
@@ -359,13 +386,15 @@ export default function ToursPage() {
 
                 {/* Languages */}
                 <div>
-                  <h3 className="font-medium text-gray-900 mb-3">Jezici</h3>
+                  <h3 className="font-medium text-gray-900 mb-3 text-xs">
+                    Jezici
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {allLanguages.map((lang) => (
                       <button
                         key={lang}
                         onClick={() => toggleLanguage(lang)}
-                        className={`px-3 py-1.5 rounded-full text-sm transition-all ${
+                        className={`px-2 py-1 rounded-full text-xs transition-all font-medium ${
                           selectedLanguages.includes(lang)
                             ? "bg-[#2b946f] text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -380,11 +409,13 @@ export default function ToursPage() {
                 {/* Duration & Featured */}
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-medium text-gray-900 mb-3">Trajanje</h3>
+                    <h3 className="font-medium text-gray-900 mb-3 text-xs">
+                      Trajanje
+                    </h3>
                     <select
                       value={selectedDuration}
                       onChange={(e) => setSelectedDuration(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
                     >
                       <option value="">Sve trajanje</option>
                       <option value="short">Do 3 sata</option>
@@ -393,15 +424,15 @@ export default function ToursPage() {
                     </select>
                   </div>
 
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer text-xs">
                     <input
                       type="checkbox"
                       checked={showFeaturedOnly}
                       onChange={(e) => setShowFeaturedOnly(e.target.checked)}
-                      className="w-4 h-4 text-[#2b946f] rounded focus:ring-[#2b946f]"
+                      className="w-3 h-3 text-[#2b946f] rounded focus:ring-[#2b946f]"
                     />
                     <span className="text-gray-700">Samo istaknute ture</span>
-                    <Award className="h-4 w-4 text-[#ff6309]" />
+                    <Award className="h-3 w-3 text-[#ff6309]" />
                   </label>
                 </div>
               </div>
@@ -410,7 +441,7 @@ export default function ToursPage() {
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <button
                   onClick={clearFilters}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-xs hover:bg-gray-50 transition-colors"
                 >
                   Očisti filtere
                 </button>
@@ -418,34 +449,54 @@ export default function ToursPage() {
             </motion.div>
           )}
 
-          {/* VIEW MODE TOGGLE */}
-          <div className="flex justify-between items-center mb-6">
+          {/* VIEW MODE & SORTING */}
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
             <div className="flex items-center gap-2">
               <span className="text-gray-700">
                 {filteredTours.length} rezultata
               </span>
             </div>
-            <div className="flex bg-white rounded-lg border border-gray-200 p-1">
-              <button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-gray-100 text-gray-900"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="sort"
+                className="text-gray-700 text-sm font-medium"
               >
-                <Grid className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => setViewMode("map")}
-                className={`p-2 rounded transition-colors ${
-                  viewMode === "map"
-                    ? "bg-gray-100 text-gray-900"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
+                Sortiraj:
+              </label>
+              <select
+                id="sort"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all bg-white"
               >
-                <MapIcon className="h-5 w-5" />
-              </button>
+                <option value="">Odaberi</option>
+                <option value="price-asc">Cijena (najniža)</option>
+                <option value="price-desc">Cijena (najviša)</option>
+                <option value="duration-asc">Trajanje (najkraće)</option>
+                <option value="duration-desc">Trajanje (najduže)</option>
+              </select>
+              <div className="flex bg-white rounded-lg border border-gray-200 p-1 ml-2">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded transition-colors ${
+                    viewMode === "grid"
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <Grid className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode("map")}
+                  className={`p-2 rounded transition-colors ${
+                    viewMode === "map"
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <MapIcon className="h-5 w-5" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -480,10 +531,10 @@ export default function ToursPage() {
                         onMouseEnter={() => setHoveredTour(tour.id)}
                         onMouseLeave={() => setHoveredTour(null)}
                       >
-                        {/* Featured Badge */}
+                        {/* Featured Badge - uvijek prikaži za featured ture */}
                         {tour.is_featured && (
-                          <div className="absolute top-4 left-4 z-10">
-                            <div className="flex items-center gap-1 bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-3 py-1 rounded-full text-xs font-medium">
+                          <div className="absolute top-4 left-4 z-20">
+                            <div className="flex items-center gap-1 bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-3 py-1 rounded-full text-xs font-medium shadow">
                               <Award className="h-3 w-3" />
                               Istaknuto
                             </div>
@@ -513,21 +564,25 @@ export default function ToursPage() {
 
                         {/* Content */}
                         <div className="p-6">
-                          {/* Rating */}
-                          <div className="flex items-center gap-1 mb-3">
-                            <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                            <span className="font-medium text-gray-900">
-                              {tour.rating.toFixed(1)}
-                            </span>
-                            <span className="text-gray-500 text-sm">
-                              ({tour.reviews_count} recenzija)
-                            </span>
-                          </div>
+                          {/* Rating removed - nema recenzija */}
 
                           {/* Title */}
                           <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
                             {tour.title}
                           </h3>
+                          {/* Kategorije */}
+                          {tour.categories && tour.categories.length > 0 && (
+                            <div className="mb-2 flex flex-wrap gap-1">
+                              {tour.categories.map((cat, idx) => (
+                                <span
+                                  key={idx}
+                                  className="inline-block px-2 py-1 bg-[#e6f4ef] text-[#2b946f] text-xs rounded-full font-semibold"
+                                >
+                                  {cat}
+                                </span>
+                              ))}
+                            </div>
+                          )}
 
                           {/* Location */}
                           <div className="flex items-center gap-2 text-gray-600 mb-3">
@@ -595,35 +650,10 @@ export default function ToursPage() {
                                 po grupi
                               </div>
                             </div>
-                            <button
-                              className="bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-5 py-2.5 rounded-lg font-medium hover:shadow-lg transition-all"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                // Handler za rezervaciju
-                              }}
-                            >
-                              Rezerviraj
-                            </button>
                           </div>
 
                           {/* Tags */}
-                          {tour.tags && tour.tags.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-4 pt-4 border-t border-gray-100">
-                              {tour.tags.slice(0, 3).map((tag, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                              {tour.tags.length > 3 && (
-                                <span className="px-2 py-1 text-gray-400 text-xs">
-                                  +{tour.tags.length - 3}
-                                </span>
-                              )}
-                            </div>
-                          )}
+                          {/* Tags removed - kategorija prikazana iznad */}
                         </div>
                       </motion.div>
                     </Link>

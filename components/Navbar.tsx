@@ -1,5 +1,3 @@
-// app/components/Navbar.tsx
-// @ts-nocheck
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,16 +16,17 @@ import {
   Mail,
   HelpCircle,
   Info,
-  Settings,
   Award,
   PlusCircle,
 } from "lucide-react";
 import { useAuth } from "./AuthProvider";
 import LoginModal from "./LoginModal";
+import CreateTourModal from "./CreateTourModal"; // Dodano: Import CreateTourModal
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showCreateTourModal, setShowCreateTourModal] = useState(false); // Dodano: State za modal ture
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -46,6 +45,17 @@ export function Navbar() {
     await logout();
     setUserDropdownOpen(false);
     router.push("/");
+  };
+
+  const handleCreateTour = () => {
+    setUserDropdownOpen(false);
+    setMobileMenuOpen(false);
+    setShowCreateTourModal(true);
+  };
+
+  const handleCreateTourSuccess = () => {
+    // Osvježi stranicu ili prikaži poruku o uspjehu
+    router.refresh();
   };
 
   // Zatvori dropdown kada klikneš izvan
@@ -217,10 +227,9 @@ export function Navbar() {
                               </div>
                             </Link>
 
-                            <Link
-                              href="/tours/create"
-                              onClick={() => setUserDropdownOpen(false)}
-                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                            <button
+                              onClick={handleCreateTour}
+                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors text-left"
                             >
                               <PlusCircle size={18} />
                               <div>
@@ -229,21 +238,7 @@ export function Navbar() {
                                   Podijeli svoje putovanje
                                 </div>
                               </div>
-                            </Link>
-
-                            <Link
-                              href="/profile/settings"
-                              onClick={() => setUserDropdownOpen(false)}
-                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <Settings size={18} />
-                              <div>
-                                <div className="font-medium">Postavke</div>
-                                <div className="text-xs text-gray-500">
-                                  Prilagodi svoj račun
-                                </div>
-                              </div>
-                            </Link>
+                            </button>
 
                             <div className="border-t border-gray-100 mx-4 my-2" />
 
@@ -368,14 +363,13 @@ export function Navbar() {
                         Moj profil
                       </Link>
 
-                      <Link
-                        href="/tours/create"
-                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors"
-                        onClick={() => setMobileMenuOpen(false)}
+                      <button
+                        onClick={handleCreateTour}
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left"
                       >
                         <PlusCircle size={18} />
                         Kreiraj turu
-                      </Link>
+                      </button>
 
                       <button
                         onClick={handleLogout}
@@ -406,6 +400,15 @@ export function Navbar() {
       {/* Login Modal */}
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
+      )}
+
+      {/* Create Tour Modal */}
+      {showCreateTourModal && (
+        <CreateTourModal
+          isOpen={showCreateTourModal}
+          onClose={() => setShowCreateTourModal(false)}
+          onSuccess={handleCreateTourSuccess}
+        />
       )}
 
       {/* Backdrop for dropdown */}
