@@ -176,11 +176,14 @@ export default function ProfilePage() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        {/* Gradient stripe under navbar */}
+        <div className="h-8 bg-gradient-to-r from-[#104d2f] to-[#0f6659]"></div>
+        
         {/* Profile Header */}
         <div className="relative">
           {/* Cover Image */}
-          <div className="h-48 md:h-64 bg-gradient-to-r from-[#104d2f] to-[#0f6659] relative">
-            <div className="absolute inset-0 bg-black/20" />
+          <div className="h-48 md:h-64 bg-white relative">
+            <div className="absolute inset-0 bg-black/5" />
           </div>
 
           {/* Profile Info */}
