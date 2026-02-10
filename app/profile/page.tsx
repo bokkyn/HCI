@@ -175,7 +175,7 @@ export default function ProfilePage() {
 
   return (
     <>
-      <div className="pt-16 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* Profile Header */}
         <div className="relative">
           {/* Cover Image */}
@@ -245,7 +245,7 @@ export default function ProfilePage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setShowCreateTourModal(true)}
-                      className="flex items-center gap-2 bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium"
+                      className="flex items-center gap-2 bg-[#ff6309] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium"
                     >
                       <Plus size={18} />
                       Dodaj turu

@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Mail, Phone, MapPin, Send, HelpCircle } from "lucide-react";
+import { Mail, Send, HelpCircle } from "lucide-react";
 
 
 export default function ContactPage() {
@@ -104,52 +104,22 @@ export default function ContactPage() {
                 <div>
                   <h4 className="text-[#104d2f] mb-2">Email</h4>
                   <a
-                    href="mailto:info@coverdis.hr"
+                    href="mailto:info@coverdis.com"
                     className="text-gray-600 hover:text-[#2b946f] transition-colors"
                   >
-                    info@coverdis.hr
+                    info@coverdis.com
                   </a>
                   <br />
                   <a
-                    href="mailto:support@coverdis.hr"
+                    href="mailto:support@coverdis.com"
                     className="text-gray-600 hover:text-[#2b946f] transition-colors"
                   >
-                    support@coverdis.hr
+                    support@coverdis.com
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Phone Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#2b946f] to-[#0f6659] rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Phone className="text-white" size={24} />
-                </div>
-                <div>
-                  <h4 className="text-[#104d2f] mb-2">Telefon</h4>
-                  <p className="text-gray-600">+385 1 234 5678</p>
-                  <p className="text-gray-600">+385 91 234 5678</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Pon-Pet: 09:00 - 18:00
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Address Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#2b946f] to-[#0f6659] rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MapPin className="text-white" size={24} />
-                </div>
-                <div>
-                  <h4 className="text-[#104d2f] mb-2">Adresa</h4>
-                  <p className="text-gray-600">Ilica 123</p>
-                  <p className="text-gray-600">10000 Zagreb, Hrvatska</p>
-                </div>
-              </div>
-            </div>
 
             {/* FAQ Link */}
             <div className="bg-gradient-to-br from-[#2b946f]/10 to-[#0f6659]/10 rounded-2xl p-6">

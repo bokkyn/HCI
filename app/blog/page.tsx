@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, User, Clock, ArrowRight, Search, X } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Search, X } from "lucide-react";
 
 const blogPosts = [
   {
@@ -177,7 +177,6 @@ const blogPosts = [
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -8 }}
                   className="h-full flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
                 >
                   {/* Image */} 
@@ -204,10 +203,9 @@ const blogPosts = [
                     </p>
 
                     {/* Meta */}
-                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                      <div className="flex items-center gap-1">
-                        <User size={16} />
-                        <span>{post.author}</span>
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                      <div className="px-2 py-1 bg-[#2b946f]/10 text-[#2b946f] rounded text-xs font-medium">
+                        Uredničko
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock size={16} />

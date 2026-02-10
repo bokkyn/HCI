@@ -1,18 +1,13 @@
-"use client"; // Dodajte ovo jer koristite useState i useEffect
+"use client";
 
 import { motion } from "motion/react";
 import {
   Calendar,
-  User,
   Clock,
   MapPin,
-  Share2,
-  Facebook,
-  Twitter,
-  Mail,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation"; // Promijenjeno iz react-router-dom
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 
 interface BlogPost {
   id: number;
@@ -158,20 +153,9 @@ Zaključak: Biti lokalni vodič je više od posla - to je poziv. Ako volite svoj
 };
 
  function BlogDetailPage() {
-  // Promijenjeno u export default
-  const params = useParams(); // Koristite useParams iz next/navigation
-  const [showShareMenu, setShowShareMenu] = useState(false);
-  const [shareUrl, setShareUrl] = useState("");
-
-  const id = params?.id as string; // U Next.js, params je objekt
+  const params = useParams();
+  const id = params?.id as string;
   const post = blogPosts[Number(id)] || blogPosts[1];
-
-  useEffect(() => {
-    // Postavi trenutni URL za dijeljenje
-    if (typeof window !== "undefined") {
-      setShareUrl(window.location.href);
-    }
-  }, []);
 
   return (
     <>
@@ -195,9 +179,8 @@ Zaključak: Biti lokalni vodič je više od posla - to je poziv. Ako volite svoj
               </h1>
 
               <div className="flex flex-wrap gap-4 text-white/90">
-                <div className="flex items-center gap-2">
-                  <User size={18} />
-                  <span>{post.author}</span>
+                <div className="flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full">
+                  <span className="text-sm font-medium">Uredničko mišljenje</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar size={18} />
@@ -217,66 +200,6 @@ Zaključak: Biti lokalni vodič je više od posla - to je poziv. Ako volite svoj
         </div>
 
         <div className="max-w-4xl mx-auto px-4 py-12">
-          {/* Share Button */}
-          <div className="flex justify-end mb-8">
-            <div className="relative">
-              <button
-                onClick={() => setShowShareMenu(!showShareMenu)}
-                className="flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all"
-              >
-                <Share2 size={20} className="text-[#2b946f]" />
-                <span className="text-gray-700">Podijeli</span>
-              </button>
-
-              {showShareMenu && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="absolute right-0 mt-2 bg-white rounded-xl shadow-2xl p-4 z-10 w-48"
-                >
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
-                        "_blank"
-                      )
-                    }
-                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <Facebook size={20} className="text-blue-600" />
-                    <span>Facebook</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `https://twitter.com/intent/tweet?url=${shareUrl}`,
-                        "_blank"
-                      )
-                    }
-                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <Twitter size={20} className="text-sky-500" />
-                    <span>Twitter</span>
-                  </button>
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `mailto:?subject=${encodeURIComponent(
-                          post.title
-                        )}&body=${encodeURIComponent(shareUrl)}`,
-                        "_blank"
-                      )
-                    }
-                    className="flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <Mail size={20} className="text-gray-600" />
-                    <span>Email</span>
-                  </button>
-                </motion.div>
-              )}
-            </div>
-          </div>
-
           {/* Content */}
           <motion.article
             initial={{ opacity: 0, y: 20 }}
@@ -315,29 +238,7 @@ Zaključak: Biti lokalni vodič je više od posla - to je poziv. Ako volite svoj
             )}
           </motion.article>
 
-          {/* Author Bio */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-gradient-to-br from-[#2b946f]/10 to-[#0f6659]/10 rounded-2xl p-8"
-          >
-            <div className="flex items-center gap-6">
-              <img
-                src={post.authorAvatar}
-                alt={post.author}
-                className="w-20 h-20 rounded-full object-cover ring-4 ring-white"
-              />
-              <div>
-                <h4 className="text-[#104d2f] mb-2">O autoru</h4>
-                <p className="text-gray-700 mb-2">{post.author}</p>
-                <p className="text-gray-600 text-sm">
-                  Lokalni vodič i pisac sa strašću za dijeljenjem lokalnih priča
-                  i iskustava.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+
         </div>
       </div>
     
