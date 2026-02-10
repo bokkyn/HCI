@@ -316,10 +316,10 @@ export default function ToursPage() {
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setSelectedCategories([])}
-              className={`px-3 py-1.5 rounded-full text-xs transition-all font-medium ${
+              className={`px-6 py-2 rounded-full transition-all ${
                 selectedCategories.length === 0
-                  ? "bg-[#2b946f] text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  ? "bg-[#2b946f] text-white shadow-lg"
+                  : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
             >
               Sve
@@ -328,10 +328,10 @@ export default function ToursPage() {
               <button
                 key={category}
                 onClick={() => toggleCategory(category)}
-                className={`px-3 py-1.5 rounded-full text-xs transition-all font-medium ${
+                className={`px-6 py-2 rounded-full transition-all ${
                   selectedCategories.includes(category)
-                    ? "bg-[#2b946f] text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                    ? "bg-[#2b946f] text-white shadow-lg"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {category}
