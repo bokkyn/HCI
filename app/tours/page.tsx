@@ -527,7 +527,7 @@ export default function ToursPage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="group bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                        className="group h-full flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer"
                         onMouseEnter={() => setHoveredTour(tour.id)}
                         onMouseLeave={() => setHoveredTour(null)}
                       >
@@ -563,7 +563,7 @@ export default function ToursPage() {
                         </div>
 
                         {/* Content */}
-                        <div className="p-6">
+                        <div className="p-6 flex flex-col flex-1">
                           {/* Rating removed - nema recenzija */}
 
                           {/* Title */}
@@ -641,7 +641,7 @@ export default function ToursPage() {
                           </div>
 
                           {/* Price & Button */}
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                             <div>
                               <div className="text-2xl font-bold text-[#2b946f]">
                                 {formatPrice(tour.price_per_group)}

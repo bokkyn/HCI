@@ -178,7 +178,7 @@ const blogPosts = [
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -8 }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
+                  className="h-full flex flex-col bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
                 >
                   {/* Image */} 
                   <div className="relative h-56 overflow-hidden">
@@ -195,7 +195,7 @@ const blogPosts = [
                   </div>
 
                   {/* Content */}
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-1">
                     <h3 className="text-xl text-[#104d2f] mb-3 group-hover:text-[#ff6309] transition-colors font-semibold">
                       {post.title}
                     </h3>
@@ -215,7 +215,7 @@ const blogPosts = [
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
                       <div className="flex items-center gap-1 text-gray-500 text-sm">
                         <Calendar size={16} />
                         <span>{post.date}</span>
