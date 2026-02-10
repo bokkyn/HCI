@@ -96,8 +96,10 @@ export async function POST(req: Request) {
       },
       { status: 201 },
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("Greška pri registraciji:", error);
+    console.error("Error message:", error?.message);
+    console.error("Error stack:", error?.stack);
 
     let errorMessage = "Došlo je do greške pri registraciji";
     let statusCode = 500;

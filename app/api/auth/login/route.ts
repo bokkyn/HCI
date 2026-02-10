@@ -106,11 +106,16 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Greška pri prijavi:", error);
+    console.error("Error message:", error?.message);
+    console.error("Error stack:", error?.stack);
     return NextResponse.json(
-      { error: "Došlo je do greške pri prijavi" },
-      { status: 500 },
+      { 
+        error: "Došlo je do greške pri prijavi",
+        details: error?.message 
+      },
+      { status: 500 }
     );
   }
 }

@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     ime: "",
     prezime: "",
@@ -209,17 +210,36 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <input
-                  type="password"
-                  placeholder="Lozinka"
-                  value={formData.lozinka}
-                  onChange={(e) =>
-                    setFormData({ ...formData, lozinka: e.target.value })
-                  }
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-[#ff6309] focus:ring-2 focus:ring-[#ff6309]/30 transition duration-200"
-                  required
-                  minLength={6}
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Lozinka"
+                    value={formData.lozinka}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lozinka: e.target.value })
+                    }
+                    className="w-full p-3 pr-12 border-2 border-gray-200 rounded-xl focus:border-[#ff6309] focus:ring-2 focus:ring-[#ff6309]/30 transition duration-200"
+                    required
+                    minLength={6}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 transition-colors"
+                    title={showPassword ? "Sakrij lozinku" : "Prikaži lozinku"}
+                  >
+                    {showPassword ? (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 12c0 0 2.5 4 9 4s9-4 9-4" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
                 {!isLogin && (
                   <p className="mt-1 text-xs text-gray-500">
                     Lozinka mora imati najmanje 6 znakova

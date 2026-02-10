@@ -69,8 +69,12 @@ export async function GET() {
       success: true,
       user: userResponse,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Greška u /me endpointu:", error);
-    return NextResponse.json({ error: "Došlo je do greške" }, { status: 500 });
+    console.error("Error details:", error?.message, error?.stack);
+    return NextResponse.json(
+      { error: "Došlo je do greške", details: error?.message },
+      { status: 500 }
+    );
   }
 }
