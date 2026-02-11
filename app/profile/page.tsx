@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "motion/react";
 import EditProfileModal from "@/components/EditProfileModal";
 import CreateTourModal from "@/components/CreateTourModal";
 import MyToursSection from "@/components/MyToursSection";
-import MyPastToursSection from "@/components/MyPastToursSection";
 import LeaderboardPreview from "@/components/LeaderboardPreview";
 import {
   MapPin,
