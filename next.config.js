@@ -10,6 +10,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.ctfassets.net", // za Contentful
       },
+      {
+        protocol: "https",
+        hostname: "**", // Ovo dopušta SVE HTTPS domene
+      },
     ],
   },
 };

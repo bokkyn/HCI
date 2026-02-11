@@ -111,17 +111,20 @@ export async function POST(req: Request) {
       );
     }
 
-    // Provjeri da li korisnik već ima rezervaciju za ovu turu na isti datum
+    // Provjeri da li korisnik već ima rezervaciju za ovu turu na isti datum i vrijeme
     const existingReservation = await Reservation.findOne({
       tour_id: body.tour_id,
-      user_id: userId,
       booking_date: new Date(body.booking_date),
+      booking_time: body.booking_time,
       status: { $in: ["pending", "confirmed"] },
     });
 
     if (existingReservation) {
       return NextResponse.json(
-        { error: "Već imate rezervaciju za ovu turu na odabrani datum" },
+        {
+          error:
+            "Tura je već rezervirana za taj datum i sat. Odaberite drugo vrijeme.",
+        },
         { status: 400 },
       );
     }
@@ -166,10 +169,23 @@ export async function POST(req: Request) {
       $inc: { reservations_count: 1 },
     });
 
-    // Ažuriraj korisnikovu statistiku
-    await User.findByIdAndUpdate(tour.guide_id, {
-      $inc: { ukupno_tura: 0.1 }, // Malo povećaj broj tura za vodiča
+    // XP logika za korisnika koji rezervira
+    // Bodovi po kategoriji: 1 kategorija = 24, 2 = 12, 3 = 8
+    const categories = Array.isArray(tour.categories)
+      ? tour.categories
+      : [tour.categories];
+    let points = 8;
+    if (categories.length === 1) points = 24;
+    else if (categories.length === 2) points = 12;
+
+    // Ažuriraj XP po kategorijama za korisnika koji rezervira
+    categories.forEach((cat) => {
+      // Map je case-sensitive, koristi originalne nazive
+      user.xp_kategorije.set(cat, (user.xp_kategorije.get(cat) || 0) + points);
     });
+    user.xp_total = (user.xp_total || 0) + points * categories.length;
+    await user.save();
+    // NE diraj ukupno_tura ovdje!
 
     console.log("Reservation created successfully:", newReservation._id);
 

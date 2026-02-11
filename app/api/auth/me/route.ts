@@ -29,7 +29,7 @@ export async function GET() {
     await connectDB();
 
     // Pronađi korisnika
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.userId).lean();
 
     if (!user) {
       return NextResponse.json(
@@ -38,7 +38,46 @@ export async function GET() {
       );
     }
 
-    // Kreiraj response sa SVIM podacima
+    // Debug: Provjeri što dolazi iz baze
+    console.log("User from DB:", {
+      id: user._id,
+      xp_total: user.xp_total,
+      xp_kategorije: user.xp_kategorije,
+      xp_kategorije_type: typeof user.xp_kategorije,
+      xp_kategorije_isMap: user.xp_kategorije instanceof Map,
+    });
+
+    // PRAVILNO: Konvertiraj Map u običan objekt sa HRVATSKIM KLJUČEVIMA
+    let xpKategorije = {};
+
+    if (user.xp_kategorije) {
+      if (user.xp_kategorije instanceof Map) {
+        // Ako je Map, pretvori u objekt
+        xpKategorije = Object.fromEntries(user.xp_kategorije);
+      } else if (typeof user.xp_kategorije === "object") {
+        // Ako je već objekt, koristi ga
+        xpKategorije = user.xp_kategorije;
+      }
+    }
+
+    // Osiguraj da sve kategorije imaju vrijednost
+    const defaultKategorije = {
+      Hrana: 0,
+      Sport: 0,
+      Urbano: 0,
+      Priroda: 0,
+      Povijest: 0,
+      Kultura: 0,
+      Misterija: 0,
+      Zabava: 0,
+    };
+
+    // Spoji defaultne sa stvarnim vrijednostima
+    xpKategorije = { ...defaultKategorije, ...xpKategorije };
+
+    console.log("Formatted xpKategorije:", xpKategorije);
+
+    // Kreiraj response sa SVIM podacima - koristi HRVATSKE KLJUČEVE
     const userResponse = {
       id: user._id.toString(),
       ime: user.ime,
@@ -50,17 +89,19 @@ export async function GET() {
       lokacija: user.lokacija || "",
       bio: user.bio || "",
       avatar: user.avatar || "",
+      cover_slika: user.cover_slika || "",
       xp_total: user.xp_total || 0,
-      xp_kategorije: {
-        hrana: user.xp_hrana || 0,
-        sport: user.xp_sport || 0,
-        urbano: user.xp_urbano || 0,
-        priroda: user.xp_priroda || 0,
-        art: user.xp_art || 0,
-        misterija: user.xp_misterija || 0,
-        ostalo: user.xp_ostalo || 0,
-      },
+      xp_kategorije: xpKategorije, // Ovo je sada objekt sa hrvatskim ključevima
       ukupno_tura: user.ukupno_tura || 0,
+      ukupno_ocjena: user.ukupno_ocjena || 0,
+      prosjecna_ocjena: user.prosjecna_ocjena || 0,
+      postavke: user.postavke || {
+        privatnost_profila: "javno",
+        email_obavijesti: true,
+        push_obavijesti: true,
+      },
+      email_verificiran: user.email_verificiran || false,
+      verificiran_korisnik: user.verificiran_korisnik || false,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
@@ -74,7 +115,7 @@ export async function GET() {
     console.error("Error details:", error?.message, error?.stack);
     return NextResponse.json(
       { error: "Došlo je do greške", details: error?.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
