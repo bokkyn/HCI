@@ -336,6 +336,7 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
+              <div></div>
 
               {/* Moje ture Section */}
               <MyToursSection
