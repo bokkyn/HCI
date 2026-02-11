@@ -132,7 +132,7 @@ const faqs: FAQItem[] = [
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full transition-all ${
+                className={`px-6 py-2 rounded-full transition-all cursor-pointer ${
                   selectedCategory === category
                     ? "bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white shadow-lg"
                     : "bg-white text-gray-700 hover:bg-gray-100"
@@ -157,7 +157,7 @@ const faqs: FAQItem[] = [
                   onClick={() =>
                     setOpenIndex(openIndex === index ? null : index)
                   }
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors cursor-pointer"
                 >
                   <span className="text-lg text-[#104d2f] pr-4 font-medium">
                     {faq.question}

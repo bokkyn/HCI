@@ -109,13 +109,13 @@ function Page() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/tours"
-              className="bg-white text-[#2b946f] px-8 py-3 rounded-full hover:shadow-lg transition-all inline-block"
+              className="bg-white text-[#2b946f] px-8 py-3 rounded-full hover:bg-gray-100 hover:shadow-lg transition-all inline-block cursor-pointer"
             >
               Istraži ture
             </Link>
             <Link
               href="/become-guide"
-              className="bg-[#ff6309] text-white px-8 py-3 rounded-full hover:bg-[#e55808] transition-colors inline-block"
+              className="bg-[#ff6309] text-white px-8 py-3 rounded-full hover:bg-[#e55808] transition-colors inline-block cursor-pointer"
             >
               Postani vodič
             </Link>

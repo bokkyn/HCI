@@ -82,7 +82,7 @@ export function Navbar() {
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2 text-white text-2xl font-bold tracking-tight hover:text-[#ff6309] transition-colors duration-200 p-2 rounded-lg hover:bg-white/5"
+              className="flex items-center gap-2 text-white text-2xl font-bold tracking-tight hover:text-[#ff6309] transition-colors duration-200 p-2 rounded-lg hover:bg-white/5 cursor-pointer"
             >
               <span className="bg-[#ff6309] text-white px-2 py-1 rounded-lg">
                 Cover
@@ -119,7 +119,7 @@ export function Navbar() {
                   <div className="relative">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="group flex items-center gap-3 px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/15 transition-all duration-200"
+                      className="group flex items-center gap-3 px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/15 transition-all duration-200 cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
                         {user.avatar ? (
@@ -229,7 +229,7 @@ export function Navbar() {
 
                             <button
                               onClick={handleCreateTour}
-                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors text-left"
+                              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors text-left cursor-pointer"
                             >
                               <PlusCircle size={18} />
                               <div>
@@ -244,7 +244,7 @@ export function Navbar() {
 
                             <button
                               onClick={handleLogout}
-                              className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
+                              className="flex items-center gap-3 w-full px-4 py-3 text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
                             >
                               <LogOut size={18} />
                               <div>
@@ -261,19 +261,21 @@ export function Navbar() {
                   </div>
                 ) : (
                   // NIJE LOGIRAN - LOGIN BUTTON
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => setShowLoginModal(true)}
-                    className="bg-[#ff6309] text-white px-6 py-2.5 rounded-lg hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all font-medium shadow-md"
+                    className="bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium shadow-md cursor-pointer"
                   >
                     Prijavi se
-                  </button>
+                  </motion.button>
                 )}
               </div>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              className="md:hidden text-white p-2 rounded-lg hover:bg-white/5 transition-colors"
+              <button
+              className="md:hidden text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -365,7 +367,7 @@ export function Navbar() {
 
                       <button
                         onClick={handleCreateTour}
-                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left"
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left cursor-pointer"
                       >
                         <PlusCircle size={18} />
                         Kreiraj turu
@@ -373,22 +375,24 @@ export function Navbar() {
 
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-300 hover:bg-red-500/20 transition-colors mt-1"
+                        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-red-300 hover:bg-red-500/20 transition-colors mt-1 cursor-pointer"
                       >
                         <LogOut size={18} />
                         Odjavi se
                       </button>
                     </>
                   ) : (
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => {
                         setShowLoginModal(true);
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full bg-[#ff6309] text-white px-6 py-3.5 rounded-lg font-medium shadow-md"
+                      className="w-full bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-3.5 rounded-lg font-medium shadow-md cursor-pointer"
                     >
                       Prijavi se
-                    </button>
+                    </motion.button>
                   )}
                 </div>
               </div>
@@ -414,7 +418,7 @@ export function Navbar() {
       {/* Backdrop for dropdown */}
       {userDropdownOpen && (
         <div
-          className="fixed inset-0 z-40"
+          className="fixed inset-0 z-40 cursor-pointer"
           onClick={() => setUserDropdownOpen(false)}
         />
       )}

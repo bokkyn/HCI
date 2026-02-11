@@ -159,7 +159,7 @@ export default function ProfilePage() {
           </p>
           <button
             onClick={() => (window.location.href = "/")}
-            className="bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
+            className="bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
           >
             Početna stranica
           </button>
@@ -177,17 +177,12 @@ export default function ProfilePage() {
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* Gradient stripe under navbar */}
-        <div className="h-16 bg-gradient-to-r from-[#104d2f] to-[#0f6659]"></div>
+        <div className="h-12 bg-gradient-to-r from-[#104d2f] to-[#0f6659]"></div>
         
         {/* Profile Header */}
         <div className="relative">
-          {/* Cover Image */}
-          <div className="h-48 md:h-64 bg-white relative">
-            <div className="absolute inset-0 bg-black/5" />
-          </div>
-
           {/* Profile Info */}
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative">
             <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
               {/* Avatar */}
               <div className="relative">
@@ -209,7 +204,7 @@ export default function ProfilePage() {
                 </div>
                 <button
                   onClick={() => setShowEditModal(true)}
-                  className="absolute bottom-2 right-2 bg-[#ff6309] text-white p-2 rounded-full hover:bg-[#e55808] transition-colors shadow-lg"
+                  className="absolute bottom-2 right-2 bg-[#ff6309] text-white p-2 rounded-full hover:bg-[#e55808] transition-colors shadow-lg cursor-pointer"
                 >
                   <Camera size={18} />
                 </button>
@@ -247,14 +242,14 @@ export default function ProfilePage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => setShowCreateTourModal(true)}
-                      className="flex items-center gap-2 bg-[#ff6309] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium"
+                      className="flex items-center gap-2 bg-[#ff6309] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium cursor-pointer"
                     >
                       <Plus size={18} />
                       Dodaj turu
                     </button>
                     <button
                       onClick={() => setShowEditModal(true)}
-                      className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all font-medium"
+                      className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-5 py-2.5 rounded-lg hover:bg-gray-50 hover:shadow-md transition-all font-medium cursor-pointer"
                     >
                       <Edit size={18} />
                       Uredi profil
@@ -321,7 +316,7 @@ export default function ProfilePage() {
                       </p>
                       <button
                         onClick={() => setShowEditModal(true)}
-                        className="text-[#2b946f] hover:text-[#104d2f] font-medium"
+                        className="text-[#2b946f] hover:text-[#104d2f] font-medium cursor-pointer"
                       >
                         Dodaj opis
                       </button>

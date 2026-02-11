@@ -139,7 +139,7 @@ const blogPosts = [
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   <X size={20} />
                 </button>
@@ -153,7 +153,7 @@ const blogPosts = [
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full transition-all ${
+                className={`px-6 py-2 rounded-full transition-all cursor-pointer ${
                   selectedCategory === category
                     ? "bg-[#2b946f] text-white shadow-lg"
                     : "bg-white text-gray-700 hover:bg-gray-100"

@@ -72,7 +72,7 @@ export default function ShareModal({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -96,7 +96,7 @@ export default function ShareModal({
               {/* Copy Link */}
               <button
                 onClick={handleCopyLink}
-                className="w-full flex items-center gap-3 p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors group"
+                className="w-full flex items-center gap-3 p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors group cursor-pointer"
               >
                 <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
                   <Copy className="h-6 w-6 text-gray-700" />
@@ -112,7 +112,7 @@ export default function ShareModal({
               {/* Facebook */}
               <button
                 onClick={handleShareFacebook}
-                className="w-full flex items-center gap-3 p-4 border border-gray-300 rounded-lg hover:bg-blue-50 transition-colors group"
+                className="w-full flex items-center gap-3 p-4 border border-gray-300 rounded-lg hover:bg-blue-50 transition-colors group cursor-pointer"
               >
                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                   <Facebook className="h-6 w-6 text-blue-600" />
@@ -130,7 +130,7 @@ export default function ShareModal({
               {/* Twitter/X */}
               <button
                 onClick={handleShareTwitter}
-                className="w-full flex items-center gap-3 p-4 border border-gray-300 rounded-lg hover:bg-black/5 transition-colors group"
+                className="w-full flex items-center gap-3 p-4 border border-gray-300 rounded-lg hover:bg-black/5 transition-colors group cursor-pointer"
               >
                 <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
                   <Twitter className="h-6 w-6 text-white" />
@@ -156,7 +156,7 @@ export default function ShareModal({
           <div className="border-t border-gray-200 p-4">
             <button
               onClick={onClose}
-              className="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium cursor-pointer"
             >
               Zatvori
             </button>

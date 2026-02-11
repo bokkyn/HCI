@@ -148,7 +148,7 @@ export default function MyToursSection({
           <p className="text-gray-700">{error}</p>
           <button
             onClick={fetchMyTours}
-            className="mt-4 text-[#2b946f] hover:text-[#104d2f] font-medium"
+            className="mt-4 text-[#2b946f] hover:text-[#104d2f] font-medium cursor-pointer"
           >
             Pokušaj ponovno
           </button>
@@ -169,7 +169,7 @@ export default function MyToursSection({
           </div>
           <button
             onClick={onAddTourClick}
-            className="flex items-center gap-2 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium"
+            className="flex items-center gap-2 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium cursor-pointer"
           >
             <Plus size={20} />
             Dodaj novu turu
@@ -189,7 +189,7 @@ export default function MyToursSection({
             </p>
             <button
               onClick={onAddTourClick}
-              className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
+              className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
             >
               Kreiraj prvu turu
             </button>
@@ -287,7 +287,7 @@ export default function MyToursSection({
                       <div className="flex flex-col xs:flex-row gap-3">
                         <Link
                           href={`/tours/${tour.id}`}
-                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-[#2b946f] transition-all font-medium text-sm flex-1"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-[#2b946f] transition-all font-medium text-sm flex-1 cursor-pointer"
                         >
                           <Eye size={16} />
                           Pregled
@@ -297,7 +297,7 @@ export default function MyToursSection({
                             setEditingTour(tour);
                             setShowEditModal(true);
                           }}
-                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2b946f] text-white rounded-lg hover:bg-[#0f6659] transition-all font-medium text-sm flex-1"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2b946f] text-white rounded-lg hover:bg-[#0f6659] transition-all font-medium text-sm flex-1 cursor-pointer"
                         >
                           <Edit size={16} />
                           Uredi
@@ -305,7 +305,7 @@ export default function MyToursSection({
                         <button
                           onClick={() => handleDeleteTour(tour.id)}
                           disabled={deletingId === tour.id}
-                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all font-medium text-sm flex-1 disabled:opacity-50"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all font-medium text-sm flex-1 disabled:opacity-50 cursor-pointer"
                         >
                           {deletingId === tour.id ? (
                             <Loader2 className="h-4 w-4 animate-spin" />

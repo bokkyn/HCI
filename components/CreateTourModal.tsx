@@ -60,8 +60,8 @@ export default function CreateTourModal({
     // Opcionalna polja
     highlights: [""],
     meeting_point: "",
-    price_per_group: 0,
-    max_people: 8,
+    price_per_group: 0 as number | string,
+    max_people: 8 as number | string,
     duration: "",
     location: "",
     image_urls: [""],
@@ -122,7 +122,10 @@ export default function CreateTourModal({
       const checked = (e.target as HTMLInputElement).checked;
       setFormData((prev) => ({ ...prev, [name]: checked }));
     } else if (type === "number") {
-      setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value === "" ? "" : parseFloat(value),
+      }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -255,6 +258,8 @@ export default function CreateTourModal({
       // Pripremi podatke
       const tourData = {
         ...formData,
+        price_per_group: Number(formData.price_per_group) || 0,
+        max_people: Number(formData.max_people) || 1,
         // Očisti prazne stringove iz arraya
         highlights: formData.highlights.filter((h) => h.trim()),
         benefits: formData.benefits.filter((b) => b.trim()),
@@ -323,7 +328,7 @@ export default function CreateTourModal({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
               disabled={loading}
             >
               <X size={24} />
@@ -425,7 +430,7 @@ export default function CreateTourModal({
                         availableCategories.length === 0 ||
                         formData.categories.length >= 3
                       }
-                      className={`w-full px-4 py-3 border rounded-lg text-left flex items-center justify-between transition-all ${
+                      className={`w-full px-4 py-3 border rounded-lg text-left flex items-center justify-between transition-all cursor-pointer ${
                         fieldErrors.categories
                           ? "border-red-500"
                           : "border-gray-300 hover:border-gray-400"
@@ -469,7 +474,7 @@ export default function CreateTourModal({
                                 key={category}
                                 type="button"
                                 onClick={() => addCategory(category)}
-                                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between cursor-pointer"
                               >
                                 <span>{category}</span>
                                 {formData.categories.includes(category) && (
@@ -494,7 +499,7 @@ export default function CreateTourModal({
                           <button
                             type="button"
                             onClick={() => removeCategory(category)}
-                            className="text-[#2b946f]/70 hover:text-[#2b946f]"
+                            className="text-[#2b946f]/70 hover:text-[#2b946f] cursor-pointer"
                           >
                             <X size={14} />
                           </button>
@@ -622,7 +627,7 @@ export default function CreateTourModal({
                   <button
                     type="button"
                     onClick={addHighlight}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                   >
                     Dodaj
                   </button>
@@ -640,7 +645,7 @@ export default function CreateTourModal({
                           <button
                             type="button"
                             onClick={() => removeHighlight(index)}
-                            className="text-gray-400 hover:text-gray-700"
+                            className="text-gray-400 hover:text-gray-700 cursor-pointer"
                           >
                             <X size={14} />
                           </button>
@@ -670,7 +675,7 @@ export default function CreateTourModal({
                   <button
                     type="button"
                     onClick={addBenefit}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                   >
                     Dodaj
                   </button>
@@ -688,7 +693,7 @@ export default function CreateTourModal({
                           <button
                             type="button"
                             onClick={() => removeBenefit(index)}
-                            className="text-gray-400 hover:text-gray-700"
+                            className="text-gray-400 hover:text-gray-700 cursor-pointer"
                           >
                             <X size={14} />
                           </button>
@@ -802,14 +807,14 @@ export default function CreateTourModal({
                   type="button"
                   onClick={onClose}
                   disabled={loading}
-                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3.5 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3.5 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 cursor-pointer"
                 >
                   Odustani
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>

@@ -268,7 +268,7 @@ export default function ToursPage() {
           </div>
           <button
             onClick={() => window.location.reload()}
-            className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
+            className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
           >
             Pokušaj ponovno
           </button>
@@ -394,7 +394,7 @@ export default function ToursPage() {
                       <button
                         key={lang}
                         onClick={() => toggleLanguage(lang)}
-                        className={`px-2 py-1 rounded-full text-xs transition-all font-medium ${
+                        className={`px-2 py-1 rounded-full text-xs transition-all font-medium cursor-pointer ${
                           selectedLanguages.includes(lang)
                             ? "bg-[#2b946f] text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -475,28 +475,6 @@ export default function ToursPage() {
                 <option value="duration-asc">Trajanje (najkraće)</option>
                 <option value="duration-desc">Trajanje (najduže)</option>
               </select>
-              <div className="flex bg-white rounded-lg border border-gray-200 p-1 ml-2">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded transition-colors ${
-                    viewMode === "grid"
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <Grid className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => setViewMode("map")}
-                  className={`p-2 rounded transition-colors ${
-                    viewMode === "map"
-                      ? "bg-gray-100 text-gray-900"
-                      : "text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <MapIcon className="h-5 w-5" />
-                </button>
-              </div>
             </div>
           </div>
 

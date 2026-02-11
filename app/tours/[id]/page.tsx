@@ -255,14 +255,14 @@ export default function TourDetailPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => router.back()}
-              className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-all font-medium"
+              className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-all font-medium cursor-pointer"
             >
               <ArrowLeft size={20} />
               Natrag
             </button>
             <Link
               href="/tours"
-              className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-medium text-center"
+              className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-medium text-center cursor-pointer"
             >
               Pregled svih tura
             </Link>
@@ -286,7 +286,7 @@ export default function TourDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           <button
             onClick={() => router.back()}
-            className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors px-4 py-2 rounded-lg hover:bg-gray-100"
+            className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer"
           >
             <ArrowLeft size={20} />
             <span>Natrag na ture</span>
@@ -380,7 +380,7 @@ export default function TourDetailPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setIsFavorite(!isFavorite)}
-                      className={`p-3 rounded-lg transition-colors flex items-center justify-center ${
+                      className={`p-3 rounded-lg transition-colors flex items-center justify-center cursor-pointer ${
                         isFavorite
                           ? "border-2 border-[#ff6309] text-[#ff6309] bg-[#ff6309]/10"
                           : "border-2 border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -394,7 +394,7 @@ export default function TourDetailPage() {
 
                     <button
                       onClick={() => setShareModalOpen(true)}
-                      className="p-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
+                      className="p-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center cursor-pointer"
                     >
                       <Share2 size={20} />
                     </button>

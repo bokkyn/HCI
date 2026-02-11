@@ -70,7 +70,7 @@ export function HowItWorks() {
               {/* Step Number */}
               <div className="mt-6">
                 <span 
-                  className="inline-block w-8 h-8 rounded-full text-white flex items-center justify-center"
+                  className="flex w-8 h-8 rounded-full text-white items-center justify-center mx-auto"
                   style={{ backgroundColor: step.color }}
                 >
                   {index + 1}

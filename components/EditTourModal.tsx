@@ -348,7 +348,7 @@ export default function EditTourModal({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
               disabled={loading}
             >
               <X size={24} />
@@ -450,7 +450,7 @@ export default function EditTourModal({
                         availableCategories.length === 0 ||
                         formData.categories.length >= 3
                       }
-                      className={`w-full px-4 py-3 border rounded-lg text-left flex items-center justify-between transition-all ${
+                      className={`w-full px-4 py-3 border rounded-lg text-left flex items-center justify-between transition-all cursor-pointer ${
                         fieldErrors.categories
                           ? "border-red-500"
                           : "border-gray-300 hover:border-gray-400"
@@ -494,7 +494,7 @@ export default function EditTourModal({
                                 key={category}
                                 type="button"
                                 onClick={() => addCategory(category)}
-                                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                                className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between cursor-pointer"
                               >
                                 <span>{category}</span>
                                 {formData.categories.includes(category) && (
@@ -519,7 +519,7 @@ export default function EditTourModal({
                           <button
                             type="button"
                             onClick={() => removeCategory(category)}
-                            className="text-[#2b946f]/70 hover:text-[#2b946f]"
+                            className="text-[#2b946f]/70 hover:text-[#2b946f] cursor-pointer"
                           >
                             <X size={14} />
                           </button>
@@ -647,7 +647,7 @@ export default function EditTourModal({
                   <button
                     type="button"
                     onClick={addHighlight}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                   >
                     Dodaj
                   </button>
@@ -665,7 +665,7 @@ export default function EditTourModal({
                           <button
                             type="button"
                             onClick={() => removeHighlight(index)}
-                            className="text-gray-400 hover:text-gray-700"
+                            className="text-gray-400 hover:text-gray-700 cursor-pointer"
                           >
                             <X size={14} />
                           </button>
@@ -695,7 +695,7 @@ export default function EditTourModal({
                   <button
                     type="button"
                     onClick={addBenefit}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                   >
                     Dodaj
                   </button>
@@ -713,7 +713,7 @@ export default function EditTourModal({
                           <button
                             type="button"
                             onClick={() => removeBenefit(index)}
-                            className="text-gray-400 hover:text-gray-700"
+                            className="text-gray-400 hover:text-gray-700 cursor-pointer"
                           >
                             <X size={14} />
                           </button>
@@ -743,7 +743,7 @@ export default function EditTourModal({
                   <button
                     type="button"
                     onClick={addImageUrl}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
                   >
                     Dodaj
                   </button>
@@ -766,7 +766,7 @@ export default function EditTourModal({
                           <button
                             type="button"
                             onClick={() => removeImageUrl(index)}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                           >
                             <X size={12} />
                           </button>
@@ -797,7 +797,7 @@ export default function EditTourModal({
                             tags: prev.tags.filter((_, i) => i !== index),
                           }))
                         }
-                        className="text-gray-400 hover:text-gray-700"
+                        className="text-gray-400 hover:text-gray-700 cursor-pointer"
                       >
                         <X size={12} />
                       </button>
@@ -857,14 +857,14 @@ export default function EditTourModal({
                   type="button"
                   onClick={onClose}
                   disabled={loading}
-                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3.5 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
+                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3.5 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 cursor-pointer"
                 >
                   Odustani
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <>

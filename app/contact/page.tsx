@@ -81,7 +81,7 @@ export default function ContactPage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-4 rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-4 rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Send size={20} />
                 Pošalji poruku
@@ -105,14 +105,14 @@ export default function ContactPage() {
                   <h4 className="text-[#104d2f] mb-2">Email</h4>
                   <a
                     href="mailto:info@coverdis.com"
-                    className="text-gray-600 hover:text-[#2b946f] transition-colors"
+                    className="text-gray-600 hover:text-[#2b946f] transition-colors cursor-pointer"
                   >
                     info@coverdis.com
                   </a>
                   <br />
                   <a
                     href="mailto:support@coverdis.com"
-                    className="text-gray-600 hover:text-[#2b946f] transition-colors"
+                    className="text-gray-600 hover:text-[#2b946f] transition-colors cursor-pointer"
                   >
                     support@coverdis.com
                   </a>
@@ -132,7 +132,7 @@ export default function ContactPage() {
                   </p>
                   <Link
                     href="/faq"
-                    className="inline-block text-[#2b946f] hover:text-[#104d2f] transition-colors"
+                    className="inline-block text-[#2b946f] hover:text-[#104d2f] transition-colors cursor-pointer"
                   >
                     Pogledaj FAQ →
                   </Link>

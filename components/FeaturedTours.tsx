@@ -137,9 +137,9 @@ export default function FeaturedTours() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -8 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-all duration-300"
+                transition={{ delay: index * 0.1, type: "tween", duration: 0.1 }}
+                whileHover={{ y: -8, transition: { duration: 0.05 } }}
+                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-all duration-100"
               >
                 {/* Tour Image */}
                 <div className="relative h-64 overflow-hidden">

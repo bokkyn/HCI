@@ -60,7 +60,7 @@ export default function Hero() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={scrollToSearch}
-            className="bg-[#ff6309] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#e55808] transition-colors shadow-lg"
+            className="bg-[#ff6309] text-white px-8 py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#e55808] transition-colors shadow-lg cursor-pointer"
           >
             <Search size={20} />
             Pronađi iskustvo
@@ -70,7 +70,7 @@ export default function Hero() {
             href="/profile"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-[#2b946f] text-white px-8 py-4 rounded-full hover:bg-[#267d5e] transition-colors shadow-lg inline-block"
+            className="bg-[#2b946f] text-white px-8 py-4 rounded-full hover:bg-[#267d5e] transition-colors shadow-lg inline-block cursor-pointer"
           >
             Postani vodič
           </motion.a>

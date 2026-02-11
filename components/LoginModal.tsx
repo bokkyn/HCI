@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import { motion } from "motion/react";
 import { useAuth } from "./AuthProvider";
 
 interface LoginModalProps {
@@ -107,7 +108,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
             </h2>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -185,7 +186,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 transition-colors cursor-pointer"
                   title={showPassword ? "Sakrij lozinku" : "Prikaži lozinku"}
                 >
                   {showPassword ? (
@@ -201,10 +202,12 @@ export default function LoginModal({ onClose }: LoginModalProps) {
                 </button>
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] text-white py-3.5 rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white py-4 rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
               >
                 {loading
                   ? isLogin
@@ -213,7 +216,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
                   : isLogin
                     ? "PRIJAVI SE"
                     : "REGISTRIRAJ SE"}
-              </button>
+              </motion.button>
             </form>
 
             <div className="mt-6 pt-6 border-t border-gray-200 text-center">
@@ -224,7 +227,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
                   setSuccess("");
                   setFormData({ ime: "", prezime: "", email: "", lozinka: "" });
                 }}
-                className="text-[#2b946f] hover:text-[#104d2f] font-medium"
+                className="text-[#2b946f] hover:text-[#104d2f] font-medium cursor-pointer"
               >
                 {isLogin
                   ? "Nemate račun? Registrirajte se"

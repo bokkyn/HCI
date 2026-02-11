@@ -66,7 +66,7 @@ export function TourSearch() {
               </select>
             </div>
 
-            <button className="bg-[#ff6309] text-white py-3 rounded-lg hover:bg-[#e55808] transition-colors">
+            <button className="bg-[#ff6309] text-white py-3 rounded-lg hover:bg-[#e55808] transition-colors cursor-pointer">
               Pretraži
             </button>
           </div>
@@ -74,7 +74,7 @@ export function TourSearch() {
           {/* Advanced Filters Toggle */}
           <button
             onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-            className="flex items-center gap-2 text-[#104d2f] hover:text-[#ff6309] transition-colors"
+            className="flex items-center gap-2 text-[#104d2f] hover:text-[#ff6309] transition-colors cursor-pointer"
           >
             <Filter size={18} />
             Napredni filteri
