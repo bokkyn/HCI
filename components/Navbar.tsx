@@ -34,7 +34,7 @@ export function Navbar() {
 
   const navLinks = [
     { name: "Početna", href: "/", icon: <Home size={18} /> },
-    { name: "Ture", href: "/tours", icon: <Map size={18} /> },
+    { name: "Izleti", href: "/tours", icon: <Map size={18} /> },
     { name: "Blog", href: "/blog", icon: <Book size={18} /> },
     { name: "Kontakt", href: "/contact", icon: <Mail size={18} /> },
     { name: "FAQ", href: "/faq", icon: <HelpCircle size={18} /> },
@@ -206,7 +206,7 @@ export function Navbar() {
                                 <div className="text-xl font-bold">
                                   {user.ukupno_tura || 0}
                                 </div>
-                                <div className="text-xs opacity-80">Ture</div>
+                                <div className="text-xs opacity-80">Izleti</div>
                               </div>
                             </div>
                           </div>
@@ -233,9 +233,9 @@ export function Navbar() {
                             >
                               <PlusCircle size={18} />
                               <div>
-                                <div className="font-medium">Kreiraj turu</div>
+                                <div className="font-medium">Kreiraj izlet</div>
                                 <div className="text-xs text-gray-500">
-                                  Podijeli svoje putovanje
+                                  Podijeli svoj izlet
                                 </div>
                               </div>
                             </button>
@@ -351,7 +351,7 @@ export function Navbar() {
                             <div className="text-lg font-bold text-white">
                               {user.ukupno_tura || 0}
                             </div>
-                            <div className="text-xs text-white/70">Ture</div>
+                            <div className="text-xs text-white/70">Izleti</div>
                           </div>
                         </div>
                       </div>
@@ -370,7 +370,7 @@ export function Navbar() {
                         className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-white hover:bg-white/10 transition-colors text-left cursor-pointer"
                       >
                         <PlusCircle size={18} />
-                        Kreiraj turu
+                        Kreiraj izlet
                       </button>
 
                       <button

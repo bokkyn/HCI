@@ -37,7 +37,7 @@ export function Footer() {
                 href="/tours"
                 className="text-gray-400 hover:text-[#ff6309] text-xs transition-colors"
               >
-                Sve ture
+                Svi izleti
               </Link>
               <Link
                 href="/faq"

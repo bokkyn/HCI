@@ -280,11 +280,11 @@ export default function CreateTourModal({
         if (data.error) {
           throw new Error(data.error);
         }
-        throw new Error("Došlo je do greške pri kreiranju ture");
+        throw new Error("Došlo je do greške pri kreiranju izleta");
       }
 
       // Uspješno kreiranje
-      setSuccess("Tura je uspješno kreirana!");
+      setSuccess("Izlet je uspješno kreiran!");
       setTimeout(() => {
         onClose();
         onSuccess();
@@ -319,7 +319,7 @@ export default function CreateTourModal({
           <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-[#104d2f]/5 to-[#0f6659]/5">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                Dodaj novu turu
+                Dodaj novi izlet
               </h2>
               <p className="text-gray-600 mt-1">
                 <span className="text-red-500 font-medium">*</span> označava
@@ -362,7 +362,7 @@ export default function CreateTourModal({
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <FileText size={16} />
-                    Naslov ture <span className="text-red-500">*</span>
+                    Naslov izleta <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -372,7 +372,7 @@ export default function CreateTourModal({
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all ${
                       fieldErrors.title ? "border-red-500" : "border-gray-300"
                     }`}
-                    placeholder="npr. Zagrebački city tour"
+                    placeholder="npr. Zagrebački gradski izlet"
                   />
                   {fieldErrors.title && (
                     <p className="mt-1 text-sm text-red-600">
@@ -385,7 +385,7 @@ export default function CreateTourModal({
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <FileText size={16} />
-                    Opis ture <span className="text-red-500">*</span>
+                    Opis izleta <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="description"
@@ -397,7 +397,7 @@ export default function CreateTourModal({
                         ? "border-red-500"
                         : "border-gray-300"
                     }`}
-                    placeholder="Detaljan opis ture, što će se događati, što će sudionici naučiti..."
+                    placeholder="Detaljan opis izleta, što će se događati, što će sudionici naučiti..."
                   />
                   {fieldErrors.description ? (
                     <p className="mt-1 text-sm text-red-600">
@@ -520,7 +520,7 @@ export default function CreateTourModal({
               {/* Detalji */}
               <div className="space-y-6">
                 <h3 className="text-lg font-bold text-gray-900 border-b pb-2">
-                  Detalji ture
+                  Detalji izleta
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -796,7 +796,7 @@ export default function CreateTourModal({
                     className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer"
                   >
                     <Award size={16} className="text-[#ff6309]" />
-                    Istaknuta tura
+                    Istaknuti izlet
                   </label>
                 </div>
               </div>
@@ -822,7 +822,7 @@ export default function CreateTourModal({
                       Kreiranje...
                     </>
                   ) : (
-                    "Kreiraj turu"
+                    "Kreiraj izlet"
                   )}
                 </button>
               </div>

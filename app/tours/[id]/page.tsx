@@ -117,11 +117,11 @@ export default function TourDetailPage() {
 
           setTour(tourData);
         } else {
-          throw new Error(data.error || "Greška pri dohvaćanju ture");
+          throw new Error(data.error || "Greška pri dohvaćanju izleta");
         }
       } catch (err: any) {
         console.error("Error fetching tour:", err);
-        setError(err.message || "Došlo je do greške pri učitavanju ture");
+        setError(err.message || "Došlo je do greške pri učitavanju izleta");
       } finally {
         setLoading(false);
       }
@@ -235,7 +235,7 @@ export default function TourDetailPage() {
       <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/5 to-[#0f6659]/5 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-12 w-12 text-[#2b946f] animate-spin" />
-          <p className="text-gray-600">Učitavanje ture...</p>
+          <p className="text-gray-600">Učitavanje izleta...</p>
         </div>
       </div>
     );
@@ -249,7 +249,7 @@ export default function TourDetailPage() {
             <AlertCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-red-800 mb-2">Greška</h2>
             <p className="text-red-600 mb-4">
-              {error || "Tura nije pronađena"}
+              {error || "Izlet nije pronađen"}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -264,7 +264,7 @@ export default function TourDetailPage() {
               href="/tours"
               className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-medium text-center cursor-pointer"
             >
-              Pregled svih tura
+              Pregled svih izleta
             </Link>
           </div>
         </div>
@@ -289,7 +289,7 @@ export default function TourDetailPage() {
             className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer"
           >
             <ArrowLeft size={20} />
-            <span>Natrag na ture</span>
+            <span>Natrag na izlete</span>
           </button>
         </div>
 
@@ -563,7 +563,7 @@ export default function TourDetailPage() {
                       <div className="flex flex-wrap gap-3 md:gap-4 text-sm text-gray-600 mb-3">
                         <div className="flex items-center gap-1">
                           <Users size={16} />
-                          <span>{tour.guide.tours_led || 0} tura vodio/la</span>
+                          <span>{tour.guide.tours_led || 0} izleta vodio/la</span>
                         </div>
                         {tour.guide.xp && (
                           <div className="flex items-center gap-1">
@@ -651,7 +651,7 @@ export default function TourDetailPage() {
                       <div className="flex items-center gap-2">
                         <Check className="h-5 w-5 text-green-600" />
                         <p className="text-sm text-green-700">
-                          Prijavljeni ste. Možete rezervirati turu.
+                          Prijavljeni ste. Možete rezervirati izlet.
                         </p>
                       </div>
                       {user.ime && (
@@ -665,11 +665,11 @@ export default function TourDetailPage() {
                       <div className="flex items-center gap-2">
                         <AlertCircle className="h-5 w-5 text-amber-600" />
                         <p className="text-sm text-amber-700">
-                          Za rezervaciju ture morate biti prijavljeni.
+                          Za rezervaciju izleta morate biti prijavljeni.
                         </p>
                       </div>
                       <p className="text-xs text-amber-600 mt-1">
-                        Prijavite se da biste mogli rezervirati ovu turu.
+                        Prijavite se da biste mogli rezervirati ovaj izlet.
                       </p>
                     </div>
                   )}
@@ -712,7 +712,7 @@ export default function TourDetailPage() {
 
                 {/* Tour Info */}
                 <div className="mt-6 pt-6 border-t border-gray-200 text-xs text-gray-500">
-                  <p>ID ture: {tour.id}</p>
+                  <p>ID izleta: {tour.id}</p>
                   {tour.createdAt && (
                     <p>Dodano: {formatDate(tour.createdAt)}</p>
                   )}

@@ -74,8 +74,8 @@ function TermsPage() {
                 3. Rezervacije i plaćanja
               </h2>
               <p className="text-gray-700 leading-relaxed mb-4 text-lg">
-                Prilikom rezervacije ture obvezujete se na plaćanje dogovorenog
-                iznosa. Politike otkazivanja ovise o pojedinačnoj turi i vodiču.
+                Prilikom rezervacije izleta obvezujete se na plaćanje dogovorenog
+                iznosa. Politike otkazivanja ovise o pojedinačnom izletu i vodiču.
               </p>
             </section>
 
@@ -121,7 +121,7 @@ function TermsPage() {
               </h2>
               <p className="text-gray-700 leading-relaxed text-lg">
                 CoverDis djeluje kao posrednička platforma između putnika i
-                vodiča. Nismo odgovorni za kvalitetu tura, ali nastojimo
+                vodiča. Nismo odgovorni za kvalitetu izleta, ali nastojimo
                 osigurati siguran i kvalitetan doživljaj za sve korisnike.
               </p>
             </section>

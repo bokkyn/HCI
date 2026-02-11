@@ -110,7 +110,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Kreiraj turu
+    // Kreiraj izlet
     const newTour = new Tour({
       guide_id: userId,
       title: body.title.trim(),
@@ -143,9 +143,9 @@ export async function POST(req: Request) {
 
     await newTour.save();
 
-    // Ažuriraj korisnikov broj tura i dodaj XP
+    // Ažuriraj korisnikov broj izleta i dodaj XP
     user.ukupno_tura = (user.ukupno_tura || 0) + 1;
-    user.xp_total = (user.xp_total || 0) + 10; // Dodaj 10 XP za kreiranje ture
+    user.xp_total = (user.xp_total || 0) + 10; // Dodaj 10 XP za kreiranje izleta
 
     // Ažuriraj XP po kategorijama
     body.categories.forEach((category: string) => {
@@ -159,7 +159,7 @@ export async function POST(req: Request) {
     console.log("Tour created successfully:", newTour._id);
     console.log("User XP updated:", user.xp_total);
 
-    // Kreiraj response sa detaljima ture
+    // Kreiraj response sa detaljima izleta
     const tourResponse = {
       id: newTour._id.toString(),
       guide_id: newTour.guide_id.toString(),
@@ -191,13 +191,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Tura je uspješno kreirana",
+      message: "Izlet je uspješno kreiran",
       tour: tourResponse,
     });
   } catch (error: any) {
     console.error("Tour creation error:", error);
 
-    let errorMessage = "Došlo je do greške pri kreiranju ture";
+    let errorMessage = "Došlo je do greške pri kreiranju izleta";
     if (error.name === "ValidationError") {
       errorMessage =
         "Podaci nisu validni: " +

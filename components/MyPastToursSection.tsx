@@ -140,7 +140,7 @@ export default function MyPastToursSection({
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 text-[#ff6309] animate-spin" />
-          <span className="ml-3 text-gray-600">Učitavanje prošlih tura...</span>
+          <span className="ml-3 text-gray-600">Učitavanje prošlih izleta...</span>
         </div>
       </div>
     );
@@ -167,10 +167,10 @@ export default function MyPastToursSection({
     <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Moje prošle ture</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Moji prošli izleti</h2>
           <p className="text-gray-600 mt-1">
             {tours.length}{" "}
-            {tours.length === 1 ? "posjećena tura" : "posjećenih tura"}
+            {tours.length === 1 ? "posjećen izlet" : "posjećenih izleta"}
           </p>
         </div>
         {tours.length > 0 && (
@@ -192,16 +192,16 @@ export default function MyPastToursSection({
             <Receipt className="h-8 w-8 text-[#ff6309]" />
           </div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Još nisi bio/la ni na jednoj turi
+            Još nisi bio/la ni na jednom izletu
           </h3>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">
-            Rezerviraj svoju prvu turu i započni avanturu!
+            Rezerviraj svoj prvi izlet i započni avanturu!
           </p>
           <Link
             href="/tours"
             className="inline-flex bg-gradient-to-r from-[#ff6309] to-[#ff8c42] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
           >
-            Pogledaj dostupne ture
+            Pogledaj dostupne izlete
           </Link>
         </div>
       ) : (
@@ -242,7 +242,7 @@ export default function MyPastToursSection({
                                   </span>
                                 </div>
                               )}
-                              {/* Badge za završenu turu */}
+                              {/* Badge za završen izlet */}
                               <div className="absolute top-3 right-3 bg-green-500 rounded-full px-2 py-1 flex items-center gap-1 shadow-md">
                                 <CheckCircle className="h-3 w-3 text-white" />
                                 <span className="text-xs font-semibold text-white">
@@ -346,7 +346,7 @@ export default function MyPastToursSection({
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-600">
                 Prikazano {indexOfFirstTour + 1} -{" "}
-                {Math.min(indexOfLastTour, tours.length)} od {tours.length} tura
+                {Math.min(indexOfLastTour, tours.length)} od {tours.length} izleta
               </p>
               <div className="flex items-center gap-2">
                 <button

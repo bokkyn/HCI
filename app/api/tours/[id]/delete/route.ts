@@ -42,19 +42,19 @@ export async function DELETE(
 
     if (!ObjectId.isValid(tourId)) {
       return NextResponse.json(
-        { error: `Nevažeći ID ture: ${tourId}` },
+        { error: `Nevažeći ID izleta: ${tourId}` },
         { status: 400 },
       );
     }
 
     await connectDB();
 
-    // Pronađi turu
+    // Pronađi izlet
     const tour = await Tour.findById(tourId);
 
     if (!tour) {
       return NextResponse.json(
-        { error: "Tura nije pronađena" },
+        { error: "Izlet nije pronađen" },
         { status: 404 },
       );
     }
@@ -62,15 +62,15 @@ export async function DELETE(
     // Provjeri vlasništvo
     if (tour.guide_id.toString() !== userId) {
       return NextResponse.json(
-        { error: "Nemate ovlasti za brisanje ove ture" },
+        { error: "Nemate ovlasti za brisanje ovog izleta" },
         { status: 403 },
       );
     }
 
-    // Obriši turu
+    // Obriši izlet
     await Tour.findByIdAndDelete(tourId);
 
-    // Ažuriraj korisnikov broj tura
+    // Ažuriraj korisnikov broj izleta
     await User.findByIdAndUpdate(userId, {
       $inc: { ukupno_tura: -1 },
     });
@@ -79,12 +79,12 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Tura je uspješno obrisana",
+      message: "Izlet je uspješno obrisan",
     });
   } catch (error: any) {
     console.error("Tour delete error:", error);
     return NextResponse.json(
-      { error: "Došlo je do greške pri brisanju ture" },
+      { error: "Došlo je do greške pri brisanju izleta" },
       { status: 500 },
     );
   }

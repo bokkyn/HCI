@@ -299,11 +299,11 @@ export default function EditTourModal({
         if (data.error) {
           throw new Error(data.error);
         }
-        throw new Error("Došlo je do greške pri ažuriranju ture");
+        throw new Error("Došlo je do greške pri ažuriranju izleta");
       }
 
       // Uspješno ažuriranje
-      setSuccess("Tura je uspješno ažurirana!");
+      setSuccess("Izlet je uspješno ažuriran!");
       setTimeout(() => {
         onClose();
         onSuccess();
@@ -338,9 +338,9 @@ export default function EditTourModal({
             <div className="flex items-center gap-3">
               <Edit className="h-6 w-6 text-[#2b946f]" />
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Uredi turu</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Uredi izlet</h2>
                 <p className="text-gray-600 mt-1">
-                  Ažurirajte podatke o turi{" "}
+                  Ažurirajte podatke o izletu{" "}
                   <span className="text-red-500 font-medium">*</span> označava
                   obavezna polja
                 </p>
@@ -382,7 +382,7 @@ export default function EditTourModal({
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <FileText size={16} />
-                    Naslov ture <span className="text-red-500">*</span>
+                    Naslov izleta <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -405,7 +405,7 @@ export default function EditTourModal({
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <FileText size={16} />
-                    Opis ture <span className="text-red-500">*</span>
+                    Opis izleta <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="description"
@@ -540,7 +540,7 @@ export default function EditTourModal({
               {/* Detalji */}
               <div className="space-y-6">
                 <h3 className="text-lg font-bold text-gray-900 border-b pb-2">
-                  Detalji ture
+                  Detalji izleta
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -846,7 +846,7 @@ export default function EditTourModal({
                     className="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer"
                   >
                     <Award size={16} className="text-[#ff6309]" />
-                    Istaknuta tura
+                    Istaknuti izlet
                   </label>
                 </div>
               </div>

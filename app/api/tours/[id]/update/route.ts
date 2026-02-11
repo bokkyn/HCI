@@ -43,7 +43,7 @@ export async function PUT(
     // Provjeri validnost ObjectId
     if (!ObjectId.isValid(tourId)) {
       return NextResponse.json(
-        { error: `Nevažeći ID ture: ${tourId}` },
+        { error: `Nevažeći ID izleta: ${tourId}` },
         { status: 400 },
       );
     }
@@ -58,7 +58,7 @@ export async function PUT(
 
     if (!tour) {
       return NextResponse.json(
-        { error: "Tura nije pronađena" },
+        { error: "Izlet nije pronađen" },
         { status: 404 },
       );
     }
@@ -66,7 +66,7 @@ export async function PUT(
     // Provjeri vlasništvo - samo vlasnik može ažurirati
     if (tour.guide_id.toString() !== userId) {
       return NextResponse.json(
-        { error: "Nemate ovlasti za ažuriranje ove ture" },
+        { error: "Nemate ovlasti za ažuriranje ovog izleta" },
         { status: 403 },
       );
     }
@@ -182,13 +182,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Tura je uspješno ažurirana",
+      message: "Izlet je uspješno ažuriran",
       tour: tourResponse,
     });
   } catch (error: any) {
     console.error("Tour update error:", error);
 
-    let errorMessage = "Došlo je do greške pri ažuriranju ture";
+    let errorMessage = "Došlo je do greške pri ažuriranju izleta";
     if (error.name === "ValidationError") {
       errorMessage =
         "Podaci nisu validni: " +

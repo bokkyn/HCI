@@ -106,7 +106,7 @@ export default function BlogList({ posts }: { posts: any[] }) {
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 flex flex-col flex-1">
+                  <div className="p-6 flex flex-col flex-1 space-y-3">
                     <h3 className="text-xl text-[#104d2f] mb-3 group-hover:text-[#ff6309] transition-colors font-semibold">
                       {post.title}
                     </h3>

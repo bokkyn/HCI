@@ -66,7 +66,7 @@ export default function MyToursSection({
       if (data.success) {
         setTours(data.data.tours);
       } else {
-        throw new Error(data.error || "Greška pri dohvaćanju tura");
+        throw new Error(data.error || "Greška pri dohvaćanju izleta");
       }
     } catch (err: any) {
       console.error("Error fetching my tours:", err);
@@ -83,10 +83,10 @@ export default function MyToursSection({
   }, [userId]);
 
   const handleDeleteTour = async (tourId: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Spriječi otvaranje ture
+    e.stopPropagation(); // Spriječi otvaranje izleta
     if (
       !confirm(
-        "Jeste li sigurni da želite obrisati ovu turu? Ova akcija je nepovratna.",
+        "Jeste li sigurni da želite obrisati ovaj izlet? Ova akcija je nepovratna.",
       )
     ) {
       return;
@@ -106,12 +106,12 @@ export default function MyToursSection({
       }
 
       setTours((prev) => prev.filter((tour) => tour.id !== tourId));
-      // Resetiraj na prvu stranicu ako smo obrisali zadnju turu na trenutnoj stranici
+      // Resetiraj na prvu stranicu ako smo obrisali zadnji izlet na trenutnoj stranici
       if (indexOfLastTour - 1 >= tours.length && currentPage > 1) {
         setCurrentPage((prev) => prev - 1);
       }
     } catch (err: any) {
-      alert(err.message || "Došlo je do greške pri brisanju ture");
+      alert(err.message || "Došlo je do greške pri brisanju izleta");
       console.error("Delete error:", err);
     } finally {
       setDeletingId(null);
@@ -119,7 +119,7 @@ export default function MyToursSection({
   };
 
   const handleEditClick = (tour: Tour, e: React.MouseEvent) => {
-    e.stopPropagation(); // Spriječi otvaranje ture
+    e.stopPropagation(); // Spriječi otvaranje izleta
     setEditingTour(tour);
     setShowEditModal(true);
   };
@@ -157,7 +157,7 @@ export default function MyToursSection({
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 text-[#2b946f] animate-spin" />
-          <span className="ml-3 text-gray-600">Učitavanje tura...</span>
+          <span className="ml-3 text-gray-600">Učitavanje izleta...</span>
         </div>
       </div>
     );
@@ -185,9 +185,9 @@ export default function MyToursSection({
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Moje ture</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Moji izleti</h2>
             <p className="text-gray-600 mt-1">
-              {tours.length} {tours.length === 1 ? "tura" : "tura"} kreirano
+              {tours.length} {tours.length === 1 ? "izlet" : "izleta"} kreirano
             </p>
           </div>
           <button
@@ -195,7 +195,7 @@ export default function MyToursSection({
             className="flex items-center gap-2 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium cursor-pointer"
           >
             <Plus size={20} />
-            Dodaj novu turu
+            Dodaj novi izlet
           </button>
         </div>
 
@@ -205,16 +205,16 @@ export default function MyToursSection({
               <Plus className="h-8 w-8 text-[#2b946f]" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Još nemaš tura
+              Još nemaš izleta
             </h3>
             <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              Kreiraj svoju prvu turu i podijeli svoje znanje s drugima
+              Kreiraj svoj prvi izlet i podijeli svoje znanje s drugima
             </p>
             <button
               onClick={onAddTourClick}
               className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
             >
-              Kreiraj prvu turu
+              Kreiraj prvi izlet
             </button>
           </div>
         ) : (
@@ -357,7 +357,7 @@ export default function MyToursSection({
                 <p className="text-sm text-gray-600">
                   Prikazano {indexOfFirstTour + 1} -{" "}
                   {Math.min(indexOfLastTour, tours.length)} od {tours.length}{" "}
-                  tura
+                izleta
                 </p>
                 <div className="flex items-center gap-2">
                   <button

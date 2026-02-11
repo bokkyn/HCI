@@ -10,10 +10,10 @@ function Page() {
     "Zarađujte radeći ono što volite",
     "Upoznajte ljude iz cijelog svijeta",
     "Dijelite svoju strast i znanje",
-    "Pristup alatima za upravljanje turama",
+    "Pristup alatima za upravljanje izletima",
     "Marketing i promocijska podrška",
     "24/7 tehnička i korisnička podrška",
-    "Osiguranje za sve ture",
+    "Osiguranje za sve izlete",
   ];
 
   const requirements = [
@@ -34,12 +34,12 @@ function Page() {
       description: "Naš tim će provjeriti vaše podatke i kvalifikacije",
     },
     {
-      title: "3. Kreiranje ture",
-      description: "Kreirajte svoju prvu turu s detaljnim opisom",
+      title: "3. Kreiranje izleta",
+      description: "Kreirajte svoj prvi izlet s detaljnim opisom",
     },
     {
       title: "4. Odobrenje",
-      description: "Nakon odobrenja, vaša tura postaje vidljiva korisnicima",
+      description: "Nakon odobrenja, vaš izlet postaje vidljiv korisnicima",
     },
   ];
 
@@ -77,7 +77,7 @@ function Page() {
               value: "€50+",
               label: "Prosječna zarada/sat",
             },
-            { icon: Calendar, value: "10k+", label: "Uspješnih tura" },
+            { icon: Calendar, value: "10k+", label: "Uspješnih izleta" },
           ].map((stat, index) => (
             <motion.div
               key={index}

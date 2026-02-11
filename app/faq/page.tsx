@@ -17,25 +17,25 @@ const faqs: FAQItem[] = [
     category: "Opće",
     question: "Što je CoverDis?",
     answer:
-      "CoverDis je platforma koja povezuje putnike s lokalnim vodičima i kreatorima unikatnih tura. Naša misija je omogućiti autentična lokalna iskustva koja prelaze klasične turističke rute.",
+      "CoverDis je platforma koja povezuje putnike s lokalnim vodičima i kreatorima unikatnih izleta. Naša misija je omogućiti autentična lokalna iskustva koja prelaze klasične turističke rute.",
   },
   {
     category: "Opće",
     question: "Kako mogu postati vodič?",
     answer:
-      "Jednostavno kliknite na 'Postani vodič' gumb, ispunite registracijski obrazac, kreirajte svoju prvu turu i nakon verifikacije možete početi dijeliti svoja lokalna iskustva s putnicima.",
+      "Jednostavno kliknite na 'Postani vodič' gumb, ispunite registracijski obrazac, kreirajte svoj prvi izlet i nakon verifikacije možete početi dijeliti svoja lokalna iskustva s putnicima.",
   },
   {
     category: "Rezervacije",
-    question: "Kako rezervirati turu?",
+    question: "Kako rezervirati izlet?",
     answer:
-      "Pretražite dostupne ture, odaberite željenu turu, kliknite 'Rezerviraj', odaberite datum i broj osoba, te dovršite proces plaćanja. Dobit ćete potvrdu putem emaila.",
+      "Pretražite dostupne izlete, odaberite željeni izlet, kliknite 'Rezerviraj', odaberite datum i broj osoba, te dovršite proces plaćanja. Dobit ćete potvrdu putem emaila.",
   },
   {
     category: "Rezervacije",
     question: "Mogu li otkazati rezervaciju?",
     answer:
-      "Da, rezervacije možete otkazati do 24 sata prije početka ture i dobiti puni povrat novca. Otkazivanja unutar 24 sata nisu prihvatljiva za povrat novca.",
+      "Da, rezervacije možete otkazati do 24 sata prije početka izleta i dobiti puni povrat novca. Otkazivanja unutar 24 sata nisu prihvatljiva za povrat novca.",
   },
   {
     category: "Plaćanje",
@@ -45,31 +45,31 @@ const faqs: FAQItem[] = [
   },
   {
     category: "Plaćanje",
-    question: "Kada se naplaćuje tura?",
+    question: "Kada se naplaćuje izlet?",
     answer:
-      "Plaćanje se procesira odmah nakon potvrde rezervacije. Za neke ture vodič može zatražiti predujam, dok se preostali iznos plaća na licu mjesta.",
+      "Plaćanje se procesira odmah nakon potvrde rezervacije. Za neke izlete vodič može zatražiti predujam, dok se preostali iznos plaća na licu mjesta.",
   },
   {
     category: "Gamifikacija",
     question: "Što su značke i kako ih dobivam?",
     answer:
-      "Značke su nagrade koje dobivate završavanjem tura, istraživanjem novih lokacija ili postizanjem određenih ciljeva. Svaka značka donosi dodatne XP bodove.",
+      "Značke su nagrade koje dobivate završavanjem izleta, istraživanjem novih lokacija ili postizanjem određenih ciljeva. Svaka značka donosi dodatne XP bodove.",
   },
   {
     category: "Gamifikacija",
     question: "Što mogu napraviti s XP bodovima?",
     answer:
-      "XP bodovi vam omogućuju napredovanje kroz razine, otključavanje posebnih ponuda, popusta i pristup ekskluzivnim turama.",
+      "XP bodovi vam omogućuju napredovanje kroz razine, otključavanje posebnih ponuda, popusta i pristup ekskluzivnim izletima.",
   },
   {
     category: "Sigurnost",
     question: "Kako CoverDis osigurava sigurnost korisnika?",
     answer:
-      "Svi naši vodiči prolaze kroz verifikacijski proces, a korisnici mogu ocjenjivati ture. Također imamo 24/7 podršku i osiguranje za sve ture.",
+      "Svi naši vodiči prolaze kroz verifikacijski proces, a korisnici mogu ocjenjivati izlete. Također imamo 24/7 podršku i osiguranje za sve izlete.",
   },
   {
     category: "Sigurnost",
-    question: "Što ako imam problema tijekom ture?",
+    question: "Što ako imam problema tijekom izleta?",
     answer:
       "Možete nas kontaktirati 24/7 putem hitne linije ili kroz aplikaciju. Naš tim će vam odmah pružiti potrebnu pomoć.",
   },

@@ -122,7 +122,7 @@ export default function FeaturedTours() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-[#104d2f] mb-4">Predložene Ture</h2>
+          <h2 className="text-[#104d2f] mb-4">Predloženi Izleti</h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Otkrijte nezaboravna iskustva s našim lokalnim vodičima
           </p>

@@ -48,7 +48,7 @@ interface Tour {
 export default function ToursPage() {
   const [sortOption, setSortOption] = useState<string>("");
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
-  // Kategorije - definiraj ručno ili iz tura
+  // Kategorije - definiraj ručno ili iz izleta
   const CATEGORY_LIST = [
     "Hrana",
     "Kultura",
@@ -72,7 +72,7 @@ export default function ToursPage() {
   const [selectedDuration, setSelectedDuration] = useState("");
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
 
-  // Dohvati ture s API-ja
+  // Dohvati izlete s API-ja
   useEffect(() => {
     const fetchTours = async () => {
       try {
@@ -88,11 +88,11 @@ export default function ToursPage() {
         if (data.success) {
           setTours(data.data.tours);
         } else {
-          throw new Error(data.error || "Greška pri dohvaćanju tura");
+          throw new Error(data.error || "Greška pri dohvaćanju izleta");
         }
       } catch (err: any) {
         console.error("Error fetching tours:", err);
-        setError(err.message || "Došlo je do greške pri učitavanju tura");
+        setError(err.message || "Došlo je do greške pri učitavanju izleta");
       } finally {
         setLoading(false);
       }
@@ -252,7 +252,7 @@ export default function ToursPage() {
       <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/5 to-[#0f6659]/5 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-12 w-12 text-[#2b946f] animate-spin" />
-          <p className="text-gray-600">Učitavanje tura...</p>
+          <p className="text-gray-600">Učitavanje izleta...</p>
         </div>
       </div>
     );
@@ -283,7 +283,7 @@ export default function ToursPage() {
         {/* HEADER */}
         <section className="bg-gradient-to-r from-[#104d2f] to-[#0f6659] text-white py-16 px-4">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Sve Ture</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Svi Izleti</h1>
             <p className="text-lg text-white/90">
               Otkrijte {filteredTours.length} unikatnih iskustava
             </p>
@@ -299,7 +299,7 @@ export default function ToursPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Pretraži ture po naslovu, lokaciji ili tagovima..."
+              placeholder="Pretraži izlete po naslovu, lokaciji ili tagovima..."
               className="w-full pl-12 pr-12 py-4 rounded-xl shadow border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
             />
             {searchQuery && (
@@ -431,7 +431,7 @@ export default function ToursPage() {
                       onChange={(e) => setShowFeaturedOnly(e.target.checked)}
                       className="w-3 h-3 text-[#2b946f] rounded focus:ring-[#2b946f]"
                     />
-                    <span className="text-gray-700">Samo istaknute ture</span>
+                    <span className="text-gray-700">Samo istaknuti izleti</span>
                     <Award className="h-3 w-3 text-[#ff6309]" />
                   </label>
                 </div>
@@ -485,7 +485,7 @@ export default function ToursPage() {
                 <div className="text-center py-12 bg-white rounded-2xl shadow border border-gray-200">
                   <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Nema pronađenih tura
+                    Nema pronađenih izleta
                   </h3>
                   <p className="text-gray-600 mb-6">
                     Pokušajte promijeniti filtere ili pretragu
@@ -509,7 +509,7 @@ export default function ToursPage() {
                         onMouseEnter={() => setHoveredTour(tour.id)}
                         onMouseLeave={() => setHoveredTour(null)}
                       >
-                        {/* Featured Badge - uvijek prikaži za featured ture */}
+                        {/* Featured Badge - uvijek prikaži za featured izlete */}
                         {tour.is_featured && (
                           <div className="absolute top-4 left-4 z-20">
                             <div className="flex items-center gap-1 bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-3 py-1 rounded-full text-xs font-medium shadow">
@@ -613,7 +613,7 @@ export default function ToursPage() {
                                 {tour.guide?.name || "Vodič"}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {tour.guide?.tours_led || 0} tura
+                                {tour.guide?.tours_led || 0} izleta
                               </p>
                             </div>
                           </div>
@@ -648,9 +648,9 @@ export default function ToursPage() {
                 <div className="text-center">
                   <MapIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {filteredTours.length} tura pronađeno
+                    {filteredTours.length} izleta pronađeno
                   </h3>
-                  <p className="text-gray-600">Prikažite ture na karti</p>
+                  <p className="text-gray-600">Prikažite izlete na karti</p>
                 </div>
               </div>
             </div>

@@ -18,7 +18,7 @@ export async function GET(
     console.log("Fetching tour with ID:", tourId);
 
     if (!ObjectId.isValid(tourId)) {
-      return NextResponse.json({ error: "Nevažeći ID ture" }, { status: 400 });
+      return NextResponse.json({ error: "Nevažeći ID izleta" }, { status: 400 });
     }
 
     await connectDB();
@@ -28,7 +28,7 @@ export async function GET(
 
     if (!tour) {
       return NextResponse.json(
-        { error: "Tura nije pronađena" },
+        { error: "Izlet nije pronađen" },
         { status: 404 },
       );
     }
@@ -149,7 +149,7 @@ export async function GET(
   } catch (error: any) {
     console.error("Get tour by ID error:", error);
     return NextResponse.json(
-      { error: "Došlo je do greške pri dohvaćanju ture" },
+      { error: "Došlo je do greške pri dohvaćanju izleta" },
       { status: 500 },
     );
   }
@@ -165,22 +165,22 @@ export async function PUT(
     const tourId = id;
 
     if (!ObjectId.isValid(tourId)) {
-      return NextResponse.json({ error: "Nevažeći ID ture" }, { status: 400 });
+      return NextResponse.json({ error: "Nevažeći ID izleta" }, { status: 400 });
     }
 
     const body = await req.json();
     await connectDB();
 
-    // Provjeri da li tura postoji
+    // Provjeri da li izlet postoji
     const existingTour = await Tour.findById(tourId);
     if (!existingTour) {
       return NextResponse.json(
-        { error: "Tura nije pronađena" },
+        { error: "Izlet nije pronađen" },
         { status: 404 },
       );
     }
 
-    // Ažuriraj turu
+    // Ažuriraj izlet
     const updatedTour = await Tour.findByIdAndUpdate(
       tourId,
       { $set: body },
@@ -189,13 +189,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Tura je uspješno ažurirana",
+      message: "Izlet je uspješno ažuriran",
       data: updatedTour,
     });
   } catch (error: any) {
     console.error("Update tour error:", error);
     return NextResponse.json(
-      { error: "Došlo je do greške pri ažuriranju ture" },
+      { error: "Došlo je do greške pri ažuriranju izleta" },
       { status: 500 },
     );
   }
@@ -211,31 +211,31 @@ export async function DELETE(
     const tourId = id;
 
     if (!ObjectId.isValid(tourId)) {
-      return NextResponse.json({ error: "Nevažeći ID ture" }, { status: 400 });
+      return NextResponse.json({ error: "Nevažeći ID izleta" }, { status: 400 });
     }
 
     await connectDB();
 
-    // Provjeri da li tura postoji
+    // Provjeri da li izlet postoji
     const existingTour = await Tour.findById(tourId);
     if (!existingTour) {
       return NextResponse.json(
-        { error: "Tura nije pronađena" },
+        { error: "Izlet nije pronađen" },
         { status: 404 },
       );
     }
 
-    // Obriši turu
+    // Obriši izlet
     await Tour.findByIdAndDelete(tourId);
 
     return NextResponse.json({
       success: true,
-      message: "Tura je uspješno obrisana",
+      message: "Izlet je uspješno obrisan",
     });
   } catch (error: any) {
     console.error("Delete tour error:", error);
     return NextResponse.json(
-      { error: "Došlo je do greške pri brisanju ture" },
+      { error: "Došlo je do greške pri brisanju izleta" },
       { status: 500 },
     );
   }

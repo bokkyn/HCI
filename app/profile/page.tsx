@@ -257,7 +257,7 @@ export default function ProfilePage() {
                       className="flex items-center gap-2 bg-[#ff6309] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium cursor-pointer"
                     >
                       <Plus size={18} />
-                      Dodaj turu
+                      Dodaj izlet
                     </button>
                     <button
                       onClick={() => setShowEditModal(true)}
@@ -275,7 +275,7 @@ export default function ProfilePage() {
                     <div className="text-2xl font-bold text-[#104d2f]">
                       {userData.ukupno_tura || 0}
                     </div>
-                    <div className="text-sm text-gray-600">Ture</div>
+                    <div className="text-sm text-gray-600">Izleti</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-[#104d2f]">
@@ -337,7 +337,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Moje ture Section */}
+              {/* Moji izleti Section */}
               <MyToursSection
                 userId={userData.id}
                 onAddTourClick={() => setShowCreateTourModal(true)}
