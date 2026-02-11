@@ -70,10 +70,6 @@ function Page() {
               pristup dolaze na prvo mjesto. Svaki vodič na našoj platformi
               donosi svoju jedinstvenu perspektivu i priču.
             </p>
-            <p>
-              Danas smo ponosna zajednica od preko 500 vodiča i 10,000+ putnika
-              koji su proživjeli nezaboravna iskustva širom Hrvatske i regije.
-            </p>
           </div>
         </motion.div>
 

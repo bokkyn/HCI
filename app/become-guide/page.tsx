@@ -30,16 +30,16 @@ function Page() {
       description: "Ispunite registracijski obrazac s osnovnim podacima",
     },
     {
-      title: "2. Verifikacija",
-      description: "Naš tim će provjeriti vaše podatke i kvalifikacije",
+      title: "2. Kreiranje izleta",
+      description: "Kreirajte svoj prvi izlet s detaljnim opisom, u izborniku na profilu",
     },
     {
-      title: "3. Kreiranje izleta",
-      description: "Kreirajte svoj prvi izlet s detaljnim opisom",
+      title: "3. Prva rezervacija",
+      description: "Pričekajte da privugnete prve putnike i ostvarite svoju prvu rezervaciju",
     },
     {
-      title: "4. Odobrenje",
-      description: "Nakon odobrenja, vaš izlet postaje vidljiv korisnicima",
+      title: "4. Gotovo",
+      description: "Njihovi kontakt podaci se šalju vama i rezervacija je spremna",
     },
   ];
 
@@ -68,32 +68,7 @@ function Page() {
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-          {[
-            { icon: Users, value: "500+", label: "Aktivnih vodiča" },
-            { icon: Star, value: "4.9", label: "Prosječna ocjena" },
-            {
-              icon: DollarSign,
-              value: "€50+",
-              label: "Prosječna zarada/sat",
-            },
-            { icon: Calendar, value: "10k+", label: "Uspješnih izleta" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-xl p-4 md:p-6 shadow-lg text-center"
-            >
-              <stat.icon className="w-8 h-8 md:w-12 md:h-12 text-[#2b946f] mx-auto mb-2" />
-              <p className="text-2xl md:text-3xl text-[#104d2f] mb-1">
-                {stat.value}
-              </p>
-              <p className="text-xs md:text-sm text-gray-600">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Benefits */}

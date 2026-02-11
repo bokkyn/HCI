@@ -1,134 +1,124 @@
-//@ts-nocheck
+// app/api/reservations/route.ts
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { connectDB } from "@/app/lib/mongodb";
 import { Reservation } from "@/app/models/Reservation";
 import { Tour } from "@/app/models/Tour";
 import { User } from "@/app/models/User";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-jwt-secret-key-change-this";
-
-function authenticateUser(req: Request) {
-  try {
-    const cookieHeader = req.headers.get("cookie");
-    if (cookieHeader) {
-      const tokenMatch = cookieHeader.match(/auth_token=([^;]+)/);
-      if (tokenMatch) {
-        const decoded = jwt.verify(tokenMatch[1], JWT_SECRET) as any;
-        return decoded.userId;
-      }
-    }
-    return null;
-  } catch (error) {
-    return null;
-  }
-}
-
 export async function GET(req: Request) {
+  console.log("=== API REZERVACIJE POKRENUT (GET) ===");
+
   try {
-    const userId = authenticateUser(req);
-    const { searchParams } = new URL(req.url);
-
-    const requestedUserId = searchParams.get("user_id");
-    const status = searchParams.get("status");
-    const guideId = searchParams.get("guide_id");
-    const limit = searchParams.get("limit")
-      ? parseInt(searchParams.get("limit"))
-      : 20;
-    const page = searchParams.get("page")
-      ? parseInt(searchParams.get("page"))
-      : 1;
-    const skip = (page - 1) * limit;
-
-    // Ako se dohvaća za drugog korisnika, provjeri autentikaciju
-    if (requestedUserId && requestedUserId !== userId) {
-      return NextResponse.json(
-        { error: "Nemate dozvolu za pristup" },
-        { status: 403 },
-      );
-    }
-
     await connectDB();
+
+    const { searchParams } = new URL(req.url);
+    const userId = searchParams.get("user_id");
+    const status = searchParams.get("status");
+
+    console.log("Parametri:", { userId, status });
 
     // Build query
     const query: any = {};
+    if (userId) query.user_id = userId;
+    if (status) query.status = status;
 
-    if (requestedUserId) {
-      query.user_id = requestedUserId;
-    }
-
-    if (guideId) {
-      query.guide_id = guideId;
-    }
-
-    if (status) {
-      // Podrška za više statusa odvojenih zarezom
-      const statuses = status.split(",");
-      query.status = statuses.length > 1 ? { $in: statuses } : statuses[0];
-    }
+    console.log("MongoDB query:", JSON.stringify(query, null, 2));
 
     // Dohvati rezervacije
     const reservations = await Reservation.find(query)
-      .sort({ booking_date: -1, booking_time: -1 })
-      .skip(skip)
-      .limit(limit)
+      .sort({ createdAt: -1 })
       .lean();
 
-    // Dohvati ukupan broj za paginaciju
-    const total = await Reservation.countDocuments(query);
+    console.log(`Pronađeno ${reservations.length} rezervacija`);
 
-    // Dohvati dodatne podatke za svaku rezervaciju
-    const enrichedReservations = await Promise.all(
-      reservations.map(async (res) => {
-        const tour = await Tour.findById(res.tour_id).lean();
-        const guide = await User.findById(res.guide_id).lean();
+    // Ako nema rezervacija, vrati prazan array
+    if (reservations.length === 0) {
+      return NextResponse.json({
+        success: true,
+        data: {
+          reservations: [],
+          pagination: {
+            page: 1,
+            limit: 20,
+            total: 0,
+            totalPages: 0,
+            hasNextPage: false,
+            hasPrevPage: false,
+          },
+        },
+      });
+    }
 
-        return {
-          id: res._id.toString(),
-          tour_id: res.tour_id.toString(),
-          user_id: res.user_id.toString(),
-          guide_id: res.guide_id.toString(),
-          booking_date: res.booking_date,
-          booking_time: res.booking_time,
-          number_of_people: res.number_of_people,
-          total_price: res.total_price,
-          special_notes: res.special_notes,
-          requirements: res.requirements,
-          status: res.status,
-          contact_phone: res.contact_phone,
-          contact_email: res.contact_email,
-          completed_at: res.completed_at,
-          cancelled_at: res.cancelled_at,
-          createdAt: res.createdAt,
-          updatedAt: res.updatedAt,
-          tour_title: tour?.title || "Obrisana tura",
-          location: tour?.location || "Lokacija nedostupna",
-          duration: tour?.duration || "Nepoznato",
-          image_urls: tour?.image_urls || [],
-          guide_name: guide
-            ? `${guide.ime} ${guide.prezime}`
-            : "Nepoznat vodič",
-          guide_email: guide?.email,
-        };
-      }),
-    );
+    // Dohvati sve tour ID-ove
+    const tourIds = reservations
+      .map((r) => r.tour_id?.toString())
+      .filter(Boolean);
+
+    // Dohvati ture
+    const tours = await Tour.find({ _id: { $in: tourIds } }).lean();
+
+    // Map za brži pristup
+    const tourMap = new Map();
+    tours.forEach((tour) => {
+      tourMap.set(tour._id.toString(), {
+        title: tour.title,
+        location: tour.location,
+        image_urls: tour.image_urls || [],
+        duration: tour.duration,
+        price_per_group: tour.price_per_group,
+      });
+    });
+
+    // Formatiraj rezervacije
+    const formattedReservations = reservations.map((res) => {
+      const tourInfo = tourMap.get(res.tour_id?.toString()) || {};
+
+      return {
+        id: res._id.toString(),
+        tour_id: res.tour_id?.toString(),
+        user_id: res.user_id?.toString(),
+        guide_id: res.guide_id?.toString(),
+        booking_date: res.booking_date,
+        booking_time: res.booking_time,
+        number_of_people: res.number_of_people,
+        total_price: res.total_price,
+        status: res.status,
+        completed_at: res.completed_at || res.updatedAt,
+        createdAt: res.createdAt,
+        updatedAt: res.updatedAt,
+        tour_title: tourInfo.title || "Nepoznata tura",
+        location: tourInfo.location || "Lokacija nije dostupna",
+        image_urls: tourInfo.image_urls || [],
+        duration: tourInfo.duration || "Nepoznato",
+        price_per_group: tourInfo.price_per_group || 0,
+        guide_name: "Vodič", // Ovo možeš naknadno dohvatiti
+      };
+    });
+
+    console.log(`Formatirano ${formattedReservations.length} rezervacija`);
 
     return NextResponse.json({
       success: true,
       data: {
-        reservations: enrichedReservations,
+        reservations: formattedReservations,
         pagination: {
-          total,
-          page,
-          limit,
-          pages: Math.ceil(total / limit),
+          page: 1,
+          limit: 20,
+          total: formattedReservations.length,
+          totalPages: 1,
+          hasNextPage: false,
+          hasPrevPage: false,
         },
       },
     });
   } catch (error: any) {
-    console.error("Error fetching reservations:", error);
+    console.error("Greška u GET /api/reservations:", error);
     return NextResponse.json(
-      { error: "Došlo je do greške pri dohvaćanju rezervacija" },
+      {
+        success: false,
+        error: "Došlo je do greške pri dohvaćanju rezervacija",
+        details: error.message,
+      },
       { status: 500 },
     );
   }

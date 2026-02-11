@@ -116,9 +116,7 @@ export default function BlogList({ posts }: { posts: any[] }) {
 
                     {/* Meta */}
                     <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                      <div className="px-2 py-1 bg-[#2b946f]/10 text-[#2b946f] rounded text-xs font-medium">
-                        Uredničko
-                      </div>
+
                     </div>
 
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">

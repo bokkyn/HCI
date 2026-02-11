@@ -14,10 +14,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="bg-[#2b946f] text-white px-2 py-1 rounded text-sm font-bold">
-                Cover
-              </span>
-              <span className="font-bold">Dis</span>
+              <img src="/logo.png" alt="CoverDis" className="h-8 w-auto" />
             </div>
             <p className="text-gray-400 text-xs">
               Otkrij autentična iskustva s lokalnim vodičima.

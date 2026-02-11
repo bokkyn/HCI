@@ -7,6 +7,7 @@ import EditProfileModal from "@/components/EditProfileModal";
 import CreateTourModal from "@/components/CreateTourModal";
 import MyToursSection from "@/components/MyToursSection";
 import MyPastToursSection from "@/components/MyPastToursSection";
+import LeaderboardPreview from "@/components/LeaderboardPreview";
 import {
   MapPin,
   Calendar,
@@ -193,7 +194,7 @@ export default function ProfilePage() {
         <div className="h-12 bg-gradient-to-r from-[#104d2f] to-[#0f6659]"></div>
 
         {/* Profile Header */}
-        <div className="relative">
+        <div className="relative pt-6">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 relative">
             <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
               {/* Avatar */}
@@ -223,7 +224,7 @@ export default function ProfilePage() {
               </div>
 
               {/* User Info */}
-              <div className="flex-1 pb-4">
+              <div className="flex-1 pb-4 pt-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
@@ -245,7 +246,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-2">
                         <Calendar size={16} className="text-[#2b946f]" />
                         <span>
-                          Član od {formatDateShort(userData.createdAt)}
+                         {formatDateShort(userData.createdAt)}
                         </span>
                       </div>
                     </div>
@@ -271,12 +272,7 @@ export default function ProfilePage() {
 
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 mt-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-[#104d2f]">
-                      {userData.ukupno_tura || 0}
-                    </div>
-                    <div className="text-sm text-gray-600">Izleti</div>
-                  </div>
+                  <div className="text-center"></div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-[#104d2f]">
                       Lvl {level}
@@ -343,7 +339,8 @@ export default function ProfilePage() {
                 userId={userData.id}
                 onAddTourClick={() => setShowCreateTourModal(true)}
               />
-              <MyPastToursSection userId={userData.id} />
+              
+              <LeaderboardPreview currentUserId={userData.id} />
             </div>
 
             {/* Right Column - XP Progress (sticky) */}
@@ -407,9 +404,7 @@ export default function ProfilePage() {
                                 </span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold text-gray-900">
-                                  Lvl {katLevel}
-                                </span>
+
                                 <span className="text-xs text-gray-500">
                                   {xp} XP
                                 </span>

@@ -55,6 +55,7 @@ export default function MyToursSection({
   const fetchMyTours = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await fetch(`/api/tours?guide_id=${userId}`);
 
       if (!response.ok) {
@@ -64,7 +65,19 @@ export default function MyToursSection({
       const data = await response.json();
 
       if (data.success) {
-        setTours(data.data.tours);
+        // ISPRAVKA: Provjeri strukturu podataka
+        let toursData = [];
+        if (data.data && data.data.tours) {
+          toursData = data.data.tours;
+        } else if (Array.isArray(data.data)) {
+          toursData = data.data;
+        } else if (Array.isArray(data.tours)) {
+          toursData = data.tours;
+        } else if (Array.isArray(data.data)) {
+          toursData = data.data;
+        }
+
+        setTours(toursData);
       } else {
         throw new Error(data.error || "Greška pri dohvaćanju izleta");
       }
@@ -83,7 +96,9 @@ export default function MyToursSection({
   }, [userId]);
 
   const handleDeleteTour = async (tourId: string, e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation(); // Spriječi otvaranje izleta
+
     if (
       !confirm(
         "Jeste li sigurni da želite obrisati ovaj izlet? Ova akcija je nepovratna.",
@@ -94,7 +109,7 @@ export default function MyToursSection({
 
     try {
       setDeletingId(tourId);
-      const response = await fetch(`/api/tours/${tourId}/delete`, {
+      const response = await fetch(`/api/tours/${tourId}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -119,12 +134,14 @@ export default function MyToursSection({
   };
 
   const handleEditClick = (tour: Tour, e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation(); // Spriječi otvaranje izleta
     setEditingTour(tour);
     setShowEditModal(true);
   };
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return "Nepoznato";
     const date = new Date(dateString);
     return date.toLocaleDateString("hr-HR", {
       day: "numeric",
@@ -235,12 +252,23 @@ export default function MyToursSection({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Link href={`/tours/${tour.id}`} className="block">
-                      <div className="group bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl hover:border-[#2b946f]/50 hover:shadow-xl transition-all overflow-hidden cursor-pointer">
-                        <div className="p-6">
+                    <div className="relative">
+                      {/* Link koji omotava cijeli div osim akcijskih gumbiju */}
+                      <Link
+                        href={`/tours/${tour.id}`}
+                        className="absolute inset-0 z-0"
+                      >
+                        <span className="sr-only">
+                          Pogledaj izlet {tour.title}
+                        </span>
+                      </Link>
+
+                      {/* Vizualni prikaz - nije link, ali prima klikove preko absolute linka */}
+                      <div className="group bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl hover:border-[#2b946f]/50 hover:shadow-xl transition-all overflow-hidden relative z-0 pointer-events-none">
+                        <div className="p-6 pointer-events-none">
                           <div className="flex flex-col sm:flex-row gap-6">
                             {/* Tour Image */}
-                            <div className="flex-shrink-0">
+                            <div className="flex-shrink-0 pointer-events-none">
                               <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
                                 {tour.image_urls &&
                                 tour.image_urls.length > 0 ? (
@@ -252,7 +280,7 @@ export default function MyToursSection({
                                 ) : (
                                   <div className="w-full h-full bg-gradient-to-br from-[#2b946f] to-[#0f6659] flex items-center justify-center">
                                     <span className="text-white text-4xl font-bold">
-                                      {tour.title.charAt(0)}
+                                      {tour.title?.charAt(0) || "T"}
                                     </span>
                                   </div>
                                 )}
@@ -265,18 +293,21 @@ export default function MyToursSection({
                             </div>
 
                             {/* Tour Info */}
-                            <div className="flex-1 flex flex-col justify-between">
+                            <div className="flex-1 flex flex-col justify-between pointer-events-none">
                               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                                 <div className="flex-1">
                                   <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-[#2b946f] transition-colors">
-                                    {tour.title}
+                                    {tour.title || "Bez naslova"}
                                   </h3>
                                   <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                                     <MapPin
                                       size={16}
                                       className="text-[#2b946f]"
                                     />
-                                    <span>{tour.location}</span>
+                                    <span>
+                                      {tour.location ||
+                                        "Lokacija nije navedena"}
+                                    </span>
                                   </div>
 
                                   {/* Informacije u kompaktnom formatu */}
@@ -287,7 +318,7 @@ export default function MyToursSection({
                                         className="text-[#2b946f]"
                                       />
                                       <span className="text-gray-700">
-                                        {tour.duration}
+                                        {tour.duration || "Nepoznato"}
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
@@ -304,9 +335,9 @@ export default function MyToursSection({
 
                                 {/* Cijena i akcijski gumbi */}
                                 <div className="flex flex-col items-end gap-3">
-                                  <div className="text-right">
+                                  <div className="text-right pointer-events-none">
                                     <div className="text-3xl font-bold text-[#2b946f]">
-                                      {formatPrice(tour.price_per_group)}
+                                      {formatPrice(tour.price_per_group || 0)}
                                     </div>
                                     <span className="text-xs text-gray-500">
                                       po grupi
@@ -314,7 +345,7 @@ export default function MyToursSection({
                                   </div>
 
                                   {/* Akcijski gumbi - Edit i Delete */}
-                                  <div className="flex gap-2">
+                                  <div className="flex gap-2 relative z-20 pointer-events-auto">
                                     <button
                                       onClick={(e) => handleEditClick(tour, e)}
                                       className="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#2b946f] text-white rounded-lg hover:bg-[#0f6659] transition-all font-medium text-sm cursor-pointer"
@@ -345,7 +376,7 @@ export default function MyToursSection({
                           </div>
                         </div>
                       </div>
-                    </Link>
+                    </div>
                   </motion.div>
                 ))}
               </motion.div>
@@ -357,7 +388,7 @@ export default function MyToursSection({
                 <p className="text-sm text-gray-600">
                   Prikazano {indexOfFirstTour + 1} -{" "}
                   {Math.min(indexOfLastTour, tours.length)} od {tours.length}{" "}
-                izleta
+                  izleta
                 </p>
                 <div className="flex items-center gap-2">
                   <button

@@ -84,10 +84,7 @@ export function Navbar() {
               href="/"
               className="flex items-center gap-2 text-white text-2xl font-bold tracking-tight hover:text-[#ff6309] transition-colors duration-200 p-2 rounded-lg hover:bg-white/5 cursor-pointer"
             >
-              <span className="bg-[#ff6309] text-white px-2 py-1 rounded-lg">
-                Cover
-              </span>
-              <span className="text-white">Dis</span>
+              <img src="/logo.png" alt="CoverDis" className="h-10 w-auto" />
             </Link>
 
             {/* Desktop Navigation */}
@@ -140,10 +137,7 @@ export function Navbar() {
                           <div className="font-medium text-sm">
                             {user.ime} {user.prezime?.[0]}.
                           </div>
-                          <div className="text-xs text-white/70 flex items-center gap-1">
-                            <Award size={10} />
-                            Lvl {calculateLevel(user.xp_total || 0)}
-                          </div>
+  
                         </div>
                       </div>
                       <ChevronDown
@@ -189,25 +183,14 @@ export function Navbar() {
                                 </p>
                               </div>
                             </div>
-                            <div className="flex items-center justify-between mt-3">
+                            <div className="flex items-center justify-around mt-3">
                               <div className="text-center">
                                 <div className="text-xl font-bold">
                                   {user.xp_total || 0}
                                 </div>
                                 <div className="text-xs opacity-80">XP</div>
                               </div>
-                              <div className="text-center">
-                                <div className="text-xl font-bold">
-                                  Lvl {calculateLevel(user.xp_total || 0)}
-                                </div>
-                                <div className="text-xs opacity-80">Level</div>
-                              </div>
-                              <div className="text-center">
-                                <div className="text-xl font-bold">
-                                  {user.ukupno_tura || 0}
-                                </div>
-                                <div className="text-xs opacity-80">Izleti</div>
-                              </div>
+
                             </div>
                           </div>
 
@@ -274,7 +257,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile Menu Button */}
-              <button
+            <button
               className="md:hidden text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
@@ -334,7 +317,7 @@ export function Navbar() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex justify-between mt-2">
+                        <div className="flex justify-center mt-2">
                           <div className="text-center">
                             <div className="text-lg font-bold text-white">
                               {user.xp_total || 0}
@@ -342,17 +325,8 @@ export function Navbar() {
                             <div className="text-xs text-white/70">XP</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-lg font-bold text-white">
-                              Lvl {calculateLevel(user.xp_total || 0)}
-                            </div>
-                            <div className="text-xs text-white/70">Level</div>
                           </div>
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-white">
-                              {user.ukupno_tura || 0}
-                            </div>
-                            <div className="text-xs text-white/70">Izleti</div>
-                          </div>
+ 
                         </div>
                       </div>
 

@@ -149,7 +149,7 @@ export default function TourDetailPage() {
     }
 
     // Prikazivanje poruke o uspjehu
-    alert("Rezervacija uspješno kreirana! Provjerite svoj email za potvrdu.");
+    alert("Rezervacija uspješno kreirana! Vodič će vas kontaktirati s detaljima.");
   };
 
   const fetchTour = async () => {
