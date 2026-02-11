@@ -177,7 +177,7 @@ export default function ProfilePage() {
     <>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* Gradient stripe under navbar */}
-        <div className="h-8 bg-gradient-to-r from-[#104d2f] to-[#0f6659]"></div>
+        <div className="h-16 bg-gradient-to-r from-[#104d2f] to-[#0f6659]"></div>
         
         {/* Profile Header */}
         <div className="relative">

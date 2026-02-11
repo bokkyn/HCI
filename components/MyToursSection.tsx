@@ -195,118 +195,125 @@ export default function MyToursSection({
             </button>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="grid gap-6">
             {tours.map((tour, index) => (
               <motion.div
                 key={tour.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="group border border-gray-200 rounded-xl hover:border-[#2b946f]/30 hover:shadow-md transition-all overflow-hidden"
+                className="group bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl hover:border-[#2b946f]/50 hover:shadow-xl transition-all overflow-hidden"
               >
                 <div className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+                  <div className="flex flex-col sm:flex-row gap-6">
                     {/* Tour Image */}
                     <div className="flex-shrink-0">
-                      <div className="relative w-24 h-24 rounded-lg overflow-hidden">
+                      <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
                         {tour.image_urls && tour.image_urls.length > 0 ? (
                           <img
                             src={tour.image_urls[0]}
                             alt={tour.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-r from-[#2b946f] to-[#0f6659] flex items-center justify-center">
-                            <span className="text-white text-xl font-bold">
+                          <div className="w-full h-full bg-gradient-to-br from-[#2b946f] to-[#0f6659] flex items-center justify-center">
+                            <span className="text-white text-4xl font-bold">
                               {tour.title.charAt(0)}
                             </span>
                           </div>
                         )}
                         {tour.is_featured && (
-                          <div className="absolute top-2 right-2">
-                            <Award className="h-4 w-4 text-[#ff6309]" />
+                          <div className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md">
+                            <Award className="h-5 w-5 text-[#ff6309]" />
                           </div>
                         )}
                       </div>
                     </div>
 
                     {/* Tour Info */}
-                    <div className="flex-1">
-                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-gray-900 mb-2">
-                            {tour.title}
-                          </h3>
-
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
-                            {tour.location && (
-                              <div className="flex items-center gap-1">
-                                <MapPin size={14} />
-                                <span>{tour.location}</span>
-                              </div>
-                            )}
-                            {tour.duration && (
-                              <div className="flex items-center gap-1">
-                                <Clock size={14} />
-                                <span>{tour.duration}</span>
-                              </div>
-                            )}
-                            <div className="flex items-center gap-1">
-                              <Users size={14} />
-                              <span>Do {tour.max_people} osoba</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Star size={14} className="text-yellow-500" />
-                              <span>{tour.rating.toFixed(1)}</span>
-                              <span className="text-gray-400">
-                                ({tour.reviews_count})
-                              </span>
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-start justify-between gap-4 mb-3">
+                          <div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                              {tour.title}
+                            </h3>
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                              <MapPin size={16} className="text-[#2b946f]" />
+                              <span>{tour.location}</span>
                             </div>
                           </div>
-
-                          <div className="flex flex-wrap items-center gap-4 text-sm">
-                            <div className="text-2xl font-bold text-[#2b946f]">
+                          <div className="text-right">
+                            <div className="text-3xl font-bold text-[#2b946f]">
                               {formatPrice(tour.price_per_group)}
                             </div>
-                            <div className="flex items-center gap-1 text-gray-500">
-                              <Calendar size={14} />
-                              <span>Dodano: {formatDate(tour.createdAt)}</span>
-                            </div>
+                            <span className="text-xs text-gray-500">po grupi</span>
                           </div>
                         </div>
 
-                        {/* Action Buttons */}
-                        <div className="flex flex-col sm:flex-row lg:flex-col gap-2">
-                          <Link
-                            href={`/tours/${tour.id}`}
-                            className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
-                          >
-                            <Eye size={16} />
-                            Pregled
-                          </Link>
-                          <button
-                            onClick={() => {
-                              setEditingTour(tour);
-                              setShowEditModal(true);
-                            }}
-                            className="flex items-center justify-center gap-2 px-4 py-2 bg-[#2b946f]/10 text-[#2b946f] rounded-lg hover:bg-[#2b946f]/20 transition-colors font-medium text-sm"
-                          >
-                            <Edit size={16} />
-                            Uredi
-                          </button>
-                          <button
-                            onClick={() => handleDeleteTour(tour.id)}
-                            disabled={deletingId === tour.id}
-                            className="flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-sm disabled:opacity-50"
-                          >
-                            {deletingId === tour.id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash2 size={16} />
-                            )}
-                            {deletingId === tour.id ? "Brisanje..." : "Obriši"}
-                          </button>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4 pb-4 border-b border-gray-200">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Clock size={16} className="text-[#2b946f]" />
+                            <div>
+                              <div className="text-xs text-gray-500">Trajanje</div>
+                              <div className="font-semibold text-gray-900">{tour.duration}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Users size={16} className="text-[#2b946f]" />
+                            <div>
+                              <div className="text-xs text-gray-500">Kapacitet</div>
+                              <div className="font-semibold text-gray-900">{tour.max_people} osoba</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Star size={16} className="text-yellow-500" />
+                            <div>
+                              <div className="text-xs text-gray-500">Ocjena</div>
+                              <div className="font-semibold text-gray-900">{tour.rating.toFixed(1)}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Calendar size={16} className="text-[#2b946f]" />
+                            <div>
+                              <div className="text-xs text-gray-500">Dodano</div>
+                              <div className="font-semibold text-gray-900 whitespace-nowrap">{formatDate(tour.createdAt)}</div>
+                            </div>
+                          </div>
                         </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex flex-col xs:flex-row gap-3">
+                        <Link
+                          href={`/tours/${tour.id}`}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:border-[#2b946f] transition-all font-medium text-sm flex-1"
+                        >
+                          <Eye size={16} />
+                          Pregled
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setEditingTour(tour);
+                            setShowEditModal(true);
+                          }}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2b946f] text-white rounded-lg hover:bg-[#0f6659] transition-all font-medium text-sm flex-1"
+                        >
+                          <Edit size={16} />
+                          Uredi
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTour(tour.id)}
+                          disabled={deletingId === tour.id}
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all font-medium text-sm flex-1 disabled:opacity-50"
+                        >
+                          {deletingId === tour.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 size={16} />
+                          )}
+                          {deletingId === tour.id ? "Brisanje..." : "Obriši"}
+                        </button>
                       </div>
                     </div>
                   </div>
