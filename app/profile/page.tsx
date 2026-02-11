@@ -336,6 +336,7 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
+              <div></div>
 
               {/* Moji izleti Section */}
               <MyToursSection
