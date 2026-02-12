@@ -19,7 +19,7 @@
 ### Semester Project
 
 - Link to your production version: [**Production Version**](https://coverdis-hci.vercel.app/) <!-- Replace with actual URL -->
-- Link to your final report: [**Final Report**](URL_TO_FINAL_REPORT) <!-- Replace with actual URL -->
+- Link to your final report: [**Final Report**](https://www.notion.so/Digitalna-platforma-za-otkrivanje-kreiranje-i-rezerviranje-izleta-s-community-i-gamifikacijskim-slo-3043288877e680319741e3c616b09bf8#617e161377874525a8fb100908a2e4a3) <!-- Replace with actual URL -->
 <!-- Add more as necessary -->
 
 ### Semester Assignments
