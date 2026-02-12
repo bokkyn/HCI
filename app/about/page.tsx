@@ -38,7 +38,7 @@ function Page() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-4"
           >
-            O nama
+            Mi
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

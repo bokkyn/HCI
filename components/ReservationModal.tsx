@@ -14,7 +14,6 @@ import {
   AlertCircle,
   Check,
   Users,
-  DollarSign,
 } from "lucide-react";
 
 interface ReservationModalProps {
@@ -24,7 +23,7 @@ interface ReservationModalProps {
   tourTitle: string;
   price: number;
   maxPeople: number;
-  onSuccess: () => void;
+  onSuccess: (message: string) => void;
 }
 
 interface UserProfile {
@@ -45,7 +44,6 @@ export default function ReservationModal({
 }: ReservationModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   // Form state
@@ -65,12 +63,72 @@ export default function ReservationModal({
     return `${hour.toString().padStart(2, "0")}:00`;
   });
 
+  // Validacija telefona - samo brojevi, +, /, -, i razmak
+  const validatePhone = (phone: string) => {
+    if (!phone) return true;
+    const phoneRegex = /^[\d\s\+\/\-]{6,20}$/;
+    return phoneRegex.test(phone);
+  };
+
+  // Validacija emaila
+  const validateEmail = (email: string) => {
+    if (!email) return false;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Provjeri da li je forma validna
+  const isFormValid = () => {
+    const errors = [];
+
+    if (!formData.booking_date) {
+      errors.push("Datum je obavezan");
+    }
+
+    if (!formData.booking_time) {
+      errors.push("Vrijeme je obavezno");
+    }
+
+    if (formData.number_of_people < 1) {
+      errors.push("Broj osoba mora biti barem 1");
+    }
+
+    if (formData.number_of_people > maxPeople) {
+      errors.push(`Maksimalan broj osoba za ovu turu je ${maxPeople}`);
+    }
+
+    if (!formData.contact_email) {
+      errors.push("Email je obavezan");
+    } else if (!validateEmail(formData.contact_email)) {
+      errors.push("Unesite validnu email adresu");
+    }
+
+    if (formData.contact_phone && !validatePhone(formData.contact_phone)) {
+      errors.push("Telefon može sadržavati samo brojeve, +, /, - i razmak");
+    }
+
+    if (formData.booking_date) {
+      const bookingDate = new Date(formData.booking_date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (bookingDate < today) {
+        errors.push("Ne možete rezervirati u prošlosti");
+      }
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  };
+
   // Učitaj podatke korisnika prilikom otvaranja modala
   useEffect(() => {
     if (isOpen) {
       fetchUserProfile();
+      setError("");
 
-      // Postavi default datum na sutra
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       setFormData((prev) => ({
@@ -84,13 +142,13 @@ export default function ReservationModal({
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch("/api/auth/profile", {
+      const response = await fetch("/api/auth/me", {
         credentials: "include",
       });
 
       if (response.ok) {
         const data = await response.json();
-        if (data.success && data.user) {
+        if (data.user) {
           setUserProfile({
             email: data.user.email || "",
             phone: data.user.phone || "",
@@ -98,7 +156,6 @@ export default function ReservationModal({
             prezime: data.user.prezime || "",
           });
 
-          // Popuni formu s podacima korisnika
           setFormData((prev) => ({
             ...prev,
             contact_email: data.user.email || "",
@@ -117,55 +174,31 @@ export default function ReservationModal({
     >,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "contact_phone") {
+      const filteredValue = value.replace(/[^\d\s\+\/\-]/g, "");
+      setFormData((prev) => ({ ...prev, [name]: filteredValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+
+    setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validation = isFormValid();
+
+    if (!validation.isValid) {
+      setError(validation.errors.join(", "));
+      return;
+    }
+
     setLoading(true);
     setError("");
-    setSuccess("");
 
     try {
-      // Validacija
-      const errors = [];
-
-      if (!formData.booking_date) {
-        errors.push("Datum je obavezan");
-      }
-
-      if (!formData.booking_time) {
-        errors.push("Vrijeme je obavezno");
-      }
-
-      if (formData.number_of_people < 1) {
-        errors.push("Broj osoba mora biti barem 1");
-      }
-
-      if (formData.number_of_people > maxPeople) {
-        errors.push(`Maksimalan broj osoba za ovu turu je ${maxPeople}`);
-      }
-
-      if (!formData.contact_email) {
-        errors.push("Email je obavezan");
-      } else if (!/\S+@\S+\.\S+/.test(formData.contact_email)) {
-        errors.push("Unesite validnu email adresu");
-      }
-
-      if (errors.length > 0) {
-        throw new Error(errors.join(", "));
-      }
-
-      // Provjeri datum - ne može rezervirati u prošlosti
-      const bookingDate = new Date(formData.booking_date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      if (bookingDate < today) {
-        throw new Error("Ne možete rezervirati u prošlosti");
-      }
-
-      // Pripremi podatke
       const reservationData = {
         tour_id: formData.tour_id,
         booking_date: formData.booking_date,
@@ -175,8 +208,6 @@ export default function ReservationModal({
         contact_email: formData.contact_email.trim(),
         contact_phone: formData.contact_phone.trim() || "",
       };
-
-      console.log("Sending reservation data:", reservationData);
 
       const response = await fetch("/api/reservations/create", {
         method: "POST",
@@ -192,12 +223,11 @@ export default function ReservationModal({
       }
 
       // Uspješno kreiranje
-      setSuccess("Rezervacija je uspješno kreirana!");
-      setTimeout(() => {
-        onClose();
-        onSuccess();
-        resetForm();
-      }, 2000);
+      onClose();
+      onSuccess(
+        `Uspješno ste rezervirali turu "${tourTitle}" za ${formData.booking_date} u ${formData.booking_time} sati.`,
+      );
+      resetForm();
     } catch (err: any) {
       setError(err.message);
       console.error("Reservation error:", err);
@@ -217,7 +247,6 @@ export default function ReservationModal({
       contact_phone: userProfile?.phone || "",
     });
     setError("");
-    setSuccess("");
   };
 
   const handleClose = () => {
@@ -229,7 +258,6 @@ export default function ReservationModal({
 
   if (!isOpen) return null;
 
-  // Format price
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("hr-HR", {
       style: "currency",
@@ -237,6 +265,8 @@ export default function ReservationModal({
       minimumFractionDigits: 0,
     }).format(price);
   };
+
+  const validation = isFormValid();
 
   return (
     <AnimatePresence>
@@ -273,26 +303,6 @@ export default function ReservationModal({
 
           {/* Form */}
           <div className="flex-1 overflow-y-auto p-6">
-            {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-red-700 font-medium">Greška:</p>
-                  <p className="text-red-600 text-sm mt-1">{error}</p>
-                </div>
-              </div>
-            )}
-
-            {success && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
-                <Check className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-green-700 font-medium">Uspjeh!</p>
-                  <p className="text-green-600 text-sm mt-1">{success}</p>
-                </div>
-              </div>
-            )}
-
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Tour Info Summary */}
               <div className="bg-gray-50 rounded-xl p-4">
@@ -396,13 +406,19 @@ export default function ReservationModal({
                       name="contact_email"
                       value={formData.contact_email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all ${
+                        formData.contact_email &&
+                        !validateEmail(formData.contact_email)
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-300"
+                      }`}
                       placeholder="vas@email.com"
                       required
                     />
                     {userProfile?.email && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        Vaš profilni email: {userProfile.email}
+                      <p className="text-xs text-blue-600 mt-1">
+                        Vaš profilni email: {userProfile.email} (možete
+                        promijeniti za ovu rezervaciju)
                       </p>
                     )}
                   </div>
@@ -417,14 +433,25 @@ export default function ReservationModal({
                       name="contact_phone"
                       value={formData.contact_phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
-                      placeholder="+385 99 123 4567"
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all ${
+                        formData.contact_phone &&
+                        !validatePhone(formData.contact_phone)
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-300"
+                      }`}
+                      placeholder="0991234567"
                     />
                     {userProfile?.phone && (
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-blue-600 mt-1">
                         Vaš profilni telefon: {userProfile.phone}
                       </p>
                     )}
+                    {formData.contact_phone &&
+                      !validatePhone(formData.contact_phone) && (
+                        <p className="text-xs text-red-500 mt-1">
+                          Dozvoljeni samo brojevi, +, /, - i razmak
+                        </p>
+                      )}
                   </div>
                 </div>
 
@@ -439,9 +466,9 @@ export default function ReservationModal({
                       </p>
                     </div>
                     <p className="text-xs text-blue-600">
-                      Kontakt informacije su automatski popunjene iz vašeg
-                      profila. Možete ih promijeniti ako želite koristiti
-                      drugačije podatke.
+                      Vaš email je automatski popunjen iz profila. Možete ga
+                      promijeniti ako želite da se rezervacija veže na drugu
+                      email adresu.
                     </p>
                   </div>
                 )}
@@ -492,6 +519,17 @@ export default function ReservationModal({
                 </div>
               </div>
 
+              {/* Error Message */}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-red-700 font-medium">Greška:</p>
+                    <p className="text-red-600 text-sm mt-1">{error}</p>
+                  </div>
+                </div>
+              )}
+
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                 <button
@@ -504,7 +542,7 @@ export default function ReservationModal({
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !validation.isValid}
                   className="flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
                 >
                   {loading ? (

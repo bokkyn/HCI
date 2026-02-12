@@ -48,18 +48,6 @@ interface Tour {
 export default function ToursPage() {
   const [sortOption, setSortOption] = useState<string>("");
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
-  // Kategorije - definiraj ručno ili iz izleta
-  const CATEGORY_LIST = [
-    "Hrana",
-    "Kultura",
-    "Priroda",
-    "Urbano",
-    "Sport",
-    "Misterija",
-    "Povijest",
-    "Zabava",
-  ];
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [hoveredTour, setHoveredTour] = useState<string | null>(null);
@@ -101,9 +89,6 @@ export default function ToursPage() {
     fetchTours();
   }, []);
 
-  // Kategorije za prikaz
-  const allCategories = useMemo(() => ["Sve", ...CATEGORY_LIST], []);
-
   // Ekstrakt sve jezike
   const allLanguages = useMemo(() => {
     const languages = new Set<string>();
@@ -117,16 +102,6 @@ export default function ToursPage() {
 
   const filteredTours = useMemo(() => {
     let filtered = tours.filter((tour) => {
-      // Filter po kategorijama
-      if (selectedCategories.length > 0) {
-        if (
-          !tour.categories ||
-          !tour.categories.some((cat) => selectedCategories.includes(cat))
-        ) {
-          return false;
-        }
-      }
-
       // Filter po pretrazi
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
@@ -200,8 +175,6 @@ export default function ToursPage() {
     return filtered;
   }, [
     tours,
-    allCategories,
-    selectedCategories,
     searchQuery,
     price,
     selectedLanguages,
@@ -218,18 +191,10 @@ export default function ToursPage() {
 
   const clearFilters = () => {
     setSearchQuery("");
-    setSelectedCategories([]);
     setPrice(200);
     setSelectedLanguages([]);
     setSelectedDuration("");
     setShowFeaturedOnly(false);
-  };
-
-  // Višestruki odabir kategorija
-  const toggleCategory = (cat: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
-    );
   };
 
   // Formatiraj trajanje
@@ -249,7 +214,7 @@ export default function ToursPage() {
 
   if (loading) {
     return (
-      <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/5 to-[#0f6659]/5 flex items-center justify-center">
+      <div className="pt-16 min-h-screen bg-linear-to-br from-[#2b946f]/5 to-[#0f6659]/5 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-12 w-12 text-[#2b946f] animate-spin" />
           <p className="text-gray-600">Učitavanje izleta...</p>
@@ -260,7 +225,7 @@ export default function ToursPage() {
 
   if (error) {
     return (
-      <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/5 to-[#0f6659]/5 flex items-center justify-center">
+      <div className="pt-16 min-h-screen bg-linear-to-br from-[#2b946f]/5 to-[#0f6659]/5 flex items-center justify-center">
         <div className="text-center max-w-md mx-4">
           <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-4">
             <h2 className="text-xl font-bold text-red-800 mb-2">Greška</h2>
@@ -268,7 +233,7 @@ export default function ToursPage() {
           </div>
           <button
             onClick={() => window.location.reload()}
-            className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
+            className="bg-linear-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
           >
             Pokušaj ponovno
           </button>
@@ -279,9 +244,9 @@ export default function ToursPage() {
 
   return (
     <>
-      <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/5 to-[#0f6659]/5">
+      <div className="pt-16 min-h-screen bg-linear-to-br from-[#2b946f]/5 to-[#0f6659]/5">
         {/* HEADER */}
-        <section className="bg-gradient-to-r from-[#104d2f] to-[#0f6659] text-white py-16 px-4">
+        <section className="bg-linear-to-r from-[#104d2f] to-[#0f6659] text-white py-16 px-4">
           <div className="max-w-7xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Svi Izleti</h1>
             <p className="text-lg text-white/90">
@@ -310,33 +275,6 @@ export default function ToursPage() {
                 <X className="h-5 w-5" />
               </button>
             )}
-          </div>
-
-          {/* CATEGORIES */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            <button
-              onClick={() => setSelectedCategories([])}
-              className={`px-6 py-2 rounded-full transition-all ${
-                selectedCategories.length === 0
-                  ? "bg-[#2b946f] text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              Sve
-            </button>
-            {CATEGORY_LIST.map((category) => (
-              <button
-                key={category}
-                onClick={() => toggleCategory(category)}
-                className={`px-6 py-2 rounded-full transition-all ${
-                  selectedCategories.includes(category)
-                    ? "bg-[#2b946f] text-white shadow-lg"
-                    : "bg-white text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
           </div>
 
           {/* ADVANCED FILTERS TOGGLE */}
@@ -492,7 +430,7 @@ export default function ToursPage() {
                   </p>
                   <button
                     onClick={clearFilters}
-                    className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
+                    className="bg-linear-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
                   >
                     Očisti filtere
                   </button>
@@ -512,7 +450,7 @@ export default function ToursPage() {
                         {/* Featured Badge - uvijek prikaži za featured izlete */}
                         {tour.is_featured && (
                           <div className="absolute top-4 left-4 z-20">
-                            <div className="flex items-center gap-1 bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white px-3 py-1 rounded-full text-xs font-medium shadow">
+                            <div className="flex items-center gap-1 bg-linear-to-r from-[#ff6309] to-[#ff9e5e] text-white px-3 py-1 rounded-full text-xs font-medium shadow">
                               <Award className="h-3 w-3" />
                               Istaknuto
                             </div>
@@ -530,37 +468,22 @@ export default function ToursPage() {
                               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-r from-[#2b946f] to-[#0f6659] flex items-center justify-center">
+                            <div className="w-full h-full bg-linear-to-r from-[#2b946f] to-[#0f6659] flex items-center justify-center">
                               <span className="text-white text-2xl font-bold">
                                 {tour.title.charAt(0)}
                               </span>
                             </div>
                           )}
                           {/* Gradient overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
 
                         {/* Content */}
                         <div className="p-6 flex flex-col flex-1">
-                          {/* Rating removed - nema recenzija */}
-
                           {/* Title */}
                           <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
                             {tour.title}
                           </h3>
-                          {/* Kategorije */}
-                          {tour.categories && tour.categories.length > 0 && (
-                            <div className="mb-2 flex flex-wrap gap-1">
-                              {tour.categories.map((cat, idx) => (
-                                <span
-                                  key={idx}
-                                  className="inline-block px-2 py-1 bg-[#e6f4ef] text-[#2b946f] text-xs rounded-full font-semibold"
-                                >
-                                  {cat}
-                                </span>
-                              ))}
-                            </div>
-                          )}
 
                           {/* Location */}
                           <div className="flex items-center gap-2 text-gray-600 mb-3">
@@ -602,7 +525,7 @@ export default function ToursPage() {
                                 className="rounded-full"
                               />
                             ) : (
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#2b946f] to-[#0f6659] flex items-center justify-center">
+                              <div className="w-8 h-8 rounded-full bg-linear-to-r from-[#2b946f] to-[#0f6659] flex items-center justify-center">
                                 <span className="text-white text-xs font-bold">
                                   {tour.guide?.name?.charAt(0) || "V"}
                                 </span>
@@ -629,9 +552,6 @@ export default function ToursPage() {
                               </div>
                             </div>
                           </div>
-
-                          {/* Tags */}
-                          {/* Tags removed - kategorija prikazana iznad */}
                         </div>
                       </motion.div>
                     </Link>
@@ -643,7 +563,7 @@ export default function ToursPage() {
 
           {/* MAP VIEW */}
           {viewMode === "map" && (
-            <div className="relative h-[600px] bg-white rounded-2xl shadow border border-gray-200">
+            <div className="relative h-150 bg-white rounded-2xl shadow border border-gray-200">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <MapIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />

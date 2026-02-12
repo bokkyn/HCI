@@ -99,14 +99,7 @@ export function HowItWorksPath() {
                 </p>
 
                 {/* Step Number */}
-                <div className="mt-6">
-                  <span
-                    className="flex w-8 h-8 rounded-full text-white items-center justify-center text-sm mx-auto"
-                    style={{ backgroundColor: step.color }}
-                  >
-                    {index + 1}
-                  </span>
-                </div>
+                
               </motion.div>
             ))}
           </div>

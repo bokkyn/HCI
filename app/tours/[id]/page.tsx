@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   MapPin,
   Clock,
@@ -18,6 +18,8 @@ import {
   AlertCircle,
   LogIn,
   Tag,
+  X,
+  CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 import ReservationModal from "@/components/ReservationModal";
@@ -72,6 +74,7 @@ export default function TourDetailPage() {
   const [reservationModalOpen, setReservationModalOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -132,6 +135,16 @@ export default function TourDetailPage() {
     }
   }, [id]);
 
+  // Auto-hide success message after 5 seconds
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   const handleReservationClick = () => {
     if (!user) {
       // Nije logiran - pokaži login modal
@@ -142,14 +155,14 @@ export default function TourDetailPage() {
     }
   };
 
-  const handleReservationSuccess = () => {
+  const handleReservationSuccess = (message: string) => {
     // Osvježi podatke o turi da se vidi ažurirani reservations_count
     if (id) {
       fetchTour();
     }
 
-    // Prikazivanje poruke o uspjehu
-    alert("Rezervacija uspješno kreirana! Vodič će vas kontaktirati s detaljima.");
+    // Prikaži custom zelenu poruku
+    setSuccessMessage(message);
   };
 
   const fetchTour = async () => {
@@ -282,6 +295,39 @@ export default function TourDetailPage() {
   return (
     <>
       <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/5 to-[#0f6659]/5">
+        {/* Success Toast */}
+        <AnimatePresence>
+          {successMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed top-24 right-4 left-4 sm:left-auto sm:right-4 z-[300] max-w-md w-full sm:w-96"
+            >
+              <div className="bg-green-50 border border-green-200 rounded-lg shadow-lg p-4 flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-green-800 font-medium">
+                    Rezervacija uspješno kreirana!
+                  </p>
+                  <p className="text-green-700 text-sm mt-1">
+                    {successMessage}
+                  </p>
+                  <p className="text-green-600 text-xs mt-2 font-medium">
+                    Vodič će vas kontaktirati s detaljima.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSuccessMessage(null)}
+                  className="text-green-600 hover:text-green-800 transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Back Button */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           <button
@@ -563,7 +609,9 @@ export default function TourDetailPage() {
                       <div className="flex flex-wrap gap-3 md:gap-4 text-sm text-gray-600 mb-3">
                         <div className="flex items-center gap-1">
                           <Users size={16} />
-                          <span>{tour.guide.tours_led || 0} izleta vodio/la</span>
+                          <span>
+                            {tour.guide.tours_led || 0} izleta vodio/la
+                          </span>
                         </div>
                         {tour.guide.xp && (
                           <div className="flex items-center gap-1">

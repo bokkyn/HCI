@@ -41,6 +41,22 @@ export default function ProfilePage() {
     avatar: "",
   });
 
+  // Force reload svaki put kad se uđe na profile stranicu
+  useEffect(() => {
+    const hasReloaded = sessionStorage.getItem("profileReloaded");
+    if (!hasReloaded) {
+      sessionStorage.setItem("profileReloaded", "true");
+      window.location.reload();
+    }
+  }, []);
+
+  // Resetiraj reload flag kad se napusti stranica
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("profileReloaded");
+    };
+  }, []);
+
   useEffect(() => {
     if (currentUser) {
       setUserData(currentUser);
@@ -99,6 +115,11 @@ export default function ProfilePage() {
   ) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTourCreated = () => {
+    setShowCreateTourModal(false);
+    window.location.reload();
   };
 
   const formatDate = (dateString: string) => {
@@ -244,9 +265,7 @@ export default function ProfilePage() {
                       )}
                       <div className="flex items-center gap-2">
                         <Calendar size={16} className="text-[#2b946f]" />
-                        <span>
-                         {formatDateShort(userData.createdAt)}
-                        </span>
+                        <span>{formatDateShort(userData.createdAt)}</span>
                       </div>
                     </div>
                   </div>
@@ -338,7 +357,7 @@ export default function ProfilePage() {
                 userId={userData.id}
                 onAddTourClick={() => setShowCreateTourModal(true)}
               />
-              
+
               <LeaderboardPreview currentUserId={userData.id} />
             </div>
 
@@ -387,7 +406,6 @@ export default function ProfilePage() {
                     <div className="space-y-4">
                       {kategorije.map(({ key, label, color }) => {
                         const xp = xpKategorije[key] || 0;
-                        const katLevel = Math.floor(xp / LEVEL_XP) + 1;
                         const progress = ((xp % LEVEL_XP) / LEVEL_XP) * 100;
 
                         return (
@@ -403,7 +421,6 @@ export default function ProfilePage() {
                                 </span>
                               </div>
                               <div className="flex items-center gap-2">
-
                                 <span className="text-xs text-gray-500">
                                   {xp} XP
                                 </span>
@@ -440,9 +457,7 @@ export default function ProfilePage() {
         <CreateTourModal
           isOpen={showCreateTourModal}
           onClose={() => setShowCreateTourModal(false)}
-          onSuccess={() => {
-            window.location.reload();
-          }}
+          onSuccess={handleTourCreated}
         />
       )}
 

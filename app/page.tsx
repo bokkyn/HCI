@@ -96,12 +96,12 @@ function HeroSection() {
         <MapPin size={80} className="text-[#2b946f]" />
       </motion.div>
 
-      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto py-12 md:py-0">
+      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto py-8 md:py-0">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-white text-6xl sm:text-6xl pt-19 md:text-7xl lg:text-8xl font-black leading-[1.1] md:leading-[1.1] mb-4 tracking-tight"
+          className="text-white text-6xl sm:text-6xl sm:pt-0 md:text-7xl md:pt-15 lg:text-8xl lg:pt-28 font-black leading-[1.1] md:leading-[1.1] mb-4 tracking-tight"
         >
           Otkrivaj. Istražuj. Osvajaj.
         </motion.h1>
@@ -114,8 +114,7 @@ function HeroSection() {
         >
           Ovo nije još jedna aplikacija za izlete. Ovo je igra izlaska iz zone
           komfora koja se igra vani, gdje ti biraš avanturu, a mi pratimo tvoj
-          put.
-          Istražite Hrvatsku na autentičan način.
+          put. Istražite Hrvatsku na autentičan način.
         </motion.p>
 
         {/* Logo animacija ispod naslova */}
@@ -215,10 +214,9 @@ function AnimatedLogo({ isNear }: { isNear: boolean }) {
             Dis
           </motion.span>
 
-          {/* DisCover - dolazi s lijeve i desne strane */}
+          {/* DisCover - Dis dolazi s lijeva, Cover s desna */}
           <motion.span
             animate={{
-              x: shouldAnimate ? "0%" : "-200%",
               opacity: shouldAnimate ? 1 : 0,
             }}
             transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
@@ -226,7 +224,7 @@ function AnimatedLogo({ isNear }: { isNear: boolean }) {
           >
             <motion.span
               animate={{
-                x: shouldAnimate ? "0%" : "100%",
+                x: shouldAnimate ? "0%" : "-150%",
               }}
               transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
               className="text-[#ff6309]"
@@ -235,10 +233,10 @@ function AnimatedLogo({ isNear }: { isNear: boolean }) {
             </motion.span>
             <motion.span
               animate={{
-                x: shouldAnimate ? "0%" : "-100%",
+                x: shouldAnimate ? "0%" : "150%",
               }}
               transition={{ duration: 0.6, ease: [0.65, 0, 0.35, 1] }}
-              className="ml-2 text-white"
+              className="ml-1 text-white"
             >
               Cover
             </motion.span>

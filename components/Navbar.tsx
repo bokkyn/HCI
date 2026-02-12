@@ -21,12 +21,12 @@ import {
 } from "lucide-react";
 import { useAuth } from "./AuthProvider";
 import LoginModal from "./LoginModal";
-import CreateTourModal from "./CreateTourModal"; // Dodano: Import CreateTourModal
+import CreateTourModal from "./CreateTourModal";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showCreateTourModal, setShowCreateTourModal] = useState(false); // Dodano: State za modal ture
+  const [showCreateTourModal, setShowCreateTourModal] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -38,7 +38,7 @@ export function Navbar() {
     { name: "Blog", href: "/blog", icon: <Book size={18} /> },
     { name: "Kontakt", href: "/contact", icon: <Mail size={18} /> },
     { name: "FAQ", href: "/faq", icon: <HelpCircle size={18} /> },
-    { name: "O nama", href: "/about", icon: <Info size={18} /> },
+    { name: "Mi", href: "/about", icon: <Info size={18} /> },
   ];
 
   const handleLogout = async () => {
@@ -54,11 +54,9 @@ export function Navbar() {
   };
 
   const handleCreateTourSuccess = () => {
-    // Osvježi stranicu ili prikaži poruku o uspjehu
     router.refresh();
   };
 
-  // Zatvori dropdown kada klikneš izvan
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -71,93 +69,91 @@ export function Navbar() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Izračunaj level na temelju XP-a
-  const calculateLevel = (xp: number) => Math.floor(xp / 1000) + 1;
-
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#104d2f]/95 backdrop-blur-md shadow-lg border-b border-[#2b946f]/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-white text-2xl font-bold tracking-tight hover:text-[#ff6309] transition-colors duration-200 p-2 rounded-lg hover:bg-white/5 cursor-pointer"
-            >
-              <img src="/logo.png" alt="CoverDis" className="h-10 w-auto" />
+            <Link href="/" className="flex items-center h-full group">
+              <div className="flex items-center gap-2 text-white text-2xl font-bold tracking-tight px-4 py-2 rounded-lg transition-all duration-200 group-hover:text-[#ff6309] group-hover:bg-white/5">
+                <img src="/logo.png" alt="CoverDis" className="h-10 w-auto" />
+              </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
+            {/* Desktop Navigation - vidljiv do 970px */}
+            <div className="desktop-nav items-center gap-1 hidden h-full">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`
-                    flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200
-                    ${
-                      pathname === link.href
-                        ? "text-[#ff6309] bg-white/10"
-                        : "text-white hover:text-[#ff6309] hover:bg-white/5"
-                    }
-                  `}
+                  className="flex items-center h-full group"
                 >
-                  {link.icon}
-                  <span>{link.name}</span>
+                  <div
+                    className={`
+                      flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all duration-200 text-sm xl:text-base whitespace-nowrap
+                      ${
+                        pathname === link.href
+                          ? "text-[#ff6309] bg-white/10"
+                          : "text-white group-hover:text-[#ff6309] group-hover:bg-white/5"
+                      }
+                    `}
+                  >
+                    {link.icon}
+                    <span className="nav-text">{link.name}</span>
+                  </div>
                 </Link>
               ))}
 
               {/* User/Login Section */}
-              <div className="ml-4 relative user-dropdown">
+              <div className="ml-2 relative user-dropdown whitespace-nowrap h-full flex items-center">
                 {loading ? (
                   <div className="w-10 h-10 rounded-full bg-white/10 animate-pulse" />
                 ) : user ? (
-                  // LOGIRAN KORISNIK - DROPDOWN
-                  <div className="relative">
+                  <div className="relative h-full flex items-center">
                     <button
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                      className="group flex items-center gap-3 px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/15 transition-all duration-200 cursor-pointer"
+                      className="flex items-center h-full group"
                     >
-                      <div className="flex items-center gap-2">
-                        {user.avatar ? (
-                          <img
-                            src={user.avatar}
-                            alt={user.ime}
-                            className="w-8 h-8 rounded-full object-cover border-2 border-white/30"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] flex items-center justify-center border-2 border-white/30">
-                            <span className="text-white font-bold text-sm">
-                              {user.ime?.[0] || "U"}
-                              {user.prezime?.[0] || "S"}
-                            </span>
+                      <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-white group-hover:bg-white/15 transition-all duration-200 cursor-pointer text-sm xl:text-base">
+                        <div className="flex items-center gap-1.5">
+                          {user.avatar ? (
+                            <img
+                              src={user.avatar}
+                              alt={user.ime}
+                              className="w-7 h-7 xl:w-8 xl:h-8 rounded-full object-cover border-2 border-white/30"
+                            />
+                          ) : (
+                            <div className="w-7 h-7 xl:w-8 xl:h-8 rounded-full bg-gradient-to-r from-[#2b946f] to-[#ff6309] flex items-center justify-center border-2 border-white/30">
+                              <span className="text-white font-bold text-xs xl:text-sm">
+                                {user.ime?.[0] || "U"}
+                                {user.prezime?.[0] || "S"}
+                              </span>
+                            </div>
+                          )}
+                          <div className="text-left">
+                            <div className="font-medium text-sm">
+                              {user.ime}
+                            </div>
                           </div>
-                        )}
-                        <div className="text-left">
-                          <div className="font-medium text-sm">
-                            {user.ime} {user.prezime?.[0]}.
-                          </div>
-  
                         </div>
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform duration-200 ${
+                            userDropdownOpen ? "rotate-180" : ""
+                          }`}
+                        />
                       </div>
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform duration-200 ${
-                          userDropdownOpen ? "rotate-180" : ""
-                        }`}
-                      />
                     </button>
 
-                    {/* Dropdown Menu */}
                     <AnimatePresence>
                       {userDropdownOpen && (
                         <motion.div
                           initial={{ opacity: 0, y: -10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50"
+                          className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50"
                         >
-                          {/* User info header */}
                           <div className="px-4 py-4 bg-gradient-to-r from-[#104d2f] to-[#0f6659] text-white">
                             <div className="flex items-center gap-3 mb-2">
                               {user.avatar ? (
@@ -190,11 +186,9 @@ export function Navbar() {
                                 </div>
                                 <div className="text-xs opacity-80">XP</div>
                               </div>
-
                             </div>
                           </div>
 
-                          {/* Menu items */}
                           <div className="py-2">
                             <Link
                               href="/profile"
@@ -243,14 +237,15 @@ export function Navbar() {
                     </AnimatePresence>
                   </div>
                 ) : (
-                  // NIJE LOGIRAN - LOGIN BUTTON
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setShowLoginModal(true)}
-                    className="bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium shadow-md cursor-pointer"
+                    className="flex items-center h-full group"
                   >
-                    Prijavi se
+                    <div className="bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-200 font-medium shadow-md cursor-pointer text-sm xl:text-base whitespace-nowrap">
+                      Prijavi se
+                    </div>
                   </motion.button>
                 )}
               </div>
@@ -258,7 +253,7 @@ export function Navbar() {
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+              className="desktop-nav-hidden text-white p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer h-full flex items-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -273,7 +268,7 @@ export function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-[#104d2f] border-t border-[#2b946f]"
+              className="bg-[#104d2f] border-t border-[#2b946f]"
             >
               <div className="px-4 py-3 space-y-2">
                 {navLinks.map((link) => (
@@ -288,7 +283,6 @@ export function Navbar() {
                   </Link>
                 ))}
 
-                {/* Mobile Auth */}
                 <div className="pt-4 border-t border-[#2b946f]/50">
                   {user ? (
                     <>
@@ -324,9 +318,6 @@ export function Navbar() {
                             </div>
                             <div className="text-xs text-white/70">XP</div>
                           </div>
-                          <div className="text-center">
-                          </div>
- 
                         </div>
                       </div>
 
@@ -375,12 +366,30 @@ export function Navbar() {
         </AnimatePresence>
       </nav>
 
-      {/* Login Modal */}
+      {/* CSS za responzivno ponašanje - hamburger na 970px */}
+      <style jsx>{`
+        @media (max-width: 970px) {
+          .desktop-nav {
+            display: none !important;
+          }
+          .desktop-nav-hidden {
+            display: block !important;
+          }
+        }
+        @media (min-width: 971px) {
+          .desktop-nav {
+            display: flex !important;
+          }
+          .desktop-nav-hidden {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
       )}
 
-      {/* Create Tour Modal */}
       {showCreateTourModal && (
         <CreateTourModal
           isOpen={showCreateTourModal}
@@ -389,7 +398,6 @@ export function Navbar() {
         />
       )}
 
-      {/* Backdrop for dropdown */}
       {userDropdownOpen && (
         <div
           className="fixed inset-0 z-40 cursor-pointer"
