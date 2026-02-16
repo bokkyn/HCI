@@ -82,7 +82,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation - vidljiv do 970px */}
-            <div className="desktop-nav items-center gap-1 hidden h-full">
+            <div className="desktop-nav items-center gap-8 hidden h-full">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -91,7 +91,7 @@ export function Navbar() {
                 >
                   <div
                     className={`
-                      flex items-center gap-1.5 px-4 py-2 rounded-lg transition-all duration-200 text-sm xl:text-base whitespace-nowrap
+                      flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all duration-200 text-sm xl:text-base whitespace-nowrap font-medium
                       ${
                         pathname === link.href
                           ? "text-[#ff6309] bg-white/10"
@@ -99,14 +99,13 @@ export function Navbar() {
                       }
                     `}
                   >
-                    {link.icon}
                     <span className="nav-text">{link.name}</span>
                   </div>
                 </Link>
               ))}
 
               {/* User/Login Section */}
-              <div className="ml-2 relative user-dropdown whitespace-nowrap h-full flex items-center">
+              <div className="ml-6 relative user-dropdown whitespace-nowrap h-full flex items-center">
                 {loading ? (
                   <div className="w-10 h-10 rounded-full bg-white/10 animate-pulse" />
                 ) : user ? (

@@ -28,10 +28,10 @@ function authenticateUser(req: Request) {
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ id: string }> },
+  { params }: { params: { id: string } },
 ) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const tourId = id;
 
     const userId = authenticateUser(req);
@@ -70,16 +70,12 @@ export async function DELETE(
     // Obriši izlet
     await Tour.findByIdAndDelete(tourId);
 
-    // Ažuriraj korisnikovu statistiku - smanji broj tura i XP
+    // Ažuriraj korisnikov broj izleta
     await User.findByIdAndUpdate(userId, {
-      $inc: {
-        ukupno_tura: -1, // Smanji broj tura za 1
-        xp_total: -10, // Smanji ukupni XP za 10 (koliko je dobio pri kreiranju)
-      },
+      $inc: { ukupno_tura: -1 },
     });
 
     console.log("Tour deleted successfully:", tourId);
-    console.log(`User ${userId} - ukupno_tura: -1, xp_total: -10`);
 
     return NextResponse.json({
       success: true,

@@ -14,6 +14,7 @@ import {
   AlertCircle,
   Check,
   Users,
+  ChevronDown,
 } from "lucide-react";
 
 interface ReservationModalProps {
@@ -302,119 +303,125 @@ export default function ReservationModal({
           </div>
 
           {/* Form */}
-          <div className="flex-1 overflow-y-auto p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Tour Info Summary */}
-              <div className="bg-gray-50 rounded-xl p-4">
-                <div className="flex justify-between items-center">
+          <div className="flex-1 overflow-y-auto p-6 md:p-8">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* 1. Tour Details Section */}
+              <div className="space-y-6">
+                {/* Header with Price */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-100">
                   <div>
-                    <h3 className="font-bold text-gray-900">{tourTitle}</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Cijena: {formatPrice(price)} po grupi
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="flex items-center gap-1 text-gray-600">
+                    <h3 className="text-xl font-bold text-gray-900">{tourTitle}</h3>
+                    <div className="flex items-center gap-2 text-gray-500 mt-1 text-sm">
                       <Users size={16} />
-                      <span className="text-sm">Maks: {maxPeople} osoba</span>
+                      <span>Maksimalno {maxPeople} osoba</span>
+                    </div>
+                  </div>
+                  <div className="text-left sm:text-right bg-gray-50 px-4 py-2 rounded-lg">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Cijena grupe</p>
+                    <p className="text-xl font-bold text-[#2b946f]">{formatPrice(price)}</p>
+                  </div>
+                </div>
+
+                {/* Booking Inputs */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Datum <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <input
+                        type="date"
+                        name="booking_date"
+                        value={formData.booking_date}
+                        onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Vrijeme <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <select
+                        name="booking_time"
+                        value={formData.booking_time}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white appearance-none"
+                        required
+                      >
+                        {timeOptions.map((time) => (
+                          <option key={time} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-sm font-semibold text-gray-700">
+                      Broj osoba <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <select
+                        name="number_of_people"
+                        value={formData.number_of_people}
+                        onChange={handleChange}
+                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white appearance-none"
+                        required
+                      >
+                        {Array.from({ length: maxPeople }, (_, i) => i + 1).map(
+                          (num) => (
+                            <option key={num} value={num}>
+                              {num} {num === 1 ? "osoba" : "osobe"}
+                            </option>
+                          ),
+                        )}
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Date & Time */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Calendar size={16} />
-                    Datum <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    name="booking_date"
-                    value={formData.booking_date}
-                    onChange={handleChange}
-                    min={new Date().toISOString().split("T")[0]}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
-                    required
-                  />
+              {/* 2. Contact Section */}
+              <div className="space-y-6 pt-2">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="h-px flex-1 bg-gray-100"></div>
+                  <h3 className="text-lg font-bold text-gray-900">Kontakt podaci</h3>
+                  <div className="h-px flex-1 bg-gray-100"></div>
                 </div>
-
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                    <Clock size={16} />
-                    Vrijeme <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="booking_time"
-                    value={formData.booking_time}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all bg-white"
-                    required
-                  >
-                    {timeOptions.map((time) => (
-                      <option key={time} value={time}>
-                        {time}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Number of People */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                  <Users size={16} />
-                  Broj osoba <span className="text-red-500">*</span>
-                </label>
-                <div className="flex items-center gap-4">
-                  <select
-                    name="number_of_people"
-                    value={formData.number_of_people}
-                    onChange={handleChange}
-                    className="w-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all"
-                    required
-                  >
-                    {Array.from({ length: maxPeople }, (_, i) => i + 1).map(
-                      (num) => (
-                        <option key={num} value={num}>
-                          {num} {num === 1 ? "osoba" : "osobe"}
-                        </option>
-                      ),
-                    )}
-                  </select>
-                  <span className="text-sm text-gray-500">
-                    Ukupno: {formatPrice(price)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Contact Information */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-bold text-gray-900 border-b pb-2">
-                  Kontakt informacije
-                </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <Mail size={16} />
+                    <label className="text-sm font-semibold text-gray-700 mb-2 block">
                       Email adresa <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="email"
-                      name="contact_email"
-                      value={formData.contact_email}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all ${
-                        formData.contact_email &&
-                        !validateEmail(formData.contact_email)
-                          ? "border-red-500 bg-red-50"
-                          : "border-gray-300"
-                      }`}
-                      placeholder="vas@email.com"
-                      required
-                    />
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <input
+                        type="email"
+                        name="contact_email"
+                        value={formData.contact_email}
+                        onChange={handleChange}
+                        className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white ${
+                          formData.contact_email &&
+                          !validateEmail(formData.contact_email)
+                            ? "border-red-500 bg-red-50"
+                            : "border-gray-200"
+                        }`}
+                        placeholder="vas@email.com"
+                        required
+                      />
+                    </div>
                     {userProfile?.email && (
                       <p className="text-xs text-blue-600 mt-1">
                         Vaš profilni email: {userProfile.email} (možete
@@ -424,23 +431,25 @@ export default function ReservationModal({
                   </div>
 
                   <div>
-                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                      <Phone size={16} />
+                    <label className="text-sm font-semibold text-gray-700 mb-2 block">
                       Telefon
                     </label>
-                    <input
-                      type="tel"
-                      name="contact_phone"
-                      value={formData.contact_phone}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all ${
-                        formData.contact_phone &&
-                        !validatePhone(formData.contact_phone)
-                          ? "border-red-500 bg-red-50"
-                          : "border-gray-300"
-                      }`}
-                      placeholder="0991234567"
-                    />
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <input
+                        type="tel"
+                        name="contact_phone"
+                        value={formData.contact_phone}
+                        onChange={handleChange}
+                        className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white ${
+                          formData.contact_phone &&
+                          !validatePhone(formData.contact_phone)
+                            ? "border-red-500 bg-red-50"
+                            : "border-gray-200"
+                        }`}
+                        placeholder="0991234567"
+                      />
+                    </div>
                     {userProfile?.phone && (
                       <p className="text-xs text-blue-600 mt-1">
                         Vaš profilni telefon: {userProfile.phone}
@@ -457,48 +466,41 @@ export default function ReservationModal({
 
                 {/* User Info */}
                 {userProfile && (
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <User size={16} className="text-blue-600" />
-                      <p className="text-sm text-blue-700 font-medium">
-                        Prijavljeni ste kao: {userProfile.ime}{" "}
-                        {userProfile.prezime}
-                      </p>
+                  <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start">
+                    <User size={18} className="text-blue-600 mt-0.5 shrink-0" />
+                    <div className="text-sm text-blue-800">
+                      <p className="font-medium">Prijavljeni ste kao {userProfile.ime} {userProfile.prezime}</p>
+                      <p className="text-blue-600/80 text-xs mt-1">Podaci su automatski popunjeni iz vašeg profila.</p>
                     </div>
-                    <p className="text-xs text-blue-600">
-                      Vaš email je automatski popunjen iz profila. Možete ga
-                      promijeniti ako želite da se rezervacija veže na drugu
-                      email adresu.
-                    </p>
                   </div>
                 )}
               </div>
 
-              {/* Special Notes */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              {/* 3. Notes Section */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                   <FileText size={16} />
-                  Posebne napomene za vodiča
+                  Posebne napomene
                 </label>
                 <textarea
                   name="special_notes"
                   value={formData.special_notes}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all resize-none"
-                  placeholder="Imate li posebne zahtjeve, alergije, ograničenja? Javite vodiču što bi trebao znati..."
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all resize-none bg-gray-50/50 hover:bg-white"
+                  placeholder="Imate li posebne zahtjeve, alergije, ograničenja?"
                   maxLength={500}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-400 text-right">
                   {formData.special_notes.length}/500 znakova
                 </p>
               </div>
 
               {/* Terms & Conditions */}
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-xl p-4">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600 mt-0.5" />
+                    <Check className="h-5 w-5 text-[#2b946f] mt-0.5" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-700">
