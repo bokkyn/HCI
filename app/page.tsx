@@ -463,15 +463,7 @@ function FinalCTA() {
               </motion.button>
             </Link>
 
-            <Link href="/how-it-works" className="w-full sm:w-auto">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="bg-white/10 backdrop-blur-md text-white px-8 md:px-12 py-4 md:py-5 rounded-full text-base md:text-lg font-bold border-2 border-white/30 hover:bg-white/20 transition-all w-full sm:min-w-[260px]"
-              >
-                Kako funkcionira?
-              </motion.button>
-            </Link>
+
           </div>
         </motion.div>
       </div>
