@@ -19,7 +19,7 @@ const renderOptions = {
       </h2>
     ),
     [BLOCKS.UL_LIST]: (node: any, children: any) => (
-      <ul className="list-disc pl-6 mb-8 space-y-4 text-lg">{children}</ul>
+      <ul className="list-none pl-0 mb-8 space-y-4 text-lg">{children}</ul>
     ),
   },
 };
