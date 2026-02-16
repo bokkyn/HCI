@@ -1,6 +1,5 @@
-// app/api/tours/[id]/delete/route.ts
-// @ts-nocheck
-import { NextResponse } from "next/server";
+//@ts-nocheck
+import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectDB } from "@/app/lib/mongodb";
 import { Tour } from "@/app/models/Tour";
@@ -9,8 +8,7 @@ import { ObjectId } from "mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-jwt-secret-key-change-this";
 
-// Helper funkcija za autentikaciju
-function authenticateUser(req: Request) {
+function authenticateUser(req: NextRequest) {
   try {
     const cookieHeader = req.headers.get("cookie");
     if (cookieHeader) {
@@ -21,20 +19,20 @@ function authenticateUser(req: Request) {
       }
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const tourId = id;
 
-    const userId = authenticateUser(req);
+    const userId = authenticateUser(request);
 
     if (!userId) {
       return NextResponse.json({ error: "Niste prijavljeni" }, { status: 401 });
@@ -49,7 +47,6 @@ export async function DELETE(
 
     await connectDB();
 
-    // Pronađi izlet
     const tour = await Tour.findById(tourId);
 
     if (!tour) {
@@ -59,7 +56,6 @@ export async function DELETE(
       );
     }
 
-    // Provjeri vlasništvo
     if (tour.guide_id.toString() !== userId) {
       return NextResponse.json(
         { error: "Nemate ovlasti za brisanje ovog izleta" },
@@ -67,10 +63,8 @@ export async function DELETE(
       );
     }
 
-    // Obriši izlet
     await Tour.findByIdAndDelete(tourId);
 
-    // Ažuriraj korisnikov broj izleta
     await User.findByIdAndUpdate(userId, {
       $inc: { ukupno_tura: -1 },
     });
