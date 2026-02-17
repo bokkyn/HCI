@@ -10,6 +10,7 @@ import {
   MessageSquare,
   AlertCircle,
   Loader2,
+  ChevronDown,
 } from "lucide-react";
 
 interface ReservationModalProps {
@@ -188,17 +189,15 @@ export default function ReservationModal({
                   <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
                     <div className="flex justify-between items-center mb-2">
                       <label className="text-sm font-medium text-gray-700">
-                        Broj osoba
+                        Broj osoba <span className="text-red-500">*</span>
                       </label>
                       <span className="text-xs text-gray-500">
                         Max: {maxPeople}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <input
-                        type="range"
-                        min="1"
-                        max={maxPeople}
+                    <div className="relative">
+                      <select
+                        required
                         value={formData.people}
                         onChange={(e) =>
                           setFormData({
@@ -206,10 +205,18 @@ export default function ReservationModal({
                             people: parseInt(e.target.value),
                           })
                         }
-                        className="flex-1 accent-[#2b946f] h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                      />
-                      <div className="w-12 h-12 bg-white rounded-lg border border-gray-200 flex items-center justify-center font-bold text-lg text-[#104d2f] shadow-sm">
-                        {formData.people}
+                        className="w-full p-2.5 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2b946f] outline-none transition-all appearance-none"
+                      >
+                        {Array.from({ length: maxPeople }, (_, i) => i + 1).map(
+                          (num) => (
+                            <option key={num} value={num}>
+                              {num}
+                            </option>
+                          ),
+                        )}
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                        <ChevronDown size={16} />
                       </div>
                     </div>
                   </div>
@@ -224,10 +231,11 @@ export default function ReservationModal({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-xs font-medium text-gray-600">
-                        Broj telefona
+                        Broj telefona <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
+                        required
                         placeholder="+385..."
                         className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2b946f] outline-none transition-all"
                         value={formData.phone}
@@ -238,10 +246,11 @@ export default function ReservationModal({
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-xs font-medium text-gray-600">
-                        Email (opcionalno)
+                        Email <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="email"
+                        required
                         placeholder="primjer@email.com"
                         className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#2b946f] outline-none transition-all"
                         value={formData.email}
