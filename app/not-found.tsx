@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function NotFoundPage() {
 
   return (
-    <div className="pt-16 min-h-screen bg-gradient-to-br from-[#2b946f]/10 to-[#0f6659]/10 flex items-center justify-center px-4">
+    <div className="pt-16 pb-20 min-h-screen bg-gradient-to-br from-[#2b946f]/10 to-[#0f6659]/10 flex items-center justify-center px-4">
       <div className="text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -27,7 +27,7 @@ export default function NotFoundPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/" 
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-8 py-3 rounded-full hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 bg-[#2b946f] text-white px-8 py-3 rounded-full hover:shadow-lg transition-all"
             >
               <Home size={20} />
               Početna stranica

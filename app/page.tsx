@@ -457,7 +457,7 @@ function FinalCTA() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-[#ff6309] text-white px-8 md:px-12 py-4 md:py-5 rounded-full text-base md:text-lg font-bold hover:bg-[#e55808] transition-all shadow-2xl shadow-[#ff6309]/20 w-full sm:min-w-[260px]"
+                className="bg-[#ff6309] text-white px-8 md:px-12 py-4 md:py-5 rounded-full text-base md:text-lg font-bold hover:bg-[#e55808] transition-all shadow-2xl shadow-[#ff6309]/20 sm:min-w-[260px]"
               >
                 Istraži ture
               </motion.button>
