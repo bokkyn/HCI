@@ -26,19 +26,19 @@ function Page() {
 
   const steps = [
     {
-      title: "1. Registracija",
+      title: "Registracija",
       description: "Ispunite registracijski obrazac s osnovnim podacima",
     },
     {
-      title: "2. Kreiranje izleta",
+      title: "Kreiranje izleta",
       description: "Kreirajte svoj prvi izlet s detaljnim opisom, u izborniku na profilu",
     },
     {
-      title: "3. Prva rezervacija",
+      title: "Prva rezervacija",
       description: "Pričekajte da privugnete prve putnike i ostvarite svoju prvu rezervaciju",
     },
     {
-      title: "4. Gotovo",
+      title: "Gotovo",
       description: "Njihovi kontakt podaci se šalju vama i rezervacija je spremna",
     },
   ];

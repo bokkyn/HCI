@@ -91,7 +91,7 @@ export function Navbar() {
                 >
                   <div
                     className={`
-                      flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all duration-200 text-sm xl:text-base whitespace-nowrap font-medium
+                      flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all duration-200 text-base xl:text-lg whitespace-nowrap font-medium
                       ${
                         pathname === link.href
                           ? "text-[#ff6309] bg-white/10"
@@ -114,7 +114,7 @@ export function Navbar() {
                       onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                       className="flex items-center h-full group"
                     >
-                      <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-white group-hover:bg-white/15 transition-all duration-200 cursor-pointer text-sm xl:text-base">
+                      <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 text-white group-hover:bg-white/15 transition-all duration-200 cursor-pointer text-base xl:text-lg">
                         <div className="flex items-center gap-1.5">
                           {user.avatar ? (
                             <img
@@ -242,7 +242,7 @@ export function Navbar() {
                     onClick={() => setShowLoginModal(true)}
                     className="flex items-center h-full group"
                   >
-                    <div className="bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-200 font-medium shadow-md cursor-pointer text-sm xl:text-base whitespace-nowrap">
+                    <div className="bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-200 font-medium shadow-md cursor-pointer text-base xl:text-lg whitespace-nowrap">
                       Prijavi se
                     </div>
                   </motion.button>
