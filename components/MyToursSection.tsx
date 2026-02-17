@@ -209,7 +209,7 @@ export default function MyToursSection({
           </div>
           <button
             onClick={onAddTourClick}
-            className="flex items-center gap-2 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium cursor-pointer"
+            className="flex items-center gap-2 bg-[#2b946f] hover:bg-[#247c5d] text-white px-5 py-2.5 rounded-lg hover:shadow-lg transition-all font-medium cursor-pointer"
           >
             <Plus size={20} />
             Dodaj novi izlet
@@ -229,7 +229,7 @@ export default function MyToursSection({
             </p>
             <button
               onClick={onAddTourClick}
-              className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
+              className="bg-[#2b946f] hover:bg-[#247c5d] text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all cursor-pointer"
             >
               Kreiraj prvi izlet
             </button>
@@ -407,7 +407,7 @@ export default function MyToursSection({
                           onClick={() => paginate(page)}
                           className={`w-10 h-10 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                             currentPage === page
-                              ? "bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white"
+                              ? "bg-[#2b946f] text-white"
                               : "text-gray-700 hover:bg-gray-100 border border-gray-300"
                           }`}
                         >

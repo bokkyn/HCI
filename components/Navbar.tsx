@@ -242,7 +242,7 @@ export function Navbar() {
                     onClick={() => setShowLoginModal(true)}
                     className="flex items-center h-full group"
                   >
-                    <div className="bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-200 font-medium shadow-md cursor-pointer text-base xl:text-lg whitespace-nowrap">
+                    <div className="bg-[#ff6309] hover:bg-[#e55808] text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-200 font-medium shadow-md cursor-pointer text-base xl:text-lg whitespace-nowrap">
                       Prijavi se
                     </div>
                   </motion.button>
@@ -353,7 +353,7 @@ export function Navbar() {
                         setShowLoginModal(true);
                         setMobileMenuOpen(false);
                       }}
-                      className="w-full bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white px-6 py-3.5 rounded-lg font-medium shadow-md cursor-pointer"
+                      className="w-full bg-[#ff6309] hover:bg-[#e55808] text-white px-6 py-3.5 rounded-lg font-medium shadow-md cursor-pointer"
                     >
                       Prijavi se
                     </motion.button>

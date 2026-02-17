@@ -207,7 +207,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-[#ff7a2f] to-[#ff6309] text-white py-4 rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full bg-[#ff6309] hover:bg-[#e55808] text-white py-4 rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
               >
                 {loading
                   ? isLogin

@@ -871,7 +871,7 @@ export default function EditTourModal({
                 type="submit"
                 onClick={handleSubmit}
                 disabled={loading || hasErrors}
-                className={`flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg transition-all font-medium flex items-center justify-center gap-2 ${
+                className={`flex-1 bg-[#2b946f] hover:bg-[#247c5d] text-white py-3.5 rounded-lg transition-all font-medium flex items-center justify-center gap-2 ${
                   loading || hasErrors
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:shadow-lg cursor-pointer"

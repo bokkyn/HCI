@@ -275,7 +275,7 @@ export default function TourDetailPage() {
             </button>
             <Link
               href="/tours"
-              className="bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-medium text-center cursor-pointer"
+              className="bg-[#2b946f] hover:bg-[#247c5d] text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all font-medium text-center cursor-pointer"
             >
               Pregled svih izleta
             </Link>
@@ -728,7 +728,7 @@ export default function TourDetailPage() {
                   // Logiran korisnik - gumb za rezervaciju
                   <button
                     onClick={() => setReservationModalOpen(true)}
-                    className="w-full bg-gradient-to-r from-[#ff6309] to-[#ff9e5e] text-white py-3 md:py-4 rounded-lg hover:shadow-lg transition-all mb-3 font-bold text-base md:text-lg shadow-md flex items-center justify-center gap-2"
+                    className="w-full bg-[#ff6309] hover:bg-[#e55808] text-white py-3 md:py-4 rounded-lg hover:shadow-lg transition-all mb-3 font-bold text-base md:text-lg shadow-md flex items-center justify-center gap-2"
                   >
                     Rezerviraj sada
                   </button>
@@ -736,7 +736,7 @@ export default function TourDetailPage() {
                   // Nije logiran - gumb za prijavu
                   <button
                     onClick={() => setShowLoginModal(true)}
-                    className="w-full bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3 md:py-4 rounded-lg hover:shadow-lg transition-all mb-3 font-bold text-base md:text-lg shadow-md flex items-center justify-center gap-2"
+                    className="w-full bg-[#2b946f] hover:bg-[#247c5d] text-white py-3 md:py-4 rounded-lg hover:shadow-lg transition-all mb-3 font-bold text-base md:text-lg shadow-md flex items-center justify-center gap-2"
                   >
                     <LogIn size={20} />
                     Prijavi se za rezervaciju

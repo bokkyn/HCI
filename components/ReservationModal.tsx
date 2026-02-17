@@ -15,6 +15,7 @@ import {
   Check,
   Users,
   ChevronDown,
+  Info,
 } from "lucide-react";
 
 interface ReservationModalProps {
@@ -282,77 +283,77 @@ export default function ReservationModal({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+          className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gradient-to-r from-[#104d2f]/5 to-[#0f6659]/5">
+          <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-white z-10">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Rezerviraj turu
+              <h2 className="text-xl font-bold text-gray-900">
+                Potvrda rezervacije
               </h2>
-              <p className="text-gray-600 mt-1">{tourTitle}</p>
+              <p className="text-gray-500 text-sm mt-0.5">Još samo par koraka do avanture</p>
             </div>
             <button
               onClick={handleClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors cursor-pointer text-gray-500"
               disabled={loading}
             >
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
 
           {/* Form */}
-          <div className="flex-1 overflow-y-auto p-6 md:p-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="flex-1 overflow-y-auto p-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* 1. Tour Details Section */}
-              <div className="space-y-6">
-                {/* Header with Price */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-100">
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900">{tourTitle}</h3>
-                    <div className="flex items-center gap-2 text-gray-500 mt-1 text-sm">
-                      <Users size={16} />
-                      <span>Maksimalno {maxPeople} osoba</span>
-                    </div>
-                  </div>
-                  <div className="text-left sm:text-right bg-gray-50 px-4 py-2 rounded-lg">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">Cijena grupe</p>
-                    <p className="text-xl font-bold text-[#2b946f]">{formatPrice(price)}</p>
+              
+              {/* Tour Summary Card */}
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 flex justify-between items-center">
+                <div>
+                  <h3 className="font-bold text-gray-900 text-lg">{tourTitle}</h3>
+                  <div className="flex items-center gap-2 text-gray-500 text-sm mt-1">
+                    <Users size={14} />
+                    <span>Max {maxPeople} osoba</span>
                   </div>
                 </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-500 uppercase font-semibold tracking-wider">Cijena</p>
+                  <p className="text-xl font-bold text-[#2b946f]">{formatPrice(price)}</p>
+                </div>
+              </div>
 
-                {/* Booking Inputs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">
-                      Datum <span className="text-red-500">*</span>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">
+                      Datum
                     </label>
                     <div className="relative">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                       <input
                         type="date"
                         name="booking_date"
                         value={formData.booking_date}
                         onChange={handleChange}
                         min={new Date().toISOString().split("T")[0]}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white"
+                        className="w-full pl-9 pr-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm"
                         required
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-gray-700">
-                      Vrijeme <span className="text-red-500">*</span>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">
+                      Vrijeme
                     </label>
                     <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                       <select
                         name="booking_time"
                         value={formData.booking_time}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white appearance-none"
+                        className="w-full pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent appearance-none text-sm bg-white"
                         required
                       >
                         {timeOptions.map((time) => (
@@ -361,21 +362,22 @@ export default function ReservationModal({
                           </option>
                         ))}
                       </select>
-                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
                     </div>
                   </div>
+                </div>
 
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-sm font-semibold text-gray-700">
-                      Broj osoba <span className="text-red-500">*</span>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">
+                      Broj osoba
                     </label>
                     <div className="relative">
-                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                       <select
                         name="number_of_people"
                         value={formData.number_of_people}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white appearance-none"
+                        className="w-full pl-9 pr-8 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent appearance-none text-sm bg-white"
                         required
                       >
                         {Array.from({ length: maxPeople }, (_, i) => i + 1).map(
@@ -386,75 +388,64 @@ export default function ReservationModal({
                           ),
                         )}
                       </select>
-                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
                     </div>
                   </div>
-                </div>
               </div>
 
+              <div className="border-t border-gray-100"></div>
+
               {/* 2. Contact Section */}
-              <div className="space-y-6 pt-2">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="h-px flex-1 bg-gray-100"></div>
-                  <h3 className="text-lg font-bold text-gray-900">Kontakt podaci</h3>
-                  <div className="h-px flex-1 bg-gray-100"></div>
-                </div>
+              <div className="space-y-4">
+                <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <User size={18} className="text-[#2b946f]" />
+                  Vaši podaci
+                </h4>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-semibold text-gray-700 mb-2 block">
-                      Email adresa <span className="text-red-500">*</span>
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5 block">
+                      Email
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                       <input
                         type="email"
                         name="contact_email"
                         value={formData.contact_email}
                         onChange={handleChange}
-                        className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white ${
+                        className={`w-full pl-9 pr-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm ${
                           formData.contact_email &&
                           !validateEmail(formData.contact_email)
                             ? "border-red-500 bg-red-50"
-                            : "border-gray-200"
+                            : "border-gray-300"
                         }`}
                         placeholder="vas@email.com"
                         required
                       />
                     </div>
-                    {userProfile?.email && (
-                      <p className="text-xs text-blue-600 mt-1">
-                        Vaš profilni email: {userProfile.email} (možete
-                        promijeniti za ovu rezervaciju)
-                      </p>
-                    )}
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-gray-700 mb-2 block">
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5 block">
                       Telefon
                     </label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                       <input
                         type="tel"
                         name="contact_phone"
                         value={formData.contact_phone}
                         onChange={handleChange}
-                        className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all bg-gray-50/50 hover:bg-white ${
+                        className={`w-full pl-9 pr-3 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent text-sm ${
                           formData.contact_phone &&
                           !validatePhone(formData.contact_phone)
                             ? "border-red-500 bg-red-50"
-                            : "border-gray-200"
+                            : "border-gray-300"
                         }`}
                         placeholder="0991234567"
                       />
                     </div>
-                    {userProfile?.phone && (
-                      <p className="text-xs text-blue-600 mt-1">
-                        Vaš profilni telefon: {userProfile.phone}
-                      </p>
-                    )}
                     {formData.contact_phone &&
                       !validatePhone(formData.contact_phone) && (
                         <p className="text-xs text-red-500 mt-1">
@@ -465,39 +456,30 @@ export default function ReservationModal({
                 </div>
 
                 {/* User Info */}
-                {userProfile && (
-                  <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start">
-                    <User size={18} className="text-blue-600 mt-0.5 shrink-0" />
-                    <div className="text-sm text-blue-800">
-                      <p className="font-medium">Prijavljeni ste kao {userProfile.ime} {userProfile.prezime}</p>
-                      <p className="text-blue-600/80 text-xs mt-1">Podaci su automatski popunjeni iz vašeg profila.</p>
-                    </div>
-                  </div>
-                )}
+                <div className="flex items-center gap-2 text-xs text-gray-500 bg-gray-50 p-2 rounded-lg">
+                  <Info size={14} className="text-[#2b946f]" />
+                  <span>Podaci su automatski popunjeni iz vašeg profila.</span>
+                </div>
               </div>
 
               {/* 3. Notes Section */}
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                  <FileText size={16} />
-                  Posebne napomene
+                <label className="text-xs font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                  Napomene (opcionalno)
                 </label>
                 <textarea
                   name="special_notes"
                   value={formData.special_notes}
                   onChange={handleChange}
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2b946f]/20 focus:border-[#2b946f] transition-all resize-none bg-gray-50/50 hover:bg-white"
+                  rows={2}
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2b946f] focus:border-transparent transition-all resize-none text-sm"
                   placeholder="Imate li posebne zahtjeve, alergije, ograničenja?"
                   maxLength={500}
                 />
-                <p className="text-xs text-gray-400 text-right">
-                  {formData.special_notes.length}/500 znakova
-                </p>
               </div>
 
               {/* Terms & Conditions */}
-              <div className="bg-gray-50 rounded-xl p-4">
+              <div className="bg-[#2b946f]/5 rounded-xl p-4 border border-[#2b946f]/10">
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0">
                     <Check className="h-5 w-5 text-[#2b946f] mt-0.5" />
@@ -533,19 +515,11 @@ export default function ReservationModal({
               )}
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  disabled={loading}
-                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3.5 rounded-lg hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 cursor-pointer"
-                >
-                  Odustani
-                </button>
+              <div className="pt-2">
                 <button
                   type="submit"
                   disabled={loading || !validation.isValid}
-                  className="flex-1 bg-gradient-to-r from-[#2b946f] to-[#0f6659] text-white py-3.5 rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full bg-[#ff6309] hover:bg-[#e55808] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   {loading ? (
                     <>
@@ -554,10 +528,17 @@ export default function ReservationModal({
                     </>
                   ) : (
                     <>
-                      <Check size={20} />
                       Potvrdi rezervaciju
                     </>
                   )}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  disabled={loading}
+                  className="w-full text-gray-500 text-sm mt-3 hover:text-gray-700 font-medium cursor-pointer"
+                >
+                  Odustani
                 </button>
               </div>
             </form>
