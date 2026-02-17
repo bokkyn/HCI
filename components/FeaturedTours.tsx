@@ -15,6 +15,7 @@ interface Tour {
   location: string;
   rating: number;
   reviews: number;
+  price: number;
 }
 
 const tours: Tour[] = [
@@ -31,6 +32,7 @@ const tours: Tour[] = [
     location: "Zadar, Hrvatska",
     rating: 4.9,
     reviews: 127,
+    price: 45,
   },
   {
     id: 2,
@@ -45,6 +47,7 @@ const tours: Tour[] = [
     location: "Zagreb, Hrvatska",
     rating: 5.0,
     reviews: 89,
+    price: 60,
   },
   {
     id: 3,
@@ -58,6 +61,7 @@ const tours: Tour[] = [
     location: "Split, Hrvatska",
     rating: 4.8,
     reviews: 156,
+    price: 25,
   },
   {
     id: 4,
@@ -71,6 +75,7 @@ const tours: Tour[] = [
     location: "Dubrovnik, Hrvatska",
     rating: 4.9,
     reviews: 203,
+    price: 55,
   },
   {
     id: 5,
@@ -84,6 +89,7 @@ const tours: Tour[] = [
     location: "Rijeka, Hrvatska",
     rating: 4.7,
     reviews: 94,
+    price: 30,
   },
   {
     id: 6,
@@ -97,6 +103,7 @@ const tours: Tour[] = [
     location: "Pula, Hrvatska",
     rating: 5.0,
     reviews: 167,
+    price: 70,
   },
 ];
 
@@ -139,21 +146,18 @@ export default function FeaturedTours() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, type: "tween", duration: 0.1 }}
                 whileHover={{ y: -8, transition: { duration: 0.05 } }}
-                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg cursor-pointer transition-all duration-100"
+                className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl cursor-pointer transition-all duration-300 h-full flex flex-col"
               >
                 {/* Tour Image */}
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={tour.image}
                     alt={tour.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
-                    <Star
-                      size={16}
-                      className="fill-yellow-400 text-yellow-400"
-                    />
-                    <span className="text-sm">{tour.rating}</span>
+                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1.5">
+                    <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                    <span className="text-sm font-bold text-gray-800">{tour.rating}</span>
                     <span className="text-xs text-gray-500">
                       ({tour.reviews})
                     </span>
@@ -161,26 +165,42 @@ export default function FeaturedTours() {
                 </div>
 
                 {/* Tour Info */}
-                <div className="p-6">
-                  <h3 className="text-xl text-[#104d2f] mb-4">{tour.title}</h3>
-
-                  {/* Guide Info */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <img
-                      src={tour.guide.avatar}
-                      alt={tour.guide.name}
-                      className="w-10 h-10 rounded-full object-cover ring-2 ring-[#2b946f]"
-                    />
-                    <div>
-                      <p className="text-sm text-gray-500">Vodič</p>
-                      <p className="text-gray-800">{tour.guide.name}</p>
+                <div className="p-5 flex flex-col flex-1">
+                  <div className="mb-6">
+                    <h3 className="text-lg font-bold text-[#104d2f] mb-2 leading-tight group-hover:text-[#ff6309] transition-colors">
+                      {tour.title}
+                    </h3>
+                    {/* Location - Moved closer to title (Proximity) */}
+                    <div className="flex items-center gap-1.5 text-gray-500 text-sm">
+                      <MapPin size={14} className="text-[#2b946f]" />
+                      <span>{tour.location}</span>
                     </div>
                   </div>
 
-                  {/* Location */}
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <MapPin size={18} className="text-[#ff6309]" />
-                    <span>{tour.location}</span>
+                  {/* Footer: Guide Info & Price - Separated section */}
+                  <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={tour.guide.avatar}
+                        alt={tour.guide.name}
+                        className="w-8 h-8 rounded-full object-cover ring-2 ring-gray-100"
+                      />
+                      <div>
+                        <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
+                          Vodič
+                        </p>
+                        <p className="text-xs font-semibold text-gray-700">
+                          {tour.guide.name}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-[10px] text-gray-400">od</p>
+                      <p className="text-lg font-bold text-[#ff6309] leading-none">
+                        {tour.price} €
+                      </p>
+                    </div>
                   </div>
                 </div>
               </motion.div>

@@ -480,42 +480,46 @@ export default function ToursPage() {
 
                         {/* Content */}
                         <div className="p-6 flex flex-col flex-1">
-                          {/* Title */}
-                          <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
-                            {tour.title}
-                          </h3>
-
-                          {/* Location */}
-                          <div className="flex items-center gap-2 text-gray-600 mb-3">
-                            <MapPin className="h-4 w-4" />
-                            <span className="text-sm">{tour.location}</span>
+                          {/* Header Group: Title & Location */}
+                          <div className="mb-6">
+                            <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-1">
+                              {tour.title}
+                            </h3>
+                            <div className="flex items-center gap-1.5 text-gray-500 text-sm">
+                              <MapPin className="h-4 w-4 text-[#2b946f]" />
+                              <span>{tour.location}</span>
+                            </div>
                           </div>
 
-                          {/* Highlights */}
-                          {tour.highlights && tour.highlights.length > 0 && (
-                            <div className="mb-4">
-                              <p className="text-sm text-gray-600 line-clamp-2">
-                                {tour.highlights[0]}
-                              </p>
-                            </div>
-                          )}
+                          {/* Body Group: Highlights & Logistics */}
+                          <div className="space-y-4 mb-6">
+                            {/* Highlights */}
+                            {tour.highlights && tour.highlights.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5">
+                                {tour.highlights.slice(0, 2).map((highlight, idx) => (
+                                  <span key={idx} className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-[#2b946f]/10 text-[#2b946f]">
+                                    {highlight}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
 
-                          {/* Details */}
-                          <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                            <div className="flex items-center gap-4">
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-4 w-4" />
+                            {/* Details (Duration & People) */}
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <div className="flex items-center gap-1.5">
+                                <Clock className="h-4 w-4 text-gray-500" />
                                 <span>{formatDuration(tour.duration)}</span>
                               </div>
-                              <div className="flex items-center gap-1">
-                                <Users className="h-4 w-4" />
+                              <div className="flex items-center gap-1.5">
+                                <Users className="h-4 w-4 text-gray-500" />
                                 <span>Do {tour.max_people} osoba</span>
                               </div>
                             </div>
                           </div>
 
-                          {/* Guide */}
-                          <div className="flex items-center gap-3 mb-4 pt-4 border-t border-gray-100">
+                          {/* Footer: Guide & Price */}
+                          <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-100">
+                            <div className="flex items-center gap-3">
                             {tour.guide?.avatar ? (
                               <Image
                                 src={tour.guide.avatar}
@@ -540,17 +544,9 @@ export default function ToursPage() {
                               </p>
                             </div>
                           </div>
-
-                          {/* Price & Button */}
-                          <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                            <div>
-                              <div className="text-2xl font-bold text-[#2b946f]">
-                                {formatPrice(tour.price_per_group)}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                po grupi
-                              </div>
-                            </div>
+                          <div className="text-2xl font-bold text-[#2b946f]">
+                            {formatPrice(tour.price_per_group)}
+                          </div>
                           </div>
                         </div>
                       </motion.div>

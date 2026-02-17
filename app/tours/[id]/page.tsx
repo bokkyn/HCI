@@ -641,7 +641,7 @@ export default function TourDetailPage() {
                 className="bg-white rounded-2xl p-6 md:p-8 shadow-lg sticky top-24"
               >
                 <div className="mb-6">
-                  <div className="flex items-baseline gap-2 mb-1">
+                  <div className="flex items-baseline gap-2 mb-2">
                     <span className="text-3xl md:text-4xl text-[#2b946f] font-bold">
                       {formatPrice(tour.price_per_group || 0)}
                     </span>
@@ -649,23 +649,25 @@ export default function TourDetailPage() {
                       po grupi
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <Users size={16} />
-                    <span>Do {tour.max_people || 1} osoba</span>
-                  </div>
+                  <p className="text-sm text-gray-500">
+                    Do {tour.max_people || 1} osoba
+                  </p>
                 </div>
 
                 {/* Languages */}
                 {languages.length > 0 && (
                   <div className="mb-6">
-                    <p className="text-sm font-medium text-gray-700 mb-2">
-                      Dostupni jezici:
-                    </p>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Languages size={18} className="text-[#2b946f]" />
+                      <span className="text-gray-700 font-medium">
+                        Dostupni jezici
+                      </span>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {languages.map((lang, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-gray-50 border border-gray-100 text-gray-600 rounded text-xs font-medium"
+                          className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
                         >
                           {lang}
                         </span>
@@ -674,15 +676,49 @@ export default function TourDetailPage() {
                   </div>
                 )}
 
+                {/* Tour Stats */}
+                <div className="mb-6 grid grid-cols-2 gap-4">
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-[#2b946f]">
+                      {tour.reservations_count || 0}
+                    </div>
+                    <div className="text-xs text-gray-600">Rezervacija</div>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-[#2b946f]">
+                      {tour.max_people || 1}
+                    </div>
+                    <div className="text-xs text-gray-600">Max osoba</div>
+                  </div>
+                </div>
+
                 {/* Login Status */}
                 <div className="mb-4">
-                  {!user && (
-                    <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 mb-3 flex gap-3 items-start">
-                      <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                      <div className="text-xs text-amber-800">
-                        <p className="font-medium">Potrebna prijava</p>
-                        <p>Prijavite se za rezervaciju ovog izleta.</p>
+                  {user ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
+                      <div className="flex items-center gap-2">
+                        <Check className="h-5 w-5 text-green-600" />
+                        <p className="text-sm text-green-700">
+                          Prijavljeni ste. Možete rezervirati izlet.
+                        </p>
                       </div>
+                      {(user as any).ime && (
+                        <p className="text-xs text-green-600 mt-1">
+                          Dobrodošli, {(user as any).ime}!
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="h-5 w-5 text-amber-600" />
+                        <p className="text-sm text-amber-700">
+                          Za rezervaciju izleta morate biti prijavljeni.
+                        </p>
+                      </div>
+                      <p className="text-xs text-amber-600 mt-1">
+                        Prijavite se da biste mogli rezervirati ovaj izlet.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -692,7 +728,7 @@ export default function TourDetailPage() {
                   // Logiran korisnik - gumb za rezervaciju
                   <button
                     onClick={() => setReservationModalOpen(true)}
-                    className="w-full bg-[#ff6309] hover:bg-[#e55808] text-white py-4 rounded-xl hover:shadow-lg transition-all mb-4 font-bold text-lg shadow-md flex items-center justify-center gap-2"
+                    className="w-full bg-[#ff6309] hover:bg-[#e55808] text-white py-3 md:py-4 rounded-lg hover:shadow-lg transition-all mb-3 font-bold text-base md:text-lg shadow-md flex items-center justify-center gap-2"
                   >
                     Rezerviraj sada
                   </button>
@@ -700,31 +736,37 @@ export default function TourDetailPage() {
                   // Nije logiran - gumb za prijavu
                   <button
                     onClick={() => setShowLoginModal(true)}
-                    className="w-full bg-[#2b946f] hover:bg-[#247c5d] text-white py-4 rounded-xl hover:shadow-lg transition-all mb-4 font-bold text-lg shadow-md flex items-center justify-center gap-2"
+                    className="w-full bg-[#2b946f] hover:bg-[#247c5d] text-white py-3 md:py-4 rounded-lg hover:shadow-lg transition-all mb-3 font-bold text-base md:text-lg shadow-md flex items-center justify-center gap-2"
                   >
                     <LogIn size={20} />
                     Prijavi se za rezervaciju
                   </button>
                 )}
 
-                <div className="space-y-2">
+                <div className="mt-6 pt-6 border-t border-gray-200">
                   <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <CheckCircle className="h-4 w-4 text-[#2b946f]" />
+                    <Check className="h-4 w-4 text-green-500" />
                     <span>Besplatno otkazivanje do 24h prije</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <CheckCircle className="h-4 w-4 text-[#2b946f]" />
+                  <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                    <Check className="h-4 w-4 text-green-500" />
                     <span>Instant potvrda rezervacije</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <CheckCircle className="h-4 w-4 text-[#2b946f]" />
+                  <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                    <Check className="h-4 w-4 text-green-500" />
                     <span>Podrška 24/7</span>
                   </div>
                 </div>
 
                 {/* Tour Info */}
-                <div className="mt-6 pt-6 border-t border-gray-100 text-[10px] text-gray-400 text-center">
-                  ID: {tour.id}
+                <div className="mt-6 pt-6 border-t border-gray-200 text-xs text-gray-500">
+                  <p>ID izleta: {tour.id}</p>
+                  {tour.createdAt && (
+                    <p>Dodano: {formatDate(tour.createdAt)}</p>
+                  )}
+                  {tour.updatedAt && (
+                    <p>Ažurirano: {formatDate(tour.updatedAt)}</p>
+                  )}
                 </div>
               </motion.div>
             </div>
